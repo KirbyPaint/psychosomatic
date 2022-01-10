@@ -2,6 +2,7 @@ import axios from "axios";
 
 export async function getWeather(url) {
   const data = await axios.get(url).then((response) => response.data);
+  // TODO: localize this shit
   const sunrise = new Date(data.sys.sunrise * 1000);
   const sunset = new Date(data.sys.sunset * 1000);
   const easyString = `
