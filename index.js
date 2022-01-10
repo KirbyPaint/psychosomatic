@@ -2,6 +2,7 @@ import { Client, Intents } from "discord.js";
 import dotenv from "dotenv";
 import { getPussy } from "./gets/getPussy.js";
 import { getWeather } from "./gets/openWeather.js";
+import { getAPOD } from "./gets/APOD.js";
 
 dotenv.config();
 
@@ -11,11 +12,18 @@ const client = new Client({
 });
 
 client.on("messageCreate", async (msg) => {
+  // PSYCHOSOMATIC
   if (msg.content.toLowerCase().includes("psychosomatic")) {
     msg.reply("THAT BOY NEEDS THERAPY");
-  } else if (msg.content.toLowerCase() === "!kitty") {
+  }
+
+  // Cat pics API
+  if (msg.content.toLowerCase() === "!kitty") {
     msg.reply(await getPussy());
-  } else if (msg.content.toLowerCase().includes("!weatherboy")) {
+  }
+
+  // Weather API
+  if (msg.content.toLowerCase().includes("!weatherboy")) {
     const [, message] = msg.content.split(" ");
     const [city, state, country] = message.split(",");
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city},${state},${country}&appid=${process.env.OPENWEATHER_API_KEY}&units=imperial`;
@@ -24,6 +32,32 @@ client.on("messageCreate", async (msg) => {
       msg.reply(response);
     } else {
       msg.reply("Request failed");
+    }
+  }
+  // APOD API
+  else if (msg.content.toLowerCase().includes("!apod")) {
+    const [, message] = msg.content.split(" ");
+    const BASE_URL = `https://api.nasa.gov/planetary/apod?api_key=${process.env.APOD_API_KEY}`;
+    // Assume date only for now
+    if (message) {
+      const data = await getAPOD(`${BASE_URL}&date=${message}`);
+      const easyString = `
+        Date: ${data.date}
+        Title: ${data.title}
+        Explanation: ${data.explanation}
+      `;
+      msg.reply(data.url);
+      msg.reply(easyString);
+    } else {
+      // No date, use today
+      const data = await getAPOD(`${BASE_URL}`);
+      const easyString = `
+        Date: ${data.date}
+        Title: ${data.title}
+        Explanation: ${data.explanation}
+      `;
+      msg.reply(data.url);
+      msg.reply(easyString);
     }
   }
 });
