@@ -1,13 +1,19 @@
-require("dotenv").config(); //initialize dotenv
-const { Client, Intents } = require("discord.js");
+import { getPussy } from "./gets/getPussy.js";
+import { Client, Intents } from "discord.js";
+import dotenv from "dotenv";
 
+dotenv.config();
+
+//create new client
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
-}); //create new client
+});
 
-client.on("messageCreate", (msg) => {
+client.on("messageCreate", async (msg) => {
   if (msg.content.toLowerCase().includes("psychosomatic")) {
     msg.reply("THAT BOY NEEDS THERAPY");
+  } else if (msg.content.toLowerCase() === "kitty") {
+    msg.reply(await getPussy());
   }
 });
 
@@ -16,4 +22,4 @@ client.on("ready", () => {
 });
 
 //make sure this line is the last line
-client.login(process.env.CLIENT_TOKEN); //login bot using token
+client.login(process.env.CLIENT_TOKEN);
