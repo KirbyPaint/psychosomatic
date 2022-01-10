@@ -12,7 +12,7 @@ const client = new Client({
 client.on("messageCreate", async (msg) => {
   if (msg.content.toLowerCase().includes("psychosomatic")) {
     msg.reply("THAT BOY NEEDS THERAPY");
-  } else if (msg.content.toLowerCase() === "kitty") {
+  } else if (msg.content.toLowerCase() === "!kitty") {
     msg.reply(await getPussy());
   }
 });
