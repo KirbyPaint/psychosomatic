@@ -8,7 +8,11 @@ dotenv.config();
 
 //create new client
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+  ],
 });
 
 client.on("messageCreate", async (msg) => {
@@ -34,8 +38,9 @@ client.on("messageCreate", async (msg) => {
       msg.reply("Request failed");
     }
   }
+
   // APOD API
-  else if (msg.content.toLowerCase().includes("!apod")) {
+  if (msg.content.toLowerCase().includes("!apod")) {
     const [, message] = msg.content.split(" ");
     const BASE_URL = `https://api.nasa.gov/planetary/apod?api_key=${process.env.APOD_API_KEY}`;
     // Assume date only for now
@@ -59,6 +64,10 @@ client.on("messageCreate", async (msg) => {
       msg.reply(data.url);
       msg.reply(easyString);
     }
+  }
+
+  if (msg.content.toLowerCase().includes("manifest")) {
+    msg.react("769755766352642128");
   }
 });
 
