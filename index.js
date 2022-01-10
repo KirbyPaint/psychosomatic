@@ -66,6 +66,7 @@ client.on("messageCreate", async (msg) => {
     }
   }
 
+  // Manifest
   if (msg.content.toLowerCase().includes("manifest")) {
     msg.react("769755766352642128");
   }
