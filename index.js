@@ -70,6 +70,20 @@ client.on("messageCreate", async (msg) => {
   if (msg.content.toLowerCase().includes("manifest")) {
     msg.react("769755766352642128");
   }
+
+  // Victoria Justice
+  if (
+    msg.content.toLowerCase().startsWith("i think") &&
+    msg.author.id !== process.env.BOT_ID
+  ) {
+    const { content } = msg;
+    const contentArray = content.split(" ");
+    const [, , , ...rest] = contentArray;
+    msg.reply(`I THINK WE ALL ${rest.join(" ").toUpperCase()}`);
+    msg.reply(
+      `https://media.discordapp.net/attachments/799876599372840964/932822173872181278/image0-2.png`
+    );
+  }
 });
 
 client.on("ready", () => {
