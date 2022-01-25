@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { getKitty } from "./gets/getKitty";
 import { getWeather } from "./gets/openWeather";
 import { getAPOD } from "./gets/APOD";
+import { victoria } from "./reactions/victoria";
 
 dotenv.config();
 
@@ -76,13 +77,14 @@ client.on("messageCreate", async (msg) => {
     msg.content.toLowerCase().startsWith("i think") &&
     msg.author.id !== process.env.BOT_ID
   ) {
-    const { content } = msg;
-    const contentArray = content.split(" ");
-    const [, , , ...rest] = contentArray;
-    msg.reply(`I THINK WE ALL ${rest.join(" ").toUpperCase()}`);
-    msg.reply(
-      `https://media.discordapp.net/attachments/799876599372840964/932822173872181278/image0-2.png`
-    );
+    // victoria(msg);
+    // const { content } = msg;
+    // const contentArray = content.split(" ");
+    // const [, , , ...rest] = contentArray;
+    // msg.reply(`I THINK WE ALL ${rest.join(" ").toUpperCase()}`);
+    // msg.reply(
+    //   `https://media.discordapp.net/attachments/799876599372840964/932822173872181278/image0-2.png`
+    // );
   }
 });
 

@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "APOD",
+    "codepaths",
     "COUNTRYCODE",
     "discordbot",
     "discordjs",
@@ -8,6 +9,7 @@
     "OPENWEATHER",
     "openweathermap",
     "superbot",
+    "tsbuildinfo",
     "weatherboy"
   ]
 }
