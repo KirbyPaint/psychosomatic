@@ -1,6 +1,6 @@
 import { Client, Intents } from "discord.js";
 import dotenv from "dotenv";
-import { getPussy } from "./gets/getPussy.js";
+import { getKitty } from "./gets/getKitty.js";
 import { getWeather } from "./gets/openWeather.js";
 import { getAPOD } from "./gets/APOD.js";
 
@@ -23,7 +23,7 @@ client.on("messageCreate", async (msg) => {
 
   // Cat pics API
   if (msg.content.toLowerCase() === "!kitty") {
-    msg.reply(await getPussy());
+    msg.reply(await getKitty());
   }
 
   // Weather API
