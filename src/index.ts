@@ -1,8 +1,8 @@
 import { Client, Intents } from "discord.js";
 import dotenv from "dotenv";
-import { getKitty } from "./gets/getKitty.js";
-import { getWeather } from "./gets/openWeather.js";
-import { getAPOD } from "./gets/APOD.js";
+import { getKitty } from "./gets/getKitty";
+import { getWeather } from "./gets/openWeather";
+import { getAPOD } from "./gets/APOD";
 
 dotenv.config();
 
@@ -87,7 +87,7 @@ client.on("messageCreate", async (msg) => {
 });
 
 client.on("ready", () => {
-  console.log(`Logged in as ${client.user.tag}!\n`);
+  console.log(`Logged in as ${client?.user?.tag}!\n`);
 });
 
 //make sure this line is the last line
