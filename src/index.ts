@@ -16,6 +16,12 @@ const client = new Client({
   ],
 });
 
+const MANIFEST_ID = "769755766352642128";
+
+const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
+const BRAIN_CELL_ID = "936895162074951730"; // custom emoji
+let whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
+
 client.on("messageCreate", async (msg) => {
   // PSYCHOSOMATIC
   if (msg.content.toLowerCase().includes("psychosomatic")) {
@@ -69,7 +75,7 @@ client.on("messageCreate", async (msg) => {
 
   // Manifest
   if (msg.content.toLowerCase().includes("manifest")) {
-    msg.react("769755766352642128");
+    msg.react(MANIFEST_ID);
   }
 
   // Victoria Justice
@@ -77,14 +83,45 @@ client.on("messageCreate", async (msg) => {
     msg.content.toLowerCase().startsWith("i think") &&
     msg.author.id !== process.env.BOT_ID
   ) {
-    // victoria(msg);
-    // const { content } = msg;
-    // const contentArray = content.split(" ");
-    // const [, , , ...rest] = contentArray;
-    // msg.reply(`I THINK WE ALL ${rest.join(" ").toUpperCase()}`);
-    // msg.reply(
-    //   `https://media.discordapp.net/attachments/799876599372840964/932822173872181278/image0-2.png`
-    // );
+    victoria(msg);
+  }
+
+  // One brain cell
+  // command to check the brain cell
+  if (msg.content.toLowerCase().includes("who has the brain cell")) {
+    msg.channel.send(
+      `<@${whoHasTheBrainCell}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
+    );
+  }
+
+  // command to transfer the brain cell
+  if (msg.content.toLowerCase().includes("!give the brain cell")) {
+    switch (whoHasTheBrainCell) {
+      case BRAIN_CELL_OWNERS[0]:
+        if (msg.author.id !== BRAIN_CELL_OWNERS[1]) {
+          whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
+          msg.channel.send(
+            `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
+          );
+        } else {
+          msg.reply(
+            "You cannot take the brain cell, it must be given willingly"
+          );
+        }
+        break;
+      case BRAIN_CELL_OWNERS[1]:
+        if (msg.author.id !== BRAIN_CELL_OWNERS[0]) {
+          whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
+          msg.channel.send(
+            `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
+          );
+        } else {
+          msg.reply(
+            "You cannot take the brain cell, it must be given willingly"
+          );
+        }
+        break;
+    }
   }
 });
 
