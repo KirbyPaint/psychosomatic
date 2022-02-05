@@ -16,6 +16,14 @@ const client = new Client({
   ],
 });
 
+const EIGHT = "eight";
+const SIX = "six";
+const SEVEN = "seven";
+const FIVE = "five";
+const THREE = "three";
+const OH = "zero";
+const NIIIEIIINE = "nine";
+
 const MANIFEST_ID = "769755766352642128";
 
 const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
@@ -86,6 +94,15 @@ client.on("messageCreate", async (msg) => {
     victoria(msg);
   }
 
+  if (msg.content.toLowerCase().includes("jenny")) {
+    msg.react("8️⃣"); // it's seriously just the unicode emoji
+    msg.react("6️⃣");
+    msg.react("7️⃣");
+    msg.react("5️⃣");
+    msg.react("3️⃣");
+    msg.react("0️⃣");
+    msg.react("9️⃣");
+  }
   // One brain cell
   // command to check the brain cell
   if (msg.content.toLowerCase().includes("who has the brain cell")) {
@@ -95,7 +112,7 @@ client.on("messageCreate", async (msg) => {
   }
 
   // command to transfer the brain cell
-  if (msg.content.toLowerCase().includes("!give the brain cell")) {
+  if (msg.content.toLowerCase().includes("!give")) {
     switch (whoHasTheBrainCell) {
       case BRAIN_CELL_OWNERS[0]:
         if (msg.author.id !== BRAIN_CELL_OWNERS[1]) {
