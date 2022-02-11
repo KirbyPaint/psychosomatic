@@ -11,7 +11,7 @@ export function victoria(msg: Message) {
     msg.reply(`I THINK WE ALL ${rest.join(" ").toUpperCase()}`);
   } else {
     msg.reply(
-      `I THINK WE ALL THINK ${conditionWord.toUpperCase()} ${rest
+      `I THINK WE ALL THINK ${conditionWord?.toUpperCase() ?? ""} ${rest
         .join(" ")
         .toUpperCase()}`
     );
