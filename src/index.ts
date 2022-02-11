@@ -95,10 +95,10 @@ client.on("messageCreate", async (msg) => {
   }
 
   if (
-    msg.content.toLowerCase().includes("hey victoria") &&
+    msg.content.toLowerCase().includes("victoria") &&
     msg.author.id !== process.env.BOT_ID
   ) {
-    msg.react(
+    msg.channel.send(
       "https://media.discordapp.net/attachments/799876599372840964/941531144569122917/Victoria_Justice_2013.png"
     );
   }
