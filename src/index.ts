@@ -94,6 +94,15 @@ client.on("messageCreate", async (msg) => {
     victoria(msg);
   }
 
+  if (
+    msg.content.toLowerCase().includes("hey victoria") &&
+    msg.author.id !== process.env.BOT_ID
+  ) {
+    msg.react(
+      "https://media.discordapp.net/attachments/799876599372840964/941531144569122917/Victoria_Justice_2013.png"
+    );
+  }
+
   if (msg.content.toLowerCase().includes("jenny")) {
     msg.react("8️⃣"); // it's seriously just the unicode emoji
     msg.react("6️⃣");
