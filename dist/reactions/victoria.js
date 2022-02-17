@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.victoria = void 0;
 function victoria(msg) {
+    var _a;
     const { content } = msg;
     const contentArray = content.split(" ");
     const [i, think, conditionWord, ...rest] = contentArray;
@@ -12,7 +13,7 @@ function victoria(msg) {
         msg.reply(`I THINK WE ALL ${rest.join(" ").toUpperCase()}`);
     }
     else {
-        msg.reply(`I THINK WE ALL THINK ${conditionWord.toUpperCase()} ${rest
+        msg.reply(`I THINK WE ALL THINK ${(_a = conditionWord === null || conditionWord === void 0 ? void 0 : conditionWord.toUpperCase()) !== null && _a !== void 0 ? _a : ""} ${rest
             .join(" ")
             .toUpperCase()}`);
     }

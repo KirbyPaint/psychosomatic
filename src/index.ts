@@ -4,6 +4,8 @@ import { getKitty } from "./gets/getKitty";
 import { getWeather } from "./gets/openWeather";
 import { getAPOD } from "./gets/APOD";
 import { victoria } from "./reactions/victoria";
+import { getRandomArbitrary, victoriaReactions } from "./consts";
+import { get8Ball } from "./gets/8ball";
 
 dotenv.config();
 
@@ -15,14 +17,6 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
   ],
 });
-
-const EIGHT = "eight";
-const SIX = "six";
-const SEVEN = "seven";
-const FIVE = "five";
-const THREE = "three";
-const OH = "zero";
-const NIIIEIIINE = "nine";
 
 const MANIFEST_ID = "769755766352642128";
 
@@ -98,8 +92,17 @@ client.on("messageCreate", async (msg) => {
     msg.content.toLowerCase().includes("victoria") &&
     msg.author.id !== process.env.BOT_ID
   ) {
+    if (
+      msg.content.toLowerCase().startsWith("victoria") &&
+      msg.content.endsWith("?")
+    ) {
+      const victoriaJudgment = get8Ball();
+      msg.reply(JSON.stringify(victoriaJudgment));
+    }
     msg.channel.send(
-      "https://media.discordapp.net/attachments/799876599372840964/941531144569122917/Victoria_Justice_2013.png"
+      victoriaReactions[
+        Math.floor(getRandomArbitrary(0, victoriaReactions.length))
+      ].toString()
     );
   }
 
@@ -121,6 +124,9 @@ client.on("messageCreate", async (msg) => {
   }
 
   // command to transfer the brain cell
+
+  // for the future - this should be more like
+  // "if the sender is trying to claim the brain cell, don't let them"
   if (msg.content.toLowerCase().includes("!give")) {
     switch (whoHasTheBrainCell) {
       case BRAIN_CELL_OWNERS[0]:

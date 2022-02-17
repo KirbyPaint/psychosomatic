@@ -18,6 +18,8 @@ const getKitty_1 = require("./gets/getKitty");
 const openWeather_1 = require("./gets/openWeather");
 const APOD_1 = require("./gets/APOD");
 const victoria_1 = require("./reactions/victoria");
+const consts_1 = require("./consts");
+const _8ball_1 = require("./gets/8ball");
 dotenv_1.default.config();
 //create new client
 const client = new discord_js_1.Client({
@@ -27,13 +29,6 @@ const client = new discord_js_1.Client({
         discord_js_1.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
     ],
 });
-const EIGHT = "eight";
-const SIX = "six";
-const SEVEN = "seven";
-const FIVE = "five";
-const THREE = "three";
-const OH = "zero";
-const NIIIEIIINE = "nine";
 const MANIFEST_ID = "769755766352642128";
 const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
 const BRAIN_CELL_ID = "936895162074951730"; // custom emoji
@@ -96,6 +91,15 @@ client.on("messageCreate", (msg) => __awaiter(void 0, void 0, void 0, function* 
         msg.author.id !== process.env.BOT_ID) {
         (0, victoria_1.victoria)(msg);
     }
+    if (msg.content.toLowerCase().includes("victoria") &&
+        msg.author.id !== process.env.BOT_ID) {
+        if (msg.content.toLowerCase().startsWith("victoria") &&
+            msg.content.endsWith("?")) {
+            const victoriaJudgment = (0, _8ball_1.get8Ball)();
+            msg.reply(JSON.stringify(victoriaJudgment));
+        }
+        msg.channel.send(consts_1.victoriaReactions[Math.floor((0, consts_1.getRandomArbitrary)(0, consts_1.victoriaReactions.length))].toString());
+    }
     if (msg.content.toLowerCase().includes("jenny")) {
         msg.react("8️⃣"); // it's seriously just the unicode emoji
         msg.react("6️⃣");
@@ -111,6 +115,8 @@ client.on("messageCreate", (msg) => __awaiter(void 0, void 0, void 0, function* 
         msg.channel.send(`<@${whoHasTheBrainCell}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`);
     }
     // command to transfer the brain cell
+    // for the future - this should be more like
+    // "if the sender is trying to claim the brain cell, don't let them"
     if (msg.content.toLowerCase().includes("!give")) {
         switch (whoHasTheBrainCell) {
             case BRAIN_CELL_OWNERS[0]:
