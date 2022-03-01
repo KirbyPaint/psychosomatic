@@ -23,10 +23,21 @@ export const victoriaReactions = [
 ];
 
 export const alanisReactions = [
-  `https://youtu.be/Jne9t8sHpUc`,
-  `https://youtu.be/NPcyTyilmYY`,
-  `https://youtu.be/CUjIY_XxF1g`,
-  `https://youtu.be/4iuO49jbovg`,
+  `https://youtu.be/HLHvb9V8Yzs`, // all i really want
+  `https://youtu.be/NPcyTyilmYY`, // you oughta know
+  `https://youtu.be/i9WIM2zZ2nI`, // perfect
+  `https://youtu.be/CUjIY_XxF1g`, // hand in my pocket
+  `https://youtu.be/3oPrb_ZzAcg`, // right through you
+  `https://youtu.be/iPTLv9xY800`, // forgiven
+  `https://youtu.be/GFW-WfuX2Dk`, // you learn
+  `https://youtu.be/4iuO49jbovg`, // head over feet
+  `https://youtu.be/4NeSUcL-qQU`, // mary jane
+  `https://youtu.be/Jne9t8sHpUc`, // ironic
+  `https://youtu.be/kiiYS2vLD5Y`, // not the doctor
+  `https://youtu.be/JX6FbIkfyro`, // wake up
+  // non-JLP tracks
+  `https://youtu.be/KV43rJ0a5iA`, // crazy
+  `https://youtu.be/VJg4rwDkkBA`, // my humps
 ];
 
 export function getRandomArbitrary(min: number, max: number): number {
