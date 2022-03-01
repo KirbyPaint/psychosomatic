@@ -4,7 +4,11 @@ import { getKitty } from "./gets/getKitty";
 import { getWeather } from "./gets/openWeather";
 import { getAPOD } from "./gets/APOD";
 import { victoria } from "./reactions/victoria";
-import { getRandomArbitrary, victoriaReactions } from "./consts";
+import {
+  alanisReactions,
+  getRandomArbitrary,
+  victoriaReactions,
+} from "./consts";
 import { get8Ball } from "./gets/8ball";
 
 dotenv.config();
@@ -153,6 +157,22 @@ client.on("messageCreate", async (msg) => {
           );
         }
         break;
+    }
+  }
+
+  if (
+    msg.content.toLowerCase().includes("ironic") ||
+    msg.content.toLowerCase().includes("alanis")
+  ) {
+    // 1/20 chance of Alanisposting
+    if (getRandomArbitrary(1, 100) > 95) {
+      msg.channel.send(
+        `${
+          alanisReactions[
+            Math.round(getRandomArbitrary(0, alanisReactions.length - 1))
+          ]
+        }`
+      );
     }
   }
 });

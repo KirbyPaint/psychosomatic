@@ -22,6 +22,13 @@ export const victoriaReactions = [
   `https://cdn.discordapp.com/attachments/799876599372840964/946232960464609290/victoria_justice_truth.jpg`,
 ];
 
+export const alanisReactions = [
+  `https://youtu.be/Jne9t8sHpUc`,
+  `https://youtu.be/NPcyTyilmYY`,
+  `https://youtu.be/CUjIY_XxF1g`,
+  `https://youtu.be/4iuO49jbovg`,
+];
+
 export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
