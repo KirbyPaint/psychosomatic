@@ -1,13 +1,16 @@
 import { Client, Intents } from "discord.js";
 import dotenv from "dotenv";
 import { getKitty } from "./gets/getKitty";
-import { getWeather } from "./gets/openWeather";
-import { getAPOD } from "./gets/APOD";
+import { weatherboy } from "./gets/openWeather";
+import { apod } from "./gets/APOD";
 import { victoria } from "./reactions/victoria";
 import {
   alanisReactions,
+  BRAIN_CELL_ID,
+  BRAIN_CELL_OWNERS,
   getRandomArbitrary,
   jpegReactions,
+  MANIFEST_ID,
   victoriaReactions,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
@@ -23,10 +26,6 @@ const client = new Client({
   ],
 });
 
-const MANIFEST_ID = "769755766352642128";
-
-const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
-const BRAIN_CELL_ID = "936895162074951730"; // custom emoji
 let whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
 
 client.on("messageCreate", async (msg) => {
@@ -42,42 +41,12 @@ client.on("messageCreate", async (msg) => {
 
   // Weather API
   if (msg.content.toLowerCase().includes("!weatherboy")) {
-    const [, message] = msg.content.split(" ");
-    const [city, state, country] = message.split(",");
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city},${state},${country}&appid=${process.env.OPENWEATHER_API_KEY}&units=imperial`;
-    const response = await getWeather(url);
-    if (response) {
-      msg.reply(response);
-    } else {
-      msg.reply("Request failed");
-    }
+    weatherboy(msg);
   }
 
   // APOD API
   if (msg.content.toLowerCase().includes("!apod")) {
-    const [, message] = msg.content.split(" ");
-    const BASE_URL = `https://api.nasa.gov/planetary/apod?api_key=${process.env.APOD_API_KEY}`;
-    // Assume date only for now
-    if (message) {
-      const data = await getAPOD(`${BASE_URL}&date=${message}`);
-      const easyString = `
-        Date: ${data.date}
-        Title: ${data.title}
-        Explanation: ${data.explanation}
-      `;
-      msg.reply(data.url);
-      msg.reply(easyString);
-    } else {
-      // No date, use today
-      const data = await getAPOD(`${BASE_URL}`);
-      const easyString = `
-        Date: ${data.date}
-        Title: ${data.title}
-        Explanation: ${data.explanation}
-      `;
-      msg.reply(data.url);
-      msg.reply(easyString);
-    }
+    apod(msg);
   }
 
   // Manifest
@@ -163,6 +132,7 @@ client.on("messageCreate", async (msg) => {
     }
   }
 
+  // Alanis
   if (
     msg.content.toLowerCase().includes("ironic") ||
     msg.content.toLowerCase().includes("alanis")
@@ -179,6 +149,7 @@ client.on("messageCreate", async (msg) => {
     }
   }
 
+  // do I look like I know what a jpeg is?
   if (
     msg.content.toLowerCase().includes("jpeg") &&
     !msg.content.toLowerCase().includes(".") &&
