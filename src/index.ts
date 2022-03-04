@@ -7,6 +7,7 @@ import { victoria } from "./reactions/victoria";
 import {
   alanisReactions,
   getRandomArbitrary,
+  jpegReactions,
   victoriaReactions,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
@@ -89,7 +90,9 @@ client.on("messageCreate", async (msg) => {
     msg.content.toLowerCase().startsWith("i think") &&
     msg.author.id !== process.env.BOT_ID
   ) {
-    victoria(msg);
+    if (getRandomArbitrary(1, 100) > 80) {
+      victoria(msg);
+    }
   }
 
   if (
@@ -170,6 +173,22 @@ client.on("messageCreate", async (msg) => {
         `${
           alanisReactions[
             Math.round(getRandomArbitrary(0, alanisReactions.length - 1))
+          ]
+        }`
+      );
+    }
+  }
+
+  if (
+    msg.content.toLowerCase().includes("jpeg") &&
+    !msg.content.toLowerCase().includes(".") &&
+    msg.author.id !== process.env.BOT_ID
+  ) {
+    if (getRandomArbitrary(1, 100) > 80) {
+      msg.channel.send(
+        `${
+          jpegReactions[
+            Math.round(getRandomArbitrary(0, jpegReactions.length - 1))
           ]
         }`
       );

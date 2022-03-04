@@ -40,6 +40,12 @@ export const alanisReactions = [
   `https://youtu.be/VJg4rwDkkBA`, // my humps
 ];
 
+export const jpegReactions = [
+  "https://youtu.be/ZXVhOPiM4mk", // hotdog.jpeg song
+  "https://youtu.be/EvKTOHVGNbg", // hotdog.jpeg
+  "https://cdn.discordapp.com/attachments/799876599372840964/949119835940466688/big_1482307605_image.png", // just the screen cap
+];
+
 export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
