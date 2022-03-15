@@ -20,6 +20,7 @@ export const victoriaReactions = [
   `https://cdn.discordapp.com/attachments/799876599372840964/946232959718011021/sexy-victoria-justice-pictures.jpg`,
   `https://cdn.discordapp.com/attachments/799876599372840964/946232960066142258/ab6761610000e5eb48b52d9236cf016e278f3658.jpeg`,
   `https://cdn.discordapp.com/attachments/799876599372840964/946232960464609290/victoria_justice_truth.jpg`,
+  `https://cdn.discordapp.com/attachments/799876599372840964/953108718923436082/Screen_Shot_2022-03-14_at_6.53.18_PM.png`,
 ];
 
 export const alanisReactions = [
