@@ -8,6 +8,7 @@ import {
   alanisReactions,
   BRAIN_CELL_ID,
   BRAIN_CELL_OWNERS,
+  CONCH_ID,
   getRandomArbitrary,
   jpegReactions,
   MANIFEST_ID,
@@ -52,6 +53,11 @@ client.on("messageCreate", async (msg) => {
   // Manifest
   if (msg.content.toLowerCase().includes("manifest")) {
     msg.react(MANIFEST_ID);
+  }
+
+  // Conch
+  if (msg.content.toLowerCase().includes("maybe someday")) {
+    msg.react(CONCH_ID);
   }
 
   // Victoria Justice

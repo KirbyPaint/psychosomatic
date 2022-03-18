@@ -50,6 +50,7 @@ export const jpegReactions = [
 export const MANIFEST_ID = "769755766352642128";
 export const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
 export const BRAIN_CELL_ID = "936895162074951730"; // custom emoji
+export const CONCH_ID = "809579247994929182";
 
 export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
