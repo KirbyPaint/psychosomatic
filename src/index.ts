@@ -172,6 +172,31 @@ client.on("messageCreate", async (msg) => {
     if (msg.content.toLowerCase().includes("weep")) {
       msg.channel.send("*ouiiip");
     }
+
+    // 2 Fast 2 Furious converter
+    if (
+      msg.content.toLowerCase().match(/(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i)
+    ) {
+      // need to split the sentence at the regex match actually
+      // const messageArray = msg.content.split(" ");
+      // console.log(
+      //   `match: `,
+      //   msg.content.match(/(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i)
+      // );
+      const wordsArray = msg.content.match(
+        /(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i
+      ); // this might be shit but it'll do the job
+      if (wordsArray) {
+        // console.log("wordsArray[0]", wordsArray[0]);
+        const wordsArray2 = wordsArray[0].split(" ");
+        // replace the items at index 0 and 2
+        wordsArray2[0] = "2";
+        wordsArray2[2] = "2";
+        // join the array back together
+        const newString = wordsArray2.join(" ");
+        msg.channel.send(newString);
+      }
+    }
   }
 });
 
