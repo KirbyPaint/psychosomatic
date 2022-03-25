@@ -171,6 +171,13 @@ client.on("messageCreate", async (msg) => {
       );
     }
   }
+
+  if (
+    msg.content.toLowerCase().includes("weep") &&
+    msg.author.id !== process.env.BOT_ID
+  ) {
+    msg.channel.send("ouiiip");
+  }
 });
 
 client.on("ready", () => {
