@@ -176,7 +176,7 @@ client.on("messageCreate", async (msg) => {
     msg.content.toLowerCase().includes("weep") &&
     msg.author.id !== process.env.BOT_ID
   ) {
-    msg.channel.send("ouiiip");
+    msg.channel.send("*ouiiip");
   }
 });
 
