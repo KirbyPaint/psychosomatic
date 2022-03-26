@@ -4,9 +4,10 @@
   "description": "discord bot",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/index.js",
+    "start": "nodemon ./dist/index.js",
     "build-dist": "./node_modules/typescript/bin/tsc",
-    "superbuild": "yarn build-dist && yarn start"
+    "superbuild": "yarn build-dist && yarn start",
+    "watch": "nodemon -e ts --watch src --exec 'yarn build-dist && yarn start'"
   },
   "repository": {
     "type": "git",
@@ -26,11 +27,13 @@
     "discord-api-types": "^0.26.1",
     "discord.js": "^13.5.0",
     "dotenv": "^10.0.0",
-    "source-map-support": "^0.5.21"
+    "nodemon": "^2.0.15",
+    "source-map-support": "^0.5.21",
+    "ts-node-dev": "^1.1.8"
   },
   "devDependencies": {
     "@types/node": "^17.0.11",
-    "ts-node": "^10.4.0",
+    "ts-node": "^10.7.0",
     "typescript": "^4.5.5"
   }
 }

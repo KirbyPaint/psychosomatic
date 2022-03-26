@@ -11,6 +11,7 @@ import {
   getRandomArbitrary,
   jpegReactions,
   MANIFEST_ID,
+  SHEEV_ID,
   victoriaReactions,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
@@ -32,7 +33,57 @@ const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
 let whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
 
 client.on("messageCreate", async (msg) => {
+  const currentGuildId = msg.guildId;
+
+  if (currentGuildId === process.env.GUILD_ID) {
+    if (msg.content.toLowerCase().includes("weep")) {
+      msg.channel.send("*ouiiip");
+    }
+
+    // One brain cell
+    // command to check the brain cell
+    if (msg.content.toLowerCase().includes("who has the brain cell")) {
+      msg.channel.send(
+        `<@${whoHasTheBrainCell}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
+      );
+    }
+
+    // command to transfer the brain cell
+
+    // for the future - this should be more like
+    // "if the sender is trying to claim the brain cell, don't let them"
+    if (msg.content.toLowerCase().includes("!give")) {
+      switch (whoHasTheBrainCell) {
+        case BRAIN_CELL_OWNERS[0]:
+          if (msg.author.id !== BRAIN_CELL_OWNERS[1]) {
+            whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
+            msg.channel.send(
+              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
+            );
+          } else {
+            msg.reply(
+              "You cannot take the brain cell, it must be given willingly"
+            );
+          }
+          break;
+        case BRAIN_CELL_OWNERS[1]:
+          if (msg.author.id !== BRAIN_CELL_OWNERS[0]) {
+            whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
+            msg.channel.send(
+              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
+            );
+          } else {
+            msg.reply(
+              "You cannot take the brain cell, it must be given willingly"
+            );
+          }
+          break;
+      }
+    }
+  }
   // wrap this all in a big IF that checks if the message is from herself
+  // Also a section that limits certain commands to certain servers
+
   if (msg.author.id !== process.env.BOT_ID) {
     // PSYCHOSOMATIC
     if (msg.content.toLowerCase().includes("psychosomatic")) {
@@ -95,46 +146,6 @@ client.on("messageCreate", async (msg) => {
       msg.react("0️⃣");
       msg.react("9️⃣");
     }
-    // One brain cell
-    // command to check the brain cell
-    if (msg.content.toLowerCase().includes("who has the brain cell")) {
-      msg.channel.send(
-        `<@${whoHasTheBrainCell}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
-      );
-    }
-
-    // command to transfer the brain cell
-
-    // for the future - this should be more like
-    // "if the sender is trying to claim the brain cell, don't let them"
-    if (msg.content.toLowerCase().includes("!give")) {
-      switch (whoHasTheBrainCell) {
-        case BRAIN_CELL_OWNERS[0]:
-          if (msg.author.id !== BRAIN_CELL_OWNERS[1]) {
-            whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
-            msg.channel.send(
-              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
-            );
-          } else {
-            msg.reply(
-              "You cannot take the brain cell, it must be given willingly"
-            );
-          }
-          break;
-        case BRAIN_CELL_OWNERS[1]:
-          if (msg.author.id !== BRAIN_CELL_OWNERS[0]) {
-            whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
-            msg.channel.send(
-              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
-            );
-          } else {
-            msg.reply(
-              "You cannot take the brain cell, it must be given willingly"
-            );
-          }
-          break;
-      }
-    }
 
     // Alanis
     if (
@@ -154,10 +165,7 @@ client.on("messageCreate", async (msg) => {
     }
 
     // do I look like I know what a jpeg is?
-    if (
-      msg.content.toLowerCase().includes("jpeg") &&
-      !msg.content.toLowerCase().includes(".")
-    ) {
+    if (msg.content.toLowerCase().match(/([ ]jpe?g)/)) {
       if (getRandomArbitrary(1, 100) > 80) {
         msg.channel.send(
           `${
@@ -169,32 +177,31 @@ client.on("messageCreate", async (msg) => {
       }
     }
 
-    if (msg.content.toLowerCase().includes("weep")) {
-      msg.channel.send("*ouiiip");
-    }
-
     // 2 Fast 2 Furious converter
     if (
       msg.content.toLowerCase().match(/(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i)
     ) {
-      // need to split the sentence at the regex match actually
-      // const messageArray = msg.content.split(" ");
-      // console.log(
-      //   `match: `,
-      //   msg.content.match(/(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i)
-      // );
       const wordsArray = msg.content.match(
         /(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i
       ); // this might be shit but it'll do the job
       if (wordsArray) {
-        // console.log("wordsArray[0]", wordsArray[0]);
         const wordsArray2 = wordsArray[0].split(" ");
-        // replace the items at index 0 and 2
         wordsArray2[0] = "2";
         wordsArray2[2] = "2";
-        // join the array back together
         const newString = wordsArray2.join(" ");
         msg.channel.send(newString);
+      }
+    }
+
+    // Shia Surprise
+    if (msg.content.toLowerCase().includes("shia labeouf")) {
+      msg.channel.send("https://youtu.be/o0u4M6vppCI");
+    }
+
+    // DO IT
+    if (msg.content.toLowerCase().includes("do it")) {
+      if (getRandomArbitrary(1, 100) > 80) {
+        msg.react(SHEEV_ID);
       }
     }
   }
