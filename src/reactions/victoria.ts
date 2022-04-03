@@ -1,4 +1,6 @@
 import { Message } from "discord.js";
+import { victoriaReactions, getRandomArbitrary } from "../consts";
+import { toriQuotes } from "../gets/toriQuotes";
 
 export function victoria(msg: Message) {
   const { content } = msg;
@@ -27,5 +29,19 @@ export function victoria(msg: Message) {
   }
   msg.reply(
     `https://media.discordapp.net/attachments/799876599372840964/932822173872181278/image0-2.png`
+  );
+}
+
+export function vicPic(msg: Message) {
+  msg.channel.send(
+    victoriaReactions[
+      Math.floor(getRandomArbitrary(0, victoriaReactions.length))
+    ].toString()
+  );
+}
+
+export function vicQuote(msg: Message) {
+  msg.channel.send(
+    toriQuotes[Math.floor(getRandomArbitrary(0, toriQuotes.length))].toString()
   );
 }

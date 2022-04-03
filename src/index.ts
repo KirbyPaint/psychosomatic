@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { getKitty } from "./gets/getKitty";
 import { weatherboy } from "./gets/openWeather";
 import { apod } from "./gets/APOD";
-import { victoria } from "./reactions/victoria";
+import { vicPic, vicQuote, victoria } from "./reactions/victoria";
 import {
   alanisReactions,
   BRAIN_CELL_ID,
@@ -12,7 +12,6 @@ import {
   jpegReactions,
   MANIFEST_ID,
   SHEEV_ID,
-  victoriaReactions,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
 
@@ -35,6 +34,7 @@ let whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
 client.on("messageCreate", async (msg) => {
   const currentGuildId = msg.guildId;
 
+  // Processes only for our special server
   if (currentGuildId === process.env.GUILD_ID) {
     if (msg.content.toLowerCase().includes("weep")) {
       msg.channel.send("*ouiiip");
@@ -125,16 +125,19 @@ client.on("messageCreate", async (msg) => {
     if (msg.content.toLowerCase().includes("victoria")) {
       if (
         msg.content.toLowerCase().startsWith("victoria") &&
-        msg.content.endsWith("?")
+        msg.content.includes("?")
       ) {
-        const victoriaJudgment = get8Ball();
-        msg.reply(JSON.stringify(victoriaJudgment));
+        msg.reply(JSON.stringify(get8Ball()));
+      } else {
+        if (getRandomArbitrary(0, 100) >= 0) {
+          vicQuote(msg);
+        }
       }
-      msg.channel.send(
-        victoriaReactions[
-          Math.floor(getRandomArbitrary(0, victoriaReactions.length))
-        ].toString()
-      );
+      vicPic(msg);
+    }
+
+    if (msg.content.includes("Toro")) {
+      msg.channel.send("Did you just call me Toro?");
     }
 
     if (msg.content.toLowerCase().includes("jenny")) {
@@ -200,15 +203,15 @@ client.on("messageCreate", async (msg) => {
 
     // DO IT
     if (msg.content.toLowerCase().includes("do it")) {
-      if (getRandomArbitrary(1, 100) > 80) {
-        msg.react(SHEEV_ID);
-      }
+      msg.react(SHEEV_ID);
     }
   }
 });
 
 client.on("ready", () => {
   console.log(`Logged in as ${client?.user?.tag}!\n`);
+  // set status
+  client.user?.setActivity("Victorious 24/7", { type: "WATCHING" });
 });
 
 //make sure this line is the last line
