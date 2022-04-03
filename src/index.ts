@@ -129,7 +129,7 @@ client.on("messageCreate", async (msg) => {
       ) {
         msg.reply(JSON.stringify(get8Ball()));
       } else {
-        if (getRandomArbitrary(0, 100) >= 0) {
+        if (getRandomArbitrary(0, 100) >= 95) {
           vicQuote(msg);
         }
       }
