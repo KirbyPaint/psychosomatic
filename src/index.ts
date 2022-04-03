@@ -14,6 +14,7 @@ import {
   SHEEV_ID,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
+import { help } from "./gets/help";
 
 dotenv.config();
 
@@ -204,6 +205,11 @@ client.on("messageCreate", async (msg) => {
     // DO IT
     if (msg.content.toLowerCase().includes("do it")) {
       msg.react(SHEEV_ID);
+    }
+
+    // Help
+    if (msg.content.toLowerCase() === "!help") {
+      msg.channel.send(help());
     }
   }
 });

@@ -1,7 +1,5 @@
 import axios from "axios";
 import { Message } from "discord.js";
-import * as fs from "fs";
-import * as path from "path";
 
 export async function apod(msg: Message) {
   const [, message] = msg.content.split(" ");
