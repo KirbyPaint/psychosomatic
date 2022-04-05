@@ -30,7 +30,7 @@ const client = new Client({
 // this array has to stay in this file because otherwise it can't read the .env
 // can probably move the config line but nah
 const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
-let whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
+let whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
 
 client.on("messageCreate", async (msg) => {
   const currentGuildId = msg.guildId;
