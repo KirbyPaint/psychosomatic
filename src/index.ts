@@ -126,6 +126,10 @@ client.on("messageCreate", async (msg) => {
       }
     }
 
+    // if (msg.content.toLowerCase().startsWith("!say")) {
+    //   msg.channel.send(msg.content.toString().split(" ").slice(1).join(" "));
+    // }
+
     if (msg.content.toLowerCase().includes("victoria")) {
       if (
         msg.content.toLowerCase().startsWith("victoria") &&
