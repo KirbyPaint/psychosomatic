@@ -7,7 +7,22 @@ export function victoria(msg: Message) {
   const contentArray: Array<string> = content.split(" ");
   const [i, think, conditionWord, ...rest] = contentArray;
   // Thanks to grammar, I have to do work
-  const modifySentenceStructureWords = ["i'm", "i've", "i'll", "i'd", "you're"]; // this is gonna be R O U G H to finalize so i will simply not
+  const modifySentenceStructureWords = [
+    "i'd",
+    "i've",
+    "you're",
+    "you'd",
+    "i'm",
+  ]; // this is gonna be R O U G H to finalize so i will simply not
+  const wordsThatNeedNotBeInThePhrase = [
+    "i",
+    "you",
+    "he",
+    "she",
+    "it",
+    "we",
+    "they",
+  ];
   // console.log(`sentence:
   //   ${i}
   //   ${think}
@@ -18,14 +33,30 @@ export function victoria(msg: Message) {
   //     conditionWord.toLowerCase()
   //   )}
   // `);
-  if (modifySentenceStructureWords.includes(conditionWord.toLowerCase())) {
+  if (msg.content.toLowerCase() === "i think we all sing") {
+    msg.reply(
+      `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
+    );
+    return;
+  }
+  if (msg.content.toLowerCase().includes(`we all`)) {
+    msg.reply(`I THINK WE ${rest.join(" ").toUpperCase()}`);
+  } else if (
+    wordsThatNeedNotBeInThePhrase.includes(conditionWord.toLowerCase())
+  ) {
+    msg.reply(`I THINK WE ALL ${rest.join(" ").toUpperCase()}`);
+  } else if (
+    modifySentenceStructureWords.includes(conditionWord.toLowerCase())
+  ) {
     msg.reply(`I THINK WE'RE ALL ${rest.join(" ").toUpperCase()}`);
   } else {
     msg.reply(
-      `I THINK WE ALL THINK ${conditionWord.toUpperCase()} ${rest
+      `I THINK WE ALL ${conditionWord.toUpperCase()} ${rest
         .join(" ")
         .toUpperCase()}`
     );
+    // no early return anywhere else or she won't send the vic pic
+    return;
   }
   msg.reply(
     `https://media.discordapp.net/attachments/799876599372840964/932822173872181278/image0-2.png`

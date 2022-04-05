@@ -118,7 +118,10 @@ client.on("messageCreate", async (msg) => {
 
     // Victoria Justice
     if (msg.content.toLowerCase().startsWith("i think")) {
-      if (getRandomArbitrary(1, 100) > 80) {
+      if (
+        getRandomArbitrary(1, 100) > 0 &&
+        msg.content.toLowerCase().length < 50
+      ) {
         victoria(msg);
       }
     }
@@ -217,7 +220,7 @@ client.on("messageCreate", async (msg) => {
 client.on("ready", () => {
   console.log(`Logged in as ${client?.user?.tag}!\n`);
   // set status
-  client.user?.setActivity("Victorious 24/7", { type: "WATCHING" });
+  client.user?.setActivity("Victorious", { type: "WATCHING" });
 });
 
 //make sure this line is the last line
