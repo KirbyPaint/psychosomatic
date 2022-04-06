@@ -119,7 +119,7 @@ client.on("messageCreate", async (msg) => {
     // Victoria Justice
     if (msg.content.toLowerCase().startsWith("i think")) {
       if (
-        getRandomArbitrary(1, 100) > 0 &&
+        getRandomArbitrary(1, 100) > 80 &&
         msg.content.toLowerCase().length < 50
       ) {
         victoria(msg);
