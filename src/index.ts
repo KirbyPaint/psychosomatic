@@ -148,6 +148,13 @@ client.on("messageCreate", async (msg) => {
       msg.channel.send("Did you just call me Toro?");
     }
 
+    if (msg.content.toLowerCase() === "i think we all sing") {
+      msg.reply(
+        `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
+      );
+      return;
+    }
+
     if (msg.content.toLowerCase().includes("jenny")) {
       msg.react("8️⃣"); // it's seriously just the unicode emoji
       msg.react("6️⃣");

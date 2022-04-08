@@ -33,12 +33,6 @@ export function victoria(msg: Message) {
   //     conditionWord.toLowerCase()
   //   )}
   // `);
-  if (msg.content.toLowerCase() === "i think we all sing") {
-    msg.reply(
-      `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
-    );
-    return;
-  }
   if (msg.content.toLowerCase().includes(`we all`)) {
     msg.reply(`I THINK WE ${rest.join(" ").toUpperCase()}`);
   } else if (
