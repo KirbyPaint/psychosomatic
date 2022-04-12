@@ -50,7 +50,7 @@ export function victoria(msg: Message) {
         .toUpperCase()}`
     );
     // no early return anywhere else or she won't send the vic pic
-    return;
+    // return;
   }
   msg.reply(
     `https://media.discordapp.net/attachments/799876599372840964/932822173872181278/image0-2.png`
