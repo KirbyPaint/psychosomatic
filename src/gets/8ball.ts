@@ -19,6 +19,8 @@ const ball = [
   "My sources say no.",
   "Outlook not so good.",
   "Very doubtful.",
+  "I don't fucking know.",
+  "It's none of my business.",
 ];
 
 export function get8Ball() {

@@ -11,6 +11,7 @@ import {
   getRandomArbitrary,
   jpegReactions,
   MANIFEST_ID,
+  naughtyWordReactions,
   SHEEV_ID,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
@@ -37,6 +38,17 @@ client.on("messageCreate", async (msg) => {
 
   // Processes only for our special server
   if (currentGuildId === process.env.GUILD_ID) {
+    if (msg.content.toLowerCase().match(/\bfoot\b|\bfeet\b/)) {
+      msg.reply(
+        `${
+          naughtyWordReactions[
+            Math.round(getRandomArbitrary(0, naughtyWordReactions.length - 1))
+          ]
+        }`
+      );
+      vicPic(msg);
+    }
+
     if (msg.content.toLowerCase().includes("weep")) {
       msg.channel.send("*ouiiip");
     }
