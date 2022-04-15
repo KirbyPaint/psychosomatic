@@ -170,6 +170,8 @@ export const victoriaReactions = [
   `https://media.discordapp.net/attachments/960785166249361418/960790899598700564/victoriajustice-05042022-0077.jpg?width=1056&height=1320`,
   `https://media.discordapp.net/attachments/960785166249361418/960790899829403678/victoriajustice-05042022-0078.jpg?width=1056&height=1320`,
   `https://media.discordapp.net/attachments/960785166249361418/960790900076838922/victoriajustice-05042022-0079.jpg`,
+  `https://media.discordapp.net/attachments/960785166249361418/964014838730862612/victoriajustice-13042022-0001.jpg`,
+  `https://media.discordapp.net/attachments/960785166249361418/964014960852226109/victoriajustice-13042022-0002.jpg?width=1056&height=1320`,
 ];
 
 export const alanisReactions = [
