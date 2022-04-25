@@ -152,16 +152,25 @@ client.on("messageCreate", async (msg) => {
     // }
 
     if (msg.content.toLowerCase().includes("victoria")) {
+      // ask her a question
       if (
-        msg.content.toLowerCase().startsWith("victoria") &&
-        msg.content.includes("?")
+        msg.content.toLowerCase().startsWith("victoria") ||
+        (msg.content.toLowerCase().startsWith("hey victoria") &&
+          msg.content.includes("?"))
       ) {
         msg.reply(JSON.stringify(get8Ball()));
+      } else if (msg.content.toLowerCase().includes("i love you")) {
+        msg.reply("I love you too");
+        vicPic(msg);
+        // Intentional early return to prevent 2 vicpics
+        return;
       } else {
+        // low chance of a random Victorious quote
         if (getRandomArbitrary(0, 100) >= 95) {
           vicQuote(msg);
         }
       }
+      // always send a vicpic
       vicPic(msg);
     }
 
@@ -204,8 +213,8 @@ client.on("messageCreate", async (msg) => {
     }
 
     // do I look like I know what a jpeg is?
-    if (msg.content.toLowerCase().match(/([ ]jpe?g)/)) {
-      if (getRandomArbitrary(1, 100) > 80) {
+    if (msg.content.toLowerCase().match(/(jpe?g)/)) {
+      if (getRandomArbitrary(1, 100) > 60) {
         msg.channel.send(
           `${
             jpegReactions[
