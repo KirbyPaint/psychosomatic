@@ -38,7 +38,10 @@ client.on("messageCreate", async (msg) => {
 
   // Processes only for our special server
   if (currentGuildId === process.env.GUILD_ID) {
-    if (msg.content.toLowerCase().match(/\bfoot\b|\bfeet\b/)) {
+    if (
+      msg.content.toLowerCase().match(/\bfoot\b|\bfeet\b/) &&
+      !msg.content.toLowerCase().includes("victoria")
+    ) {
       msg.reply(
         `${
           naughtyWordReactions[
@@ -46,7 +49,6 @@ client.on("messageCreate", async (msg) => {
           ]
         }`
       );
-      vicPic(msg);
     }
 
     if (msg.content.toLowerCase().includes("weep")) {
