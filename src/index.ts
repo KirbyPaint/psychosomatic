@@ -104,9 +104,16 @@ client.on("messageCreate", async (msg) => {
     }
 
     // Cat pics API
-    if (msg.content.toLowerCase() === "!kitty") {
-      msg.reply(await getKitty());
-    }
+    // server keeps giving 503 and discord.js is fucking dumb and won't handle it
+    // if (msg.content.toLowerCase() === "!kitty") {
+    //   try {
+    //     const result = await getKitty();
+    //     return result;
+    //   } catch (error) {
+    //     console.log(error);
+    //     return "Error";
+    //   }
+    // }
 
     // Weather API
     if (msg.content.toLowerCase().includes("!weatherboy")) {

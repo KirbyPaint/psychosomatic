@@ -3,7 +3,7 @@ export function help(): string {
   VicBot Help:
 
   !help - Displays this message.
-  !kitty - Fetches a random cat picture.
+  !kitty - BROKEN FOR NOW, SORRY
   !weatherboy [CITY,STATE,COUNTRY] - Displays the current weather.
   !apod - Displays the current Astronomy Pic Of the Day (APOD).
   !apod [YYYY-MM-DD] - Displays an APOD from the given date.
