@@ -255,6 +255,13 @@ client.on("messageCreate", async (msg) => {
     if (msg.content.toLowerCase() === "!help") {
       msg.channel.send(help());
     }
+
+    // Help
+    if (msg.content.toLowerCase() === "burgerboss") {
+      msg.channel.send(
+        `https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRShYgX1IfRVVqMr55MsAVZ3mdeD8LHYS9eAUUyZ4ygpQONDlPR`
+      );
+    }
   }
 });
 
