@@ -214,7 +214,7 @@ client.on("messageCreate", async (msg) => {
 
     // do I look like I know what a jpeg is?
     if (msg.content.toLowerCase().match(/(jpe?g)/)) {
-      if (getRandomArbitrary(1, 100) > 60) {
+      if (getRandomArbitrary(1, 100) > 85) {
         msg.channel.send(
           `${
             jpegReactions[
