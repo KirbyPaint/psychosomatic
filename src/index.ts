@@ -257,7 +257,7 @@ client.on("messageCreate", async (msg) => {
     }
 
     // Help
-    if (msg.content.toLowerCase() === "burgerboss") {
+    if (msg.content.toLowerCase().includes("burgerboss")) {
       msg.channel.send(
         `https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRShYgX1IfRVVqMr55MsAVZ3mdeD8LHYS9eAUUyZ4ygpQONDlPR`
       );
