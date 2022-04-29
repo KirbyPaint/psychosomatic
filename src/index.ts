@@ -256,11 +256,15 @@ client.on("messageCreate", async (msg) => {
       msg.channel.send(help());
     }
 
-    // Help
+    // Bob's Burgers
     if (msg.content.toLowerCase().includes("burgerboss")) {
       msg.channel.send(
         `https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRShYgX1IfRVVqMr55MsAVZ3mdeD8LHYS9eAUUyZ4ygpQONDlPR`
       );
+    }
+    
+    if (msg.content.toLowerCase().includes("noncanonical")) {
+      msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
     }
   }
 });
