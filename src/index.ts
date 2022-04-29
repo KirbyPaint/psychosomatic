@@ -1,6 +1,5 @@
 import { Client, Intents } from "discord.js";
 import dotenv from "dotenv";
-import { getKitty } from "./gets/getKitty";
 import { weatherboy } from "./gets/openWeather";
 import { apod } from "./gets/APOD";
 import { vicPic, vicQuote, victoria } from "./reactions/victoria";
@@ -104,18 +103,6 @@ client.on("messageCreate", async (msg) => {
     if (msg.content.toLowerCase().includes("psychosomatic")) {
       msg.reply("THAT BOY NEEDS THERAPY");
     }
-
-    // Cat pics API
-    // server keeps giving 503 and discord.js is fucking dumb and won't handle it
-    // if (msg.content.toLowerCase() === "!kitty") {
-    //   try {
-    //     const result = await getKitty();
-    //     return result;
-    //   } catch (error) {
-    //     console.log(error);
-    //     return "Error";
-    //   }
-    // }
 
     // Weather API
     if (msg.content.toLowerCase().includes("!weatherboy")) {
@@ -262,7 +249,7 @@ client.on("messageCreate", async (msg) => {
         `https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRShYgX1IfRVVqMr55MsAVZ3mdeD8LHYS9eAUUyZ4ygpQONDlPR`
       );
     }
-    
+
     if (msg.content.toLowerCase().includes("noncanonical")) {
       msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
     }
