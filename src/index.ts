@@ -2,7 +2,7 @@ import { Client, Intents } from "discord.js";
 import dotenv from "dotenv";
 import { weatherboy } from "./gets/openWeather";
 import { apod } from "./gets/APOD";
-import { vicPic, vicQuote, victoria } from "./reactions/victoria";
+import { vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
   BRAIN_CELL_ID,
@@ -15,6 +15,7 @@ import {
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
 import { help } from "./gets/help";
+import { vicLogic } from "./reactions/victoria.logic";
 
 dotenv.config();
 
@@ -41,13 +42,14 @@ client.on("messageCreate", async (msg) => {
       msg.content.toLowerCase().match(/\bfoot\b|\bfeet\b/) &&
       !msg.content.toLowerCase().includes("victoria")
     ) {
-      msg.reply(
-        `${
-          naughtyWordReactions[
-            Math.round(getRandomArbitrary(0, naughtyWordReactions.length - 1))
-          ]
-        }`
-      );
+      msg.channel.send(vicLogic(msg.content) ?? "I don't know what to say");
+      // msg.reply(
+      //   `${
+      //     naughtyWordReactions[
+      //       Math.round(getRandomArbitrary(0, naughtyWordReactions.length - 1))
+      //     ]
+      //   }`
+      // );
     }
 
     if (msg.content.toLowerCase().includes("weep")) {
@@ -130,8 +132,15 @@ client.on("messageCreate", async (msg) => {
         getRandomArbitrary(1, 100) > 80 &&
         msg.content.toLowerCase().length < 50
       ) {
-        victoria(msg);
+        // victoria(msg);
       }
+    }
+
+    if (msg.content.toLowerCase() === "i think we all sing") {
+      msg.reply(
+        `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
+      );
+      return;
     }
 
     if (msg.content.toLowerCase().includes("victoria")) {
@@ -144,7 +153,7 @@ client.on("messageCreate", async (msg) => {
         msg.reply(JSON.stringify(get8Ball()));
       } else if (msg.content.toLowerCase().includes("i love you")) {
         msg.reply("I love you too");
-        vicPic(msg);
+        vicPic();
         // Intentional early return to prevent 2 vicpics
         return;
       } else {
@@ -154,18 +163,11 @@ client.on("messageCreate", async (msg) => {
         }
       }
       // always send a vicpic
-      vicPic(msg);
+      vicPic();
     }
 
     if (msg.content.includes("Toro")) {
       msg.channel.send("Did you just call me Toro?");
-    }
-
-    if (msg.content.toLowerCase() === "i think we all sing") {
-      msg.reply(
-        `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
-      );
-      return;
     }
 
     if (msg.content.toLowerCase().includes("jenny")) {
@@ -188,7 +190,7 @@ client.on("messageCreate", async (msg) => {
         msg.channel.send(
           `${
             alanisReactions[
-              Math.round(getRandomArbitrary(0, alanisReactions.length - 1))
+              Math.floor(getRandomArbitrary(0, alanisReactions.length - 1))
             ]
           }`
         );
@@ -201,7 +203,7 @@ client.on("messageCreate", async (msg) => {
         msg.channel.send(
           `${
             jpegReactions[
-              Math.round(getRandomArbitrary(0, jpegReactions.length - 1))
+              Math.floor(getRandomArbitrary(0, jpegReactions.length - 1))
             ]
           }`
         );
