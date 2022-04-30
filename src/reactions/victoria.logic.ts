@@ -20,13 +20,14 @@ export function vicLogic(message: string) {
   }
 
   // I Think We All Sing
-  // if (message.toLowerCase().startsWith("i think")) {
-  //   // If you say the whole phrase
-  //   if (message.toLowerCase() === "i think we all sing") {
-  //   } else {
-  //     // ITWAS logic here, this is the current victoria() function
-  //     // returns a string, which we will use to reply
-  //     iThinkWeAll(message);
-  //   }
-  // }
+  if (message.toLowerCase().startsWith("i think")) {
+    // If you say the whole phrase
+    if (message.toLowerCase() === "i think we all sing") {
+      return `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`;
+    } else {
+      return iThinkWeAll(message);
+    }
+  }
+
+  return "NO LOGIC CALLED";
 }

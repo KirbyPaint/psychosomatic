@@ -14,6 +14,7 @@ export function iThinkWeAll(msg: string) {
     "you'd",
     "i'm",
   ]; // this is gonna be R O U G H to finalize so i will simply not
+  // The i'd and you'd need to be separate from the we've and the we're, etc.
   const wordsThatNeedNotBeInThePhrase = [
     "i",
     "you",

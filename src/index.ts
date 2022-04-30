@@ -2,7 +2,7 @@ import { Client, Intents } from "discord.js";
 import dotenv from "dotenv";
 import { weatherboy } from "./gets/openWeather";
 import { apod } from "./gets/APOD";
-import { vicPic, vicQuote } from "./reactions/victoria";
+import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
   BRAIN_CELL_ID,
@@ -132,7 +132,6 @@ client.on("messageCreate", async (msg) => {
         getRandomArbitrary(1, 100) > 80 &&
         msg.content.toLowerCase().length < 50
       ) {
-        // victoria(msg);
       }
     }
 
