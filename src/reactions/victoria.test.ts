@@ -40,21 +40,25 @@ describe(`Victoria tests`, () => {
         `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
       );
     });
-    it(`I Think We All 1`, () => {
+    it(`I Think We All base`, () => {
       message = `i think we all dance`;
       expect(vicLogic(message)).toBe(`I THINK WE ALL DANCE`);
     });
-    it(`I Think We All 2`, () => {
+    it(`I Think We All all`, () => {
       message = `i think i love to dance`;
       expect(vicLogic(message)).toBe(`I THINK WE ALL LOVE TO DANCE`);
     });
-    it(`I Think We All 3`, () => {
+    it(`I Think We All 'd'`, () => {
       message = `i think i'd go dance`;
-      expect(vicLogic(message)).toBe(`I THINK WE'RE ALL GO DANCE`);
+      expect(vicLogic(message)).toBe(`I THINK WE'D ALL GO DANCE`);
     });
-    it(`I Think We All 4`, () => {
+    it(`I Think We All null`, () => {
       message = `i think magumbo magumbo`;
       expect(vicLogic(message)).toBe(`I THINK WE ALL MAGUMBO MAGUMBO`);
+    });
+    it(`I Think We All 're'`, () => {
+      message = `i think we're going out dancing`;
+      expect(vicLogic(message)).toBe(`I THINK WE'RE ALL GOING OUT DANCING`);
     });
   });
 });
