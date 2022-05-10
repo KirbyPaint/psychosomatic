@@ -1,7 +1,5 @@
 import { Client, Intents } from "discord.js";
 import dotenv from "dotenv";
-import { weatherboy } from "./gets/openWeather";
-import { apod } from "./gets/APOD";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
@@ -10,7 +8,6 @@ import {
   getRandomArbitrary,
   jpegReactions,
   MANIFEST_ID,
-  naughtyWordReactions,
   SHEEV_ID,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
@@ -43,13 +40,6 @@ client.on("messageCreate", async (msg) => {
       !msg.content.toLowerCase().includes("victoria")
     ) {
       msg.channel.send(vicLogic(msg.content) ?? "I don't know what to say");
-      // msg.reply(
-      //   `${
-      //     naughtyWordReactions[
-      //       Math.round(getRandomArbitrary(0, naughtyWordReactions.length - 1))
-      //     ]
-      //   }`
-      // );
     }
 
     if (msg.content.toLowerCase().includes("weep")) {
@@ -106,16 +96,6 @@ client.on("messageCreate", async (msg) => {
       msg.reply("THAT BOY NEEDS THERAPY");
     }
 
-    // Weather API
-    if (msg.content.toLowerCase().includes("!weatherboy")) {
-      weatherboy(msg);
-    }
-
-    // APOD API
-    if (msg.content.toLowerCase().includes("!apod")) {
-      apod(msg);
-    }
-
     // Manifest
     if (msg.content.toLowerCase().includes("manifest")) {
       msg.react(MANIFEST_ID);
@@ -132,37 +112,43 @@ client.on("messageCreate", async (msg) => {
         getRandomArbitrary(1, 100) > 80 &&
         msg.content.toLowerCase().length < 50
       ) {
+        msg.channel.send(vicLogic(msg.content));
+        return;
       }
     }
 
-    if (msg.content.toLowerCase() === "i think we all sing") {
-      msg.reply(
-        `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
-      );
-      return;
-    }
+    // if (msg.content.toLowerCase() === "i think we all sing") {
+    //   msg.reply(
+    //     `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
+    //   );
+    //   return;
+    // }
 
     if (msg.content.toLowerCase().includes("victoria")) {
       // ask her a question
       if (
-        msg.content.toLowerCase().startsWith("victoria") ||
+        (msg.content.toLowerCase().startsWith("victoria") &&
+          msg.content.includes("?")) ||
         (msg.content.toLowerCase().startsWith("hey victoria") &&
           msg.content.includes("?"))
       ) {
         msg.reply(JSON.stringify(get8Ball()));
+        msg.channel.send(vicPic());
+        return;
       } else if (msg.content.toLowerCase().includes("i love you")) {
         msg.reply("I love you too");
-        vicPic();
+        msg.channel.send(vicPic());
         // Intentional early return to prevent 2 vicpics
         return;
       } else {
         // low chance of a random Victorious quote
         if (getRandomArbitrary(0, 100) >= 95) {
-          vicQuote(msg);
+          msg.channel.send(vicQuote());
+          msg.channel.send(vicPic());
+          return;
         }
       }
-      // always send a vicpic
-      vicPic();
+      msg.channel.send(vicPic());
     }
 
     if (msg.content.includes("Toro")) {
@@ -185,7 +171,7 @@ client.on("messageCreate", async (msg) => {
       msg.content.toLowerCase().includes("alanis")
     ) {
       // 1/20 chance of Alanisposting
-      if (getRandomArbitrary(1, 100) > 95) {
+      if (getRandomArbitrary(1, 100) >= 95) {
         msg.channel.send(
           `${
             alanisReactions[
@@ -197,7 +183,7 @@ client.on("messageCreate", async (msg) => {
     }
 
     // do I look like I know what a jpeg is?
-    if (msg.content.toLowerCase().match(/(jpe?g)/)) {
+    if (msg.content.toLowerCase().match(/([^\.]jpe?g)/)) {
       if (getRandomArbitrary(1, 100) > 85) {
         msg.channel.send(
           `${
@@ -256,7 +242,8 @@ client.on("messageCreate", async (msg) => {
 client.on("ready", () => {
   console.log(`Logged in as ${client?.user?.tag}!\n`);
   // set status
-  client.user?.setActivity("Victorious", { type: "WATCHING" });
+  // client.user?.setActivity("Victorious", { type: "WATCHING" });
+  client.user?.setActivity("DEBUGGING");
 });
 
 //make sure this line is the last line
