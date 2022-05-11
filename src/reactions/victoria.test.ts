@@ -1,4 +1,4 @@
-import { naughtyWordReactions, victoriaReactions } from "../consts";
+import { jpegRegex, naughtyWordReactions, victoriaReactions } from "../consts";
 import { vicLogic } from "./victoria.logic";
 
 describe(`Victoria tests`, () => {
@@ -59,6 +59,18 @@ describe(`Victoria tests`, () => {
     it(`I Think We All 're'`, () => {
       message = `i think we're going out dancing`;
       expect(vicLogic(message)).toBe(`I THINK WE'RE ALL GOING OUT DANCING`);
+    });
+  });
+  describe(`regex`, () => {
+    it(`should match these strings`, () => {
+      expect(`jpeg`).toMatch(jpegRegex);
+      expect(`jpg`).toMatch(jpegRegex);
+      expect(` jpeg`).toMatch(jpegRegex);
+      expect(` jpg`).toMatch(jpegRegex);
+    });
+    it(`should not match these strings`, () => {
+      expect(`.jpeg`).not.toMatch(jpegRegex);
+      expect(`.jpg`).not.toMatch(jpegRegex);
     });
   });
 });

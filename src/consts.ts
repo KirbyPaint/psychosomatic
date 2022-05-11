@@ -218,3 +218,6 @@ export const SHEEV_ID = "636777145921699852";
 export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
+
+// export const jpegRegex = /(jpe?g)/;
+export const jpegRegex = /^[^.]*(jpe?g)/;

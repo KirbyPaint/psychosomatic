@@ -1,12 +1,13 @@
 import { Client, Intents } from "discord.js";
 import dotenv from "dotenv";
-import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
+import { vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
   BRAIN_CELL_ID,
   CONCH_ID,
   getRandomArbitrary,
   jpegReactions,
+  jpegRegex,
   MANIFEST_ID,
   SHEEV_ID,
 } from "./consts";
@@ -108,21 +109,20 @@ client.on("messageCreate", async (msg) => {
 
     // Victoria Justice
     if (msg.content.toLowerCase().startsWith("i think")) {
-      if (
+      if (msg.content.toLowerCase() === "i think we all sing") {
+        msg.reply(
+          `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
+        );
+        return;
+      } else if (
         getRandomArbitrary(1, 100) > 80 &&
         msg.content.toLowerCase().length < 50
       ) {
         msg.channel.send(vicLogic(msg.content));
+        msg.channel.send(vicPic());
         return;
       }
     }
-
-    // if (msg.content.toLowerCase() === "i think we all sing") {
-    //   msg.reply(
-    //     `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
-    //   );
-    //   return;
-    // }
 
     if (msg.content.toLowerCase().includes("victoria")) {
       // ask her a question
@@ -183,7 +183,7 @@ client.on("messageCreate", async (msg) => {
     }
 
     // do I look like I know what a jpeg is?
-    if (msg.content.toLowerCase().match(/([^\.]jpe?g)/)) {
+    if (msg.content.toLowerCase().match(jpegRegex)) {
       if (getRandomArbitrary(1, 100) > 85) {
         msg.channel.send(
           `${
@@ -242,8 +242,7 @@ client.on("messageCreate", async (msg) => {
 client.on("ready", () => {
   console.log(`Logged in as ${client?.user?.tag}!\n`);
   // set status
-  // client.user?.setActivity("Victorious", { type: "WATCHING" });
-  client.user?.setActivity("DEBUGGING");
+  client.user?.setActivity("Victorious 24/7", { type: "WATCHING" });
 });
 
 //make sure this line is the last line
