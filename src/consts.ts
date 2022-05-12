@@ -176,6 +176,14 @@ export const victoriaReactions = [
   `https://media.discordapp.net/attachments/960785166249361418/965502777793073192/victoriajustice-18042022-0001.jpg`,
   `https://media.discordapp.net/attachments/960785166249361418/965503423174836254/victoriajustice-18042022-0002.jpg?width=742&height=1319`,
   `https://media.discordapp.net/attachments/960785166249361418/965893540439801906/IMG_6906.jpg`,
+  `https://media.discordapp.net/attachments/960785166249361418/968307128207020082/victoriajustice-25042022-0001.jpg?width=1056&height=1319`,
+  `https://media.discordapp.net/attachments/960785166249361418/968307128550965308/victoriajustice-25042022-0002.jpg?width=1056&height=1319`,
+  `https://media.discordapp.net/attachments/960785166249361418/968307128773247006/victoriajustice-25042022-0003.jpg?width=1056&height=1320`,
+  `https://media.discordapp.net/attachments/960785166249361418/968307129083633714/victoriajustice-25042022-0004.jpg?width=1056&height=1320`,
+  `https://media.discordapp.net/attachments/960785166249361418/968710349211717642/victoriajustice-26042022-0001.jpg`,
+  `https://media.discordapp.net/attachments/960785166249361418/971209644833898557/victoriajustice-03052022-0001.jpg?width=1056&height=1320`,
+  `https://media.discordapp.net/attachments/960785166249361418/973040012109164615/victoriajustice-08052022-0001.jpg?width=1056&height=1320`,
+  `https://cdn.discordapp.com/attachments/960785166249361418/973040022292930610/victoriajustice-08052022-0001.mp4`,
 ];
 
 export const alanisReactions = [
@@ -219,5 +227,5 @@ export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
 }
 
-// export const jpegRegex = /(jpe?g)/;
 export const jpegRegex = /^[^.]*(jpe?g)/;
+export const weepRegex = /\b(weep)\b/;

@@ -1,4 +1,9 @@
-import { jpegRegex, naughtyWordReactions, victoriaReactions } from "../consts";
+import {
+  jpegRegex,
+  naughtyWordReactions,
+  victoriaReactions,
+  weepRegex,
+} from "../consts";
 import { vicLogic } from "./victoria.logic";
 
 describe(`Victoria tests`, () => {
@@ -62,15 +67,28 @@ describe(`Victoria tests`, () => {
     });
   });
   describe(`regex`, () => {
-    it(`should match these strings`, () => {
-      expect(`jpeg`).toMatch(jpegRegex);
-      expect(`jpg`).toMatch(jpegRegex);
-      expect(` jpeg`).toMatch(jpegRegex);
-      expect(` jpg`).toMatch(jpegRegex);
+    describe(`jpeg`, () => {
+      it(`should match these strings`, () => {
+        expect(`jpeg`).toMatch(jpegRegex);
+        expect(`jpg`).toMatch(jpegRegex);
+        expect(` jpeg`).toMatch(jpegRegex);
+        expect(` jpg`).toMatch(jpegRegex);
+      });
+      it(`should not match these strings`, () => {
+        expect(`.jpeg`).not.toMatch(jpegRegex);
+        expect(`.jpg`).not.toMatch(jpegRegex);
+      });
     });
-    it(`should not match these strings`, () => {
-      expect(`.jpeg`).not.toMatch(jpegRegex);
-      expect(`.jpg`).not.toMatch(jpegRegex);
+    describe(`weep`, () => {
+      it(`should match these strings`, () => {
+        expect(`weep`).toMatch(weepRegex);
+        expect(` weep `).toMatch(weepRegex);
+        expect(`      weep      `).toMatch(weepRegex);
+      });
+      it(`should not match these strings`, () => {
+        expect(`minesweeper`).not.toMatch(weepRegex);
+        expect(`sweepstakes`).not.toMatch(weepRegex);
+      });
     });
   });
 });

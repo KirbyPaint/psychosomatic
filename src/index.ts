@@ -10,6 +10,7 @@ import {
   jpegRegex,
   MANIFEST_ID,
   SHEEV_ID,
+  weepRegex,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
 import { help } from "./gets/help";
@@ -32,10 +33,11 @@ const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
 let whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
 
 client.on("messageCreate", async (msg) => {
+  const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
   // Processes only for our special server
-  if (currentGuildId === process.env.GUILD_ID) {
+  if (currentGuildId === process.env.GUILD_ID && !isPostedByBot) {
     if (
       msg.content.toLowerCase().match(/\bfoot\b|\bfeet\b/) &&
       !msg.content.toLowerCase().includes("victoria")
@@ -43,7 +45,7 @@ client.on("messageCreate", async (msg) => {
       msg.channel.send(vicLogic(msg.content) ?? "I don't know what to say");
     }
 
-    if (msg.content.toLowerCase().includes("weep")) {
+    if (msg.content.toLowerCase().match(weepRegex)) {
       msg.channel.send("*ouiiip");
     }
 
