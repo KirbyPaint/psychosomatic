@@ -15,8 +15,12 @@ import {
 import { get8Ball } from "./gets/8ball";
 import { help } from "./gets/help";
 import { vicLogic } from "./reactions/victoria.logic";
+import { PrismaClient } from "@prisma/client";
+import chalk from "chalk";
 
 dotenv.config();
+
+const prisma = new PrismaClient();
 
 //create new client
 const client = new Client({
@@ -35,6 +39,11 @@ let whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
 client.on("messageCreate", async (msg) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
+
+  if (msg.content.toLowerCase().includes("!database")) {
+    const db = await prisma.testModel.findMany();
+    msg.channel.send(`${JSON.stringify(db)}`);
+  }
 
   // Processes only for our special server
   if (currentGuildId === process.env.GUILD_ID && !isPostedByBot) {
@@ -241,8 +250,17 @@ client.on("messageCreate", async (msg) => {
   }
 });
 
-client.on("ready", () => {
-  console.log(`Logged in as ${client?.user?.tag}!\n`);
+client.on("ready", async () => {
+  const testUserCount = await prisma.testModel.count();
+  if (testUserCount === 0) {
+    console.log(chalk.red("No users seeded in db"));
+    console.log(chalk.yellow("Please run yarn seed"));
+  }
+  console.log(
+    `Logged in as ${client?.user?.tag}!\n with ${testUserCount} user${
+      testUserCount === 1 ? "" : "s"
+    }`
+  );
   // set status
   client.user?.setActivity("Victorious 24/7", { type: "WATCHING" });
 });
