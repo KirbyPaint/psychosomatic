@@ -10,7 +10,8 @@
     "watch": "nodemon -e ts --watch src --exec 'yarn build-dist && yarn start'",
     "test": "jest",
     "seed": "prisma db seed",
-    "push": "prisma db push"
+    "push": "prisma db push",
+    "format": "prisma format"
   },
   "repository": {
     "type": "git",

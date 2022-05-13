@@ -17,9 +17,22 @@ model TestModel {
   updatedAt DateTime @updatedAt
 }
 
-model Competitor {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Player {
+  discordId String    @id
+  username  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  items     Item[]    @relation()
+  xp        Int?
+}
+
+model Item {
+  id          Int      @id @default(autoincrement())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Owner       Player   @relation(fields: [ownerId], references: [discordId])
+  ownerId     String
+  description String
 }

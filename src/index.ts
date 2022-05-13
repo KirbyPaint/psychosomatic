@@ -40,9 +40,65 @@ client.on("messageCreate", async (msg) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
-  if (msg.content.toLowerCase().includes("!database")) {
-    const db = await prisma.testModel.findMany();
-    msg.channel.send(`${JSON.stringify(db)}`);
+  if (msg.content === "!addPlayer") {
+    const playerExists = await prisma.player.findFirst({
+      where: { discordId: msg.author.id },
+    });
+    if (playerExists) {
+      if (playerExists.deletedAt) {
+        await prisma.player.update({
+          where: { discordId: msg.author.id },
+          data: { deletedAt: null },
+        });
+        msg.channel.send(`${msg.author.username} has been restored!`);
+        return;
+      }
+      msg.channel.send("You're already in the game!");
+      return;
+    }
+    try {
+      const db = await prisma.player.create({
+        data: {
+          username: msg.author.username,
+          discordId: msg.author.id,
+        },
+      });
+      msg.channel.send(`Added player ${JSON.stringify(db.username)}`);
+    } catch (error) {
+      console.log(chalk.red("Error adding player: ", error));
+      msg.channel.send(
+        "Failed to add player, ask KirbyPaint to see what happened"
+      );
+    }
+  }
+
+  if (msg.content === "!removePlayer") {
+    const playerExists = await prisma.player.findFirst({
+      where: { discordId: msg.author.id, deletedAt: null },
+    });
+    if (!playerExists) {
+      msg.channel.send("You're already not in the game!");
+      return;
+    }
+    try {
+      const db = await prisma.player.update({
+        where: {
+          discordId: msg.author.id,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+      msg.channel.send(`Removed player ${JSON.stringify(db.username)}`);
+    } catch (error) {
+      console.log(chalk.red("Error removing player: ", error));
+      msg.channel.send(
+        "Failed to remove player, ask KirbyPaint to see what happened"
+      );
+    }
+  }
+
+  if (msg.content === `!doot`) {
   }
 
   // Processes only for our special server
