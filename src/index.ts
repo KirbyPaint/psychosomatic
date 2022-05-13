@@ -118,8 +118,8 @@ client.on(`messageCreate`, async (msg) => {
     const script = rest.join(` `);
     try {
       const bad = await prisma.$executeRawUnsafe(script);
-      console.log(chalk.green(`Executed script!`));
-      msg.channel.send(`Executed script: ${bad}`);
+      console.log(chalk.green(`Executed script! ${script}`));
+      msg.channel.send(`Executed script: ${script}`);
     } catch (error: any) {
       console.log(chalk.red(`Error executing script: `, error));
       msg.channel.send(JSON.stringify(error));
