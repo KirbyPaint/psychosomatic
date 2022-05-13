@@ -31,6 +31,15 @@ const client = new Client({
   ],
 });
 
+interface IError {
+  code: string;
+  clientVersion: string;
+  meta: {
+    code: string;
+    message: string;
+  };
+}
+
 // this array has to stay in this file because otherwise it can't read the .env
 // can probably move the config line but nah
 const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
@@ -102,6 +111,48 @@ client.on(`messageCreate`, async (msg) => {
         `Failed to remove player, ask KirbyPaint to see what happened`,
       );
     }
+  }
+
+  if (msg.content.startsWith(`!script`)) {
+    const [command, ...rest] = msg.content.split(` `);
+    const script = rest.join(` `);
+    try {
+      const bad = await prisma.$executeRawUnsafe(script);
+      console.log(chalk.green(`Executed script!`));
+      msg.channel.send(`Executed script: ${bad}`);
+    } catch (error: any) {
+      console.log(chalk.red(`Error executing script: `, error));
+      msg.channel.send(JSON.stringify(error));
+    }
+    // msg.channel.send(bad.toString());
+  }
+
+  if (msg.content.startsWith(`!rename`)) {
+    const [command, ...rest] = msg.content.split(` `);
+    const newName = rest.join(` `);
+    try {
+      const db = await prisma.player.update({
+        where: {
+          discordId: msg.author.id,
+        },
+        data: {
+          username: newName,
+        },
+      });
+      console.log(chalk.green(`Renamed ${msg.author.username}!`));
+      msg.channel.send(`Renamed player ${JSON.stringify(db.username)}`);
+    } catch (error) {
+      console.log(chalk.red(`Error renaming player: `, error));
+      msg.channel.send(
+        `Failed to rename player, ask KirbyPaint to see what happened`,
+      );
+    }
+  }
+
+  if (msg.content.startsWith(`!vecho`)) {
+    const [command, ...rest] = msg.content.split(` `);
+    const message = rest.join(` `);
+    msg.channel.send(message);
   }
 
   if (msg.content === `!players`) {
@@ -244,10 +295,12 @@ client.on(`messageCreate`, async (msg) => {
           }
         }
       } catch (error) {
+        if (error instanceof Error) {
+          console.log(chalk.red(`Error updating player: `, error));
+          msg.channel.send(`Failed to complete doot: `);
+          msg.channel.send(error.toString());
+        }
         console.log(chalk.red(`Error updating player: `, error));
-        msg.channel.send(
-          `Failed to complete doot, ask KirbyPaint to see what happened`,
-        );
       }
     }
   }
