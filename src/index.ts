@@ -40,7 +40,9 @@ client.on(`messageCreate`, async (msg) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
-  if (msg.content === `!addPlayer`) {
+  if (msg.content.startsWith(`!addPlayer`)) {
+    const [command, ...rest] = msg.content.split(` `);
+    const playerName = rest.join(` `);
     const playerExists = await prisma.player.findFirst({
       where: { discordId: msg.author.id },
     });
@@ -60,7 +62,7 @@ client.on(`messageCreate`, async (msg) => {
     try {
       const db = await prisma.player.create({
         data: {
-          username: msg.author.username,
+          username: playerName ? playerName : msg.author.username,
           discordId: msg.author.id,
           xp: 50,
         },
@@ -98,6 +100,38 @@ client.on(`messageCreate`, async (msg) => {
       console.log(chalk.red(`Error removing player: `, error));
       msg.channel.send(
         `Failed to remove player, ask KirbyPaint to see what happened`,
+      );
+    }
+  }
+
+  if (msg.content === `!players`) {
+    const players = await prisma.player.findMany({
+      where: { deletedAt: null },
+    });
+    const playerList = players.map((player) => player.username);
+    msg.channel.send(`Players: ${playerList.join(`, `)}\n`);
+  }
+
+  if (msg.content === `!deletePlayer`) {
+    const playerExists = await prisma.player.findFirst({
+      where: { discordId: msg.author.id, deletedAt: null },
+    });
+    if (!playerExists) {
+      msg.channel.send(`You're already not in the game!`);
+      return;
+    }
+    try {
+      const db = await prisma.player.delete({
+        where: {
+          discordId: msg.author.id,
+        },
+      });
+      console.log(chalk.green(`Deleted ${msg.author.username}!`));
+      msg.channel.send(`Deleted player ${JSON.stringify(db.username)}`);
+    } catch (error) {
+      console.log(chalk.red(`Error deleting player: `, error));
+      msg.channel.send(
+        `Failed to delete player, ask KirbyPaint to see what happened`,
       );
     }
   }
@@ -188,11 +222,23 @@ client.on(`messageCreate`, async (msg) => {
                 xp: 0,
               },
             });
+            await prisma.player.update({
+              where: { discordId: attackingPlayer.discordId },
+              data: {
+                xp: attackingPlayer.xp + parseInt(damage) + 5,
+              },
+            });
           } else {
             await prisma.player.update({
               where: { discordId: defendingPlayer.discordId },
               data: {
-                xp: defendingPlayer?.xp - 1,
+                xp: defendingPlayer?.xp - parseInt(damage),
+              },
+            });
+            await prisma.player.update({
+              where: { discordId: attackingPlayer.discordId },
+              data: {
+                xp: attackingPlayer.xp + parseInt(damage) + 5,
               },
             });
           }
@@ -215,11 +261,40 @@ client.on(`messageCreate`, async (msg) => {
       return;
     }
     if (!currentPlayer.xp) {
-      msg.channel.send(`You have no doots!`);
+      msg.channel.send(`${currentPlayer.username} has no doots!`);
       return;
     }
     const dootCount = currentPlayer.xp;
-    msg.channel.send(`You have ${dootCount} doots!`);
+    msg.channel.send(`${currentPlayer.username} has ${dootCount} doots!`);
+  }
+
+  if (msg.content.toLowerCase().startsWith(`!restore`)) {
+    await prisma.player.update({
+      where: { discordId: msg.author.id },
+      data: {
+        deletedAt: null,
+        xp: 50,
+      },
+    });
+    msg.channel.send(`Restored ${msg.author.username}!`);
+  }
+
+  if (msg.content.toLowerCase().startsWith(`!stats`)) {
+    const player = await prisma.player.findFirst({
+      where: { discordId: msg.author.id, deletedAt: null },
+    });
+    if (!player) {
+      msg.channel.send(`You're not in the game!`);
+      return;
+    }
+    const output = `
+      Username:   ${player.username}
+      Created At: ${player.createdAt}
+      Updated At: ${player.updatedAt}
+      Deleted At: ${player.deletedAt}
+      Doots:      ${player.xp}
+    `;
+    msg.channel.send(output);
   }
 
   // Processes only for our special server

@@ -184,6 +184,7 @@ export const victoriaReactions = [
   `https://media.discordapp.net/attachments/960785166249361418/971209644833898557/victoriajustice-03052022-0001.jpg?width=1056&height=1320`,
   `https://media.discordapp.net/attachments/960785166249361418/973040012109164615/victoriajustice-08052022-0001.jpg?width=1056&height=1320`,
   `https://cdn.discordapp.com/attachments/960785166249361418/973040022292930610/victoriajustice-08052022-0001.mp4`,
+  `https://media.discordapp.net/attachments/960785166249361418/974544081508270110/victoriajustice-13052022-0001.jpg`,
 ];
 
 export const alanisReactions = [
@@ -205,23 +206,23 @@ export const alanisReactions = [
 ];
 
 export const jpegReactions = [
-  "https://youtu.be/ZXVhOPiM4mk", // hotdog.jpeg song
-  "https://youtu.be/EvKTOHVGNbg", // hotdog.jpeg
-  "https://cdn.discordapp.com/attachments/799876599372840964/949119835940466688/big_1482307605_image.png", // just the screen cap
+  `https://youtu.be/ZXVhOPiM4mk`, // hotdog.jpeg song
+  `https://youtu.be/EvKTOHVGNbg`, // hotdog.jpeg
+  `https://cdn.discordapp.com/attachments/799876599372840964/949119835940466688/big_1482307605_image.png`, // just the screen cap
 ];
 
 export const naughtyWordReactions = [
-  "We don't do that here.",
-  "You said the f-word.",
-  "Banned word detected.",
-  "👣",
-  "NO FUCKING FEET ON OUR FUCKING SERVER",
+  `We don't do that here.`,
+  `You said the f-word.`,
+  `Banned word detected.`,
+  `👣`,
+  `NO FUCKING FEET ON OUR FUCKING SERVER`,
 ];
 
-export const MANIFEST_ID = "769755766352642128";
-export const BRAIN_CELL_ID = "936895162074951730"; // custom emoji
-export const CONCH_ID = "809579247994929182";
-export const SHEEV_ID = "636777145921699852";
+export const MANIFEST_ID = `769755766352642128`;
+export const BRAIN_CELL_ID = `936895162074951730`; // custom emoji
+export const CONCH_ID = `809579247994929182`;
+export const SHEEV_ID = `636777145921699852`;
 
 export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
