@@ -98,8 +98,8 @@ client.on("messageCreate", async (msg) => {
     }
   }
 
-  if (msg.content === `!doot`) {
-  }
+  // if (msg.content === `!doot`) {
+  // }
 
   // Processes only for our special server
   if (currentGuildId === process.env.GUILD_ID && !isPostedByBot) {

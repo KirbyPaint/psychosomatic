@@ -11,7 +11,8 @@
     "test": "jest",
     "seed": "prisma db seed",
     "push": "prisma db push",
-    "format": "prisma format"
+    "format": "prisma format",
+    "lint": "eslint . --ext .ts --fix"
   },
   "repository": {
     "type": "git",

@@ -1,10 +1,10 @@
-import { Message } from "discord.js";
 import { victoriaReactions, getRandomArbitrary } from "../consts";
 import { toriQuotes } from "../gets/toriQuotes";
 
 export function iThinkWeAll(msg: string) {
   // const { content } = msg;
   const contentArray: Array<string> = msg.split(" ");
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [i, think, conditionWord, ...rest] = contentArray;
   // Thanks to grammar, I have to do work
   const wouldCouldShouldHad = [
