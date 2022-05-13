@@ -36,11 +36,11 @@ const client = new Client({
 const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
 let whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
 
-client.on("messageCreate", async (msg) => {
+client.on(`messageCreate`, async (msg) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
-  if (msg.content === "!addPlayer") {
+  if (msg.content === `!addPlayer`) {
     const playerExists = await prisma.player.findFirst({
       where: { discordId: msg.author.id },
     });
@@ -53,7 +53,7 @@ client.on("messageCreate", async (msg) => {
         msg.channel.send(`${msg.author.username} has been restored!`);
         return;
       }
-      msg.channel.send("You're already in the game!");
+      msg.channel.send(`You're already in the game!`);
       return;
     }
     try {
@@ -65,19 +65,19 @@ client.on("messageCreate", async (msg) => {
       });
       msg.channel.send(`Added player ${JSON.stringify(db.username)}`);
     } catch (error) {
-      console.log(chalk.red("Error adding player: ", error));
+      console.log(chalk.red(`Error adding player: `, error));
       msg.channel.send(
-        "Failed to add player, ask KirbyPaint to see what happened"
+        `Failed to add player, ask KirbyPaint to see what happened`,
       );
     }
   }
 
-  if (msg.content === "!removePlayer") {
+  if (msg.content === `!removePlayer`) {
     const playerExists = await prisma.player.findFirst({
       where: { discordId: msg.author.id, deletedAt: null },
     });
     if (!playerExists) {
-      msg.channel.send("You're already not in the game!");
+      msg.channel.send(`You're already not in the game!`);
       return;
     }
     try {
@@ -91,9 +91,9 @@ client.on("messageCreate", async (msg) => {
       });
       msg.channel.send(`Removed player ${JSON.stringify(db.username)}`);
     } catch (error) {
-      console.log(chalk.red("Error removing player: ", error));
+      console.log(chalk.red(`Error removing player: `, error));
       msg.channel.send(
-        "Failed to remove player, ask KirbyPaint to see what happened"
+        `Failed to remove player, ask KirbyPaint to see what happened`,
       );
     }
   }
@@ -105,20 +105,20 @@ client.on("messageCreate", async (msg) => {
   if (currentGuildId === process.env.GUILD_ID && !isPostedByBot) {
     if (
       msg.content.toLowerCase().match(/\bfoot\b|\bfeet\b/) &&
-      !msg.content.toLowerCase().includes("victoria")
+      !msg.content.toLowerCase().includes(`victoria`)
     ) {
-      msg.channel.send(vicLogic(msg.content) ?? "I don't know what to say");
+      msg.channel.send(vicLogic(msg.content) ?? `I don't know what to say`);
     }
 
     if (msg.content.toLowerCase().match(weepRegex)) {
-      msg.channel.send("*ouiiip");
+      msg.channel.send(`*ouiiip`);
     }
 
     // One brain cell
     // command to check the brain cell
-    if (msg.content.toLowerCase().includes("who has the brain cell")) {
+    if (msg.content.toLowerCase().includes(`who has the brain cell`)) {
       msg.channel.send(
-        `<@${whoHasTheBrainCell}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
+        `<@${whoHasTheBrainCell}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
       );
     }
 
@@ -126,17 +126,17 @@ client.on("messageCreate", async (msg) => {
 
     // for the future - this should be more like
     // "if the sender is trying to claim the brain cell, don't let them"
-    if (msg.content.toLowerCase().includes("!give")) {
+    if (msg.content.toLowerCase().includes(`!give`)) {
       switch (whoHasTheBrainCell) {
         case BRAIN_CELL_OWNERS[0]:
           if (msg.author.id !== BRAIN_CELL_OWNERS[1]) {
             whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
             msg.channel.send(
-              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
+              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
             );
           } else {
             msg.reply(
-              "You cannot take the brain cell, it must be given willingly"
+              `You cannot take the brain cell, it must be given willingly`,
             );
           }
           break;
@@ -144,11 +144,11 @@ client.on("messageCreate", async (msg) => {
           if (msg.author.id !== BRAIN_CELL_OWNERS[0]) {
             whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
             msg.channel.send(
-              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`
+              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
             );
           } else {
             msg.reply(
-              "You cannot take the brain cell, it must be given willingly"
+              `You cannot take the brain cell, it must be given willingly`,
             );
           }
           break;
@@ -160,25 +160,25 @@ client.on("messageCreate", async (msg) => {
 
   if (msg.author.id !== process.env.BOT_ID) {
     // PSYCHOSOMATIC
-    if (msg.content.toLowerCase().includes("psychosomatic")) {
-      msg.reply("THAT BOY NEEDS THERAPY");
+    if (msg.content.toLowerCase().includes(`psychosomatic`)) {
+      msg.reply(`THAT BOY NEEDS THERAPY`);
     }
 
     // Manifest
-    if (msg.content.toLowerCase().includes("manifest")) {
+    if (msg.content.toLowerCase().includes(`manifest`)) {
       msg.react(MANIFEST_ID);
     }
 
     // Conch
-    if (msg.content.toLowerCase().includes("maybe someday")) {
+    if (msg.content.toLowerCase().includes(`maybe someday`)) {
       msg.react(CONCH_ID);
     }
 
     // Victoria Justice
-    if (msg.content.toLowerCase().startsWith("i think")) {
-      if (msg.content.toLowerCase() === "i think we all sing") {
+    if (msg.content.toLowerCase().startsWith(`i think`)) {
+      if (msg.content.toLowerCase() === `i think we all sing`) {
         msg.reply(
-          `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
+          `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`,
         );
         return;
       } else if (
@@ -191,19 +191,19 @@ client.on("messageCreate", async (msg) => {
       }
     }
 
-    if (msg.content.toLowerCase().includes("victoria")) {
+    if (msg.content.toLowerCase().includes(`victoria`)) {
       // ask her a question
       if (
-        (msg.content.toLowerCase().startsWith("victoria") &&
-          msg.content.includes("?")) ||
-        (msg.content.toLowerCase().startsWith("hey victoria") &&
-          msg.content.includes("?"))
+        (msg.content.toLowerCase().startsWith(`victoria`) &&
+          msg.content.includes(`?`)) ||
+        (msg.content.toLowerCase().startsWith(`hey victoria`) &&
+          msg.content.includes(`?`))
       ) {
         msg.reply(JSON.stringify(get8Ball()));
         msg.channel.send(vicPic());
         return;
-      } else if (msg.content.toLowerCase().includes("i love you")) {
-        msg.reply("I love you too");
+      } else if (msg.content.toLowerCase().includes(`i love you`)) {
+        msg.reply(`I love you too`);
         msg.channel.send(vicPic());
         // Intentional early return to prevent 2 vicpics
         return;
@@ -218,24 +218,24 @@ client.on("messageCreate", async (msg) => {
       msg.channel.send(vicPic());
     }
 
-    if (msg.content.includes("Toro")) {
-      msg.channel.send("Did you just call me Toro?");
+    if (msg.content.includes(`Toro`)) {
+      msg.channel.send(`Did you just call me Toro?`);
     }
 
-    if (msg.content.toLowerCase().includes("jenny")) {
-      msg.react("8️⃣"); // it's seriously just the unicode emoji
-      msg.react("6️⃣");
-      msg.react("7️⃣");
-      msg.react("5️⃣");
-      msg.react("3️⃣");
-      msg.react("0️⃣");
-      msg.react("9️⃣");
+    if (msg.content.toLowerCase().includes(`jenny`)) {
+      msg.react(`8️⃣`); // it's seriously just the unicode emoji
+      msg.react(`6️⃣`);
+      msg.react(`7️⃣`);
+      msg.react(`5️⃣`);
+      msg.react(`3️⃣`);
+      msg.react(`0️⃣`);
+      msg.react(`9️⃣`);
     }
 
     // Alanis
     if (
-      msg.content.toLowerCase().includes("ironic") ||
-      msg.content.toLowerCase().includes("alanis")
+      msg.content.toLowerCase().includes(`ironic`) ||
+      msg.content.toLowerCase().includes(`alanis`)
     ) {
       // 1/20 chance of Alanisposting
       if (getRandomArbitrary(1, 100) >= 95) {
@@ -244,7 +244,7 @@ client.on("messageCreate", async (msg) => {
             alanisReactions[
               Math.floor(getRandomArbitrary(0, alanisReactions.length - 1))
             ]
-          }`
+          }`,
         );
       }
     }
@@ -257,7 +257,7 @@ client.on("messageCreate", async (msg) => {
             jpegReactions[
               Math.floor(getRandomArbitrary(0, jpegReactions.length - 1))
             ]
-          }`
+          }`,
         );
       }
     }
@@ -267,58 +267,58 @@ client.on("messageCreate", async (msg) => {
       msg.content.toLowerCase().match(/(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i)
     ) {
       const wordsArray = msg.content.match(
-        /(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i
+        /(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i,
       ); // this might be shit but it'll do the job
       if (wordsArray) {
-        const wordsArray2 = wordsArray[0].split(" ");
-        wordsArray2[0] = "2";
-        wordsArray2[2] = "2";
-        const newString = wordsArray2.join(" ");
+        const wordsArray2 = wordsArray[0].split(` `);
+        wordsArray2[0] = `2`;
+        wordsArray2[2] = `2`;
+        const newString = wordsArray2.join(` `);
         msg.channel.send(newString);
       }
     }
 
     // Shia Surprise
-    if (msg.content.toLowerCase().includes("shia labeouf")) {
-      msg.channel.send("https://youtu.be/o0u4M6vppCI");
+    if (msg.content.toLowerCase().includes(`shia labeouf`)) {
+      msg.channel.send(`https://youtu.be/o0u4M6vppCI`);
     }
 
     // DO IT
-    if (msg.content.toLowerCase().includes("do it")) {
+    if (msg.content.toLowerCase().includes(`do it`)) {
       msg.react(SHEEV_ID);
     }
 
     // Help
-    if (msg.content.toLowerCase() === "!help") {
+    if (msg.content.toLowerCase() === `!help`) {
       msg.channel.send(help());
     }
 
     // Bob's Burgers
-    if (msg.content.toLowerCase().includes("burgerboss")) {
+    if (msg.content.toLowerCase().includes(`burgerboss`)) {
       msg.channel.send(
-        `https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRShYgX1IfRVVqMr55MsAVZ3mdeD8LHYS9eAUUyZ4ygpQONDlPR`
+        `https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRShYgX1IfRVVqMr55MsAVZ3mdeD8LHYS9eAUUyZ4ygpQONDlPR`,
       );
     }
 
-    if (msg.content.toLowerCase().includes("noncanonical")) {
+    if (msg.content.toLowerCase().includes(`noncanonical`)) {
       msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
     }
   }
 });
 
-client.on("ready", async () => {
+client.on(`ready`, async () => {
   const testUserCount = await prisma.testModel.count();
   if (testUserCount === 0) {
-    console.log(chalk.red("No users seeded in db"));
-    console.log(chalk.yellow("Please run yarn seed"));
+    console.log(chalk.red(`No users seeded in db`));
+    console.log(chalk.yellow(`Please run yarn seed`));
   }
   console.log(
     `Logged in as ${client?.user?.tag}!\n with ${testUserCount} user${
-      testUserCount === 1 ? "" : "s"
-    }`
+      testUserCount === 1 ? `` : `s`
+    }`,
   );
   // set status
-  client.user?.setActivity("Victorious 24/7", { type: "WATCHING" });
+  client.user?.setActivity(`Victorious 24/7`, { type: `WATCHING` });
 });
 
 //make sure this line is the last line

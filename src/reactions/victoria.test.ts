@@ -42,7 +42,7 @@ describe(`Victoria tests`, () => {
     it(`should return 'I think we all sing' photo`, () => {
       message = `i think we all sing`;
       expect(vicLogic(message)).toBe(
-        `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`
+        `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`,
       );
     });
     it(`I Think We All base`, () => {

@@ -6,7 +6,7 @@ async function main() {
   await prisma.$connect();
   await prisma.testModel.create({
     data: {
-      name: "test",
+      name: `test`,
     },
   });
 }
