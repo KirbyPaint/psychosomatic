@@ -24,7 +24,7 @@ model Player {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   items     Item[]    @relation()
-  xp        Int?
+  xp        Int
 }
 
 model Item {

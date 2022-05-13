@@ -50,6 +50,7 @@ client.on(`messageCreate`, async (msg) => {
           where: { discordId: msg.author.id },
           data: { deletedAt: null },
         });
+        console.log(chalk.green(`Restored ${msg.author.username}!`));
         msg.channel.send(`${msg.author.username} has been restored!`);
         return;
       }
@@ -61,8 +62,10 @@ client.on(`messageCreate`, async (msg) => {
         data: {
           username: msg.author.username,
           discordId: msg.author.id,
+          xp: 50,
         },
       });
+      console.log(chalk.green(`Added ${msg.author.username}!`));
       msg.channel.send(`Added player ${JSON.stringify(db.username)}`);
     } catch (error) {
       console.log(chalk.red(`Error adding player: `, error));
@@ -89,6 +92,7 @@ client.on(`messageCreate`, async (msg) => {
           deletedAt: new Date(),
         },
       });
+      console.log(chalk.green(`Removed ${msg.author.username}!`));
       msg.channel.send(`Removed player ${JSON.stringify(db.username)}`);
     } catch (error) {
       console.log(chalk.red(`Error removing player: `, error));
@@ -98,8 +102,125 @@ client.on(`messageCreate`, async (msg) => {
     }
   }
 
-  // if (msg.content === `!doot`) {
-  // }
+  if (msg.content.toLowerCase().startsWith(`!doot`)) {
+    // Command will be !doot <PlayerName> <Damage>
+    const [, defendingUsername, damage] = msg.content.split(` `);
+    if (!defendingUsername || !damage) {
+      msg.channel.send(
+        `Invalid command, please post in !doot <PlayerName> <Damage> form (with no brackets)`,
+      );
+      return;
+    }
+    console.log(
+      chalk.green(`attempting to lookup player ${msg.author.username}`),
+    );
+    const attackingPlayer = await prisma.player.findFirst({
+      where: { discordId: msg.author.id, deletedAt: null },
+    });
+    if (!attackingPlayer) {
+      msg.channel.send(`You're not in the game!`);
+      return;
+    }
+    if (!attackingPlayer.xp) {
+      msg.channel.send(`You have no doots!`);
+      return;
+    }
+    // First check that the username is in the database
+    const defendingPlayer = await prisma.player.findFirst({
+      where: { username: defendingUsername, deletedAt: null },
+    });
+    if (!defendingPlayer) {
+      msg.channel.send(`${defendingUsername} is not in the game!`);
+      return;
+    }
+    // Then check that the damage is a) a number
+    // and b) between 0 and the XP amount of the current player
+    if (typeof parseInt(damage) !== `number`) {
+      msg.channel.send(`${damage} is not a number!`);
+      return;
+    } else if (parseInt(damage) < 1 || parseInt(damage) > attackingPlayer?.xp) {
+      msg.channel.send(
+        `${damage} is not a valid doot number! Must be between 1 and ${attackingPlayer?.xp}`,
+      );
+      return;
+    }
+    // Then check that the player is not attacking themselves
+    if (attackingPlayer.username === defendingPlayer.username) {
+      msg.channel.send(`You can't doot yourself!`);
+      return;
+    }
+    // Hope I didn't miss any conditions!
+    // Now we can do the damage
+    // Roll 2 dice, one for each player, based on their doot levels + bonus for the attacker's doots
+
+    const attackerDice = getRandomArbitrary(1, 6);
+    const defenderDice = getRandomArbitrary(1, 6);
+    const attackerBonus =
+      attackingPlayer.xp +
+      getRandomArbitrary(1, Math.floor(attackingPlayer.xp / 10));
+    const defenderBonus =
+      attackingPlayer.xp +
+      getRandomArbitrary(1, Math.floor(attackingPlayer.xp / 20));
+    const attackerTotal = attackerDice + attackerBonus;
+    const defenderTotal = defenderDice + defenderBonus;
+    if (attackerTotal < defenderTotal) {
+      msg.channel.send(
+        `${defendingPlayer.username} successfully defended against ${attackingPlayer.username}'s doot!`,
+      );
+      await prisma.player.update({
+        where: { discordId: attackingPlayer.discordId },
+        data: {
+          xp: attackingPlayer.xp - 1,
+        },
+      });
+    } else {
+      try {
+        msg.channel.send(
+          `${attackingPlayer.username} successfully attacked ${defendingPlayer.username}!`,
+        );
+        if (defendingPlayer.xp) {
+          // Make sure that the defending player doesn't go below zero xp
+          const isTooNegative = defendingPlayer.xp - parseInt(damage) < 0;
+          if (isTooNegative) {
+            await prisma.player.update({
+              where: { discordId: defendingPlayer.discordId },
+              data: {
+                xp: 0,
+              },
+            });
+          } else {
+            await prisma.player.update({
+              where: { discordId: defendingPlayer.discordId },
+              data: {
+                xp: defendingPlayer?.xp - 1,
+              },
+            });
+          }
+        }
+      } catch (error) {
+        console.log(chalk.red(`Error updating player: `, error));
+        msg.channel.send(
+          `Failed to complete doot, ask KirbyPaint to see what happened`,
+        );
+      }
+    }
+  }
+
+  if (msg.content === `!count`) {
+    const currentPlayer = await prisma.player.findFirst({
+      where: { discordId: msg.author.id, deletedAt: null },
+    });
+    if (!currentPlayer) {
+      msg.channel.send(`You're not in the game!`);
+      return;
+    }
+    if (!currentPlayer.xp) {
+      msg.channel.send(`You have no doots!`);
+      return;
+    }
+    const dootCount = currentPlayer.xp;
+    msg.channel.send(`You have ${dootCount} doots!`);
+  }
 
   // Processes only for our special server
   if (currentGuildId === process.env.GUILD_ID && !isPostedByBot) {
@@ -307,14 +428,14 @@ client.on(`messageCreate`, async (msg) => {
 });
 
 client.on(`ready`, async () => {
-  const testUserCount = await prisma.testModel.count();
-  if (testUserCount === 0) {
+  const player = await prisma.player.count();
+  if (player === 0) {
     console.log(chalk.red(`No users seeded in db`));
     console.log(chalk.yellow(`Please run yarn seed`));
   }
   console.log(
-    `Logged in as ${client?.user?.tag}!\n with ${testUserCount} user${
-      testUserCount === 1 ? `` : `s`
+    `Logged in as ${client?.user?.tag}!\n with ${player} Dootiverse player${
+      player === 1 ? `` : `s`
     }`,
   );
   // set status
