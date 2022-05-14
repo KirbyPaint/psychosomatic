@@ -1,5 +1,4 @@
-import { victoriaReactions, getRandomArbitrary } from "../consts";
-import { toriQuotes } from "../gets/toriQuotes";
+import { victoriaReactions, getRandomArbitrary, toriQuotes } from "../consts";
 
 export function iThinkWeAll(msg: string) {
   // const { content } = msg;

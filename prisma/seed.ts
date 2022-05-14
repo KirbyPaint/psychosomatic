@@ -4,11 +4,11 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.$connect();
-  await prisma.testModel.create({
-    data: {
-      name: `test`,
-    },
-  });
+  // await prisma.testModel.create({
+  //   data: {
+  //     name: `test`,
+  //   },
+  // });
 }
 
 main()

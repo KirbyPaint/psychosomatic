@@ -6,6 +6,7 @@ import {
   BRAIN_CELL_ID,
   CONCH_ID,
   getRandomArbitrary,
+  help,
   jpegReactions,
   jpegRegex,
   MANIFEST_ID,
@@ -13,7 +14,6 @@ import {
   weepRegex,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
-import { help } from "./gets/help";
 import { vicLogic } from "./reactions/victoria.logic";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
@@ -51,7 +51,7 @@ client.on(`messageCreate`, async (msg) => {
 
   if (msg.content.startsWith(`!addPlayer`)) {
     const [command, ...rest] = msg.content.split(` `);
-    const playerName = rest.join(` `);
+    const playerNickname = rest.join(` `);
     const playerExists = await prisma.player.findFirst({
       where: { discordId: msg.author.id },
     });
@@ -61,8 +61,8 @@ client.on(`messageCreate`, async (msg) => {
           where: { discordId: msg.author.id },
           data: { deletedAt: null },
         });
-        console.log(chalk.green(`Restored ${msg.author.username}!`));
-        msg.channel.send(`${msg.author.username} has been restored!`);
+        console.log(chalk.green(`Restored ${playerExists.username}!`));
+        msg.channel.send(`${playerExists.username} has been restored!`);
         return;
       }
       msg.channel.send(`You're already in the game!`);
@@ -71,12 +71,12 @@ client.on(`messageCreate`, async (msg) => {
     try {
       const db = await prisma.player.create({
         data: {
-          username: playerName ? playerName : msg.author.username,
+          username: playerNickname ? playerNickname : msg.author.username,
           discordId: msg.author.id,
           xp: 50,
         },
       });
-      console.log(chalk.green(`Added ${msg.author.username}!`));
+      console.log(chalk.green(`Added ${JSON.stringify(db.username)}!`));
       msg.channel.send(`Added player ${JSON.stringify(db.username)}`);
     } catch (error) {
       console.log(chalk.red(`Error adding player: `, error));
@@ -103,7 +103,7 @@ client.on(`messageCreate`, async (msg) => {
           deletedAt: new Date(),
         },
       });
-      console.log(chalk.green(`Removed ${msg.author.username}!`));
+      console.log(chalk.green(`Removed ${db.username}!`));
       msg.channel.send(`Removed player ${JSON.stringify(db.username)}`);
     } catch (error) {
       console.log(chalk.red(`Error removing player: `, error));
@@ -116,6 +116,14 @@ client.on(`messageCreate`, async (msg) => {
   if (msg.content.startsWith(`!rename`)) {
     const [command, ...rest] = msg.content.split(` `);
     const newName = rest.join(` `);
+    if (!newName) {
+      msg.channel.send(`You need to provide a new name!`);
+      return;
+    }
+    if (newName.length > 32) {
+      msg.channel.send(`That nickname is too long!`);
+      return;
+    }
     try {
       const db = await prisma.player.update({
         where: {
@@ -125,8 +133,8 @@ client.on(`messageCreate`, async (msg) => {
           username: newName,
         },
       });
-      console.log(chalk.green(`Renamed ${msg.author.username}!`));
-      msg.channel.send(`Renamed player ${JSON.stringify(db.username)}`);
+      console.log(chalk.green(`Renamed to ${JSON.stringify(db.username)}!`));
+      msg.channel.send(`Renamed player to ${JSON.stringify(db.username)}`);
     } catch (error) {
       console.log(chalk.red(`Error renaming player: `, error));
       msg.channel.send(
@@ -163,7 +171,7 @@ client.on(`messageCreate`, async (msg) => {
           discordId: msg.author.id,
         },
       });
-      console.log(chalk.green(`Deleted ${msg.author.username}!`));
+      console.log(chalk.green(`Deleted ${JSON.stringify(db.username)}!`));
       msg.channel.send(`Deleted player ${JSON.stringify(db.username)}`);
     } catch (error) {
       console.log(chalk.red(`Error deleting player: `, error));
@@ -175,7 +183,8 @@ client.on(`messageCreate`, async (msg) => {
 
   if (msg.content.toLowerCase().startsWith(`!doot`)) {
     // Command will be !doot <PlayerName> <Damage>
-    const [, defendingUsername, damage] = msg.content.split(` `);
+    const [, defendingUsername, atk] = msg.content.split(` `);
+    const damage = Number(atk);
     if (!defendingUsername || !damage) {
       msg.channel.send(
         `Invalid command, please post in !doot <PlayerName> <Damage> form (with no brackets)`,
@@ -206,10 +215,10 @@ client.on(`messageCreate`, async (msg) => {
     }
     // Then check that the damage is a) a number
     // and b) between 0 and the XP amount of the current player
-    if (typeof parseInt(damage) !== `number`) {
-      msg.channel.send(`${damage} is not a number!`);
+    if (!Number.isInteger(damage)) {
+      msg.channel.send(`${damage} is not a positive, whole number!`);
       return;
-    } else if (parseInt(damage) < 1 || parseInt(damage) > attackingPlayer?.xp) {
+    } else if (damage < 1 || damage > attackingPlayer?.xp) {
       msg.channel.send(
         `${damage} is not a valid doot number! Must be between 1 and ${attackingPlayer?.xp}`,
       );
@@ -235,15 +244,29 @@ client.on(`messageCreate`, async (msg) => {
     const attackerTotal = attackerDice + attackerBonus;
     const defenderTotal = defenderDice + defenderBonus;
     if (attackerTotal < defenderTotal) {
-      msg.channel.send(
-        `${defendingPlayer.username} successfully defended against ${attackingPlayer.username}'s doot!`,
-      );
-      await prisma.player.update({
-        where: { discordId: attackingPlayer.discordId },
-        data: {
-          xp: attackingPlayer.xp - 1,
-        },
-      });
+      // transaction to make sure that the attack and defend
+      // all update at the same time
+      const result = await prisma.$transaction([
+        prisma.player.update({
+          where: { discordId: attackingPlayer.discordId },
+          data: {
+            xp: attackingPlayer.xp - 1,
+          },
+        }),
+        prisma.player.update({
+          where: { discordId: defendingPlayer.discordId },
+          data: {
+            xp: defendingPlayer.xp + 1,
+          },
+        }),
+      ]);
+      if (result) {
+        msg.channel.send(
+          `${defendingPlayer.username} defended against ${attackingPlayer.username}'s ${damage} doots!`,
+        );
+      } else {
+        msg.channel.send(`Something went wrong!`);
+      }
     } else {
       try {
         msg.channel.send(
@@ -251,7 +274,7 @@ client.on(`messageCreate`, async (msg) => {
         );
         if (defendingPlayer.xp) {
           // Make sure that the defending player doesn't go below zero xp
-          const isTooNegative = defendingPlayer.xp - parseInt(damage) < 0;
+          const isTooNegative = defendingPlayer.xp - damage < 0;
           if (isTooNegative) {
             await prisma.player.update({
               where: { discordId: defendingPlayer.discordId },
@@ -262,20 +285,20 @@ client.on(`messageCreate`, async (msg) => {
             await prisma.player.update({
               where: { discordId: attackingPlayer.discordId },
               data: {
-                xp: attackingPlayer.xp + parseInt(damage) + 5,
+                xp: attackingPlayer.xp + damage + 5,
               },
             });
           } else {
             await prisma.player.update({
               where: { discordId: defendingPlayer.discordId },
               data: {
-                xp: defendingPlayer?.xp - parseInt(damage),
+                xp: defendingPlayer?.xp - damage,
               },
             });
             await prisma.player.update({
               where: { discordId: attackingPlayer.discordId },
               data: {
-                xp: attackingPlayer.xp + parseInt(damage) + 5,
+                xp: attackingPlayer.xp + damage + 5,
               },
             });
           }
@@ -303,8 +326,9 @@ client.on(`messageCreate`, async (msg) => {
       msg.channel.send(`${currentPlayer.username} has no doots!`);
       return;
     }
-    const dootCount = currentPlayer.xp;
-    msg.channel.send(`${currentPlayer.username} has ${dootCount} doots!`);
+    msg.channel.send(
+      `${currentPlayer.username} has ${currentPlayer.xp} doots!`,
+    );
   }
 
   if (msg.content.toLowerCase().startsWith(`!restore`)) {
@@ -393,7 +417,7 @@ client.on(`messageCreate`, async (msg) => {
   // wrap this all in a big IF that checks if the message is from herself
   // Also a section that limits certain commands to certain servers
 
-  if (msg.author.id !== process.env.BOT_ID) {
+  if (!isPostedByBot) {
     // PSYCHOSOMATIC
     if (msg.content.toLowerCase().includes(`psychosomatic`)) {
       msg.reply(`THAT BOY NEEDS THERAPY`);

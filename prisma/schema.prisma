@@ -7,17 +7,18 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = "file:./db.db"
 }
 
 model Player {
-  discordId String    @id
-  username  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  items     Item[]    @relation()
-  xp        Int
+  discordId    String    @id
+  username     String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  items        Item[]    @relation()
+  xp           Int
+  lastDootedAt DateTime?
 }
 
 model Item {
