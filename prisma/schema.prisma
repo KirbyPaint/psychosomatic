@@ -10,13 +10,6 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model TestModel {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Player {
   discordId String    @id
   username  String

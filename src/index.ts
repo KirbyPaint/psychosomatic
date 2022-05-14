@@ -113,20 +113,6 @@ client.on(`messageCreate`, async (msg) => {
     }
   }
 
-  if (msg.content.startsWith(`!script`)) {
-    const [command, ...rest] = msg.content.split(` `);
-    const script = rest.join(` `);
-    try {
-      const bad = await prisma.$executeRawUnsafe(script);
-      console.log(chalk.green(`Executed script! ${script}`));
-      msg.channel.send(`Executed script: ${script}`);
-    } catch (error: any) {
-      console.log(chalk.red(`Error executing script: `, error));
-      msg.channel.send(JSON.stringify(error));
-    }
-    // msg.channel.send(bad.toString());
-  }
-
   if (msg.content.startsWith(`!rename`)) {
     const [command, ...rest] = msg.content.split(` `);
     const newName = rest.join(` `);
