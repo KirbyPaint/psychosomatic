@@ -15,9 +15,9 @@ import {
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
 import { vicLogic } from "./reactions/victoria.logic";
-import { PrismaClient } from "@prisma/client";
+import { Player, PrismaClient } from "@prisma/client";
 import chalk from "chalk";
-import { CronJob } from "cron";
+import { redootJob } from "./cron/jobs";
 
 dotenv.config();
 
@@ -41,18 +41,6 @@ interface IError {
   };
 }
 
-const every5Minutes = `*/5 * * * *`;
-
-const job = new CronJob(
-  every5Minutes,
-  async () => {
-    console.log(chalk.green(`running cron job`));
-    // Here is where everyone gets a few extra doots
-  },
-  null,
-  true,
-);
-
 // this array has to stay in this file because otherwise it can't read the .env
 // can probably move the config line but nah
 const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
@@ -62,8 +50,9 @@ client.on(`messageCreate`, async (msg) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
+  // Add Player
   if (msg.content.startsWith(`!addPlayer`)) {
-    const [command, ...rest] = msg.content.split(` `);
+    const [, ...rest] = msg.content.split(` `);
     const playerNickname = rest.join(` `);
     const playerExists = await prisma.player.findFirst({
       where: { discordId: msg.author.id },
@@ -99,6 +88,7 @@ client.on(`messageCreate`, async (msg) => {
     }
   }
 
+  // Remove Player (soft delete)
   if (msg.content === `!removePlayer`) {
     const playerExists = await prisma.player.findFirst({
       where: { discordId: msg.author.id, deletedAt: null },
@@ -126,8 +116,9 @@ client.on(`messageCreate`, async (msg) => {
     }
   }
 
+  // Rename
   if (msg.content.startsWith(`!rename`)) {
-    const [command, ...rest] = msg.content.split(` `);
+    const [, ...rest] = msg.content.split(` `);
     const newName = rest.join(` `);
     if (!newName) {
       msg.channel.send(`You need to provide a new name!`);
@@ -156,12 +147,14 @@ client.on(`messageCreate`, async (msg) => {
     }
   }
 
+  // Bot echo
   if (msg.content.startsWith(`!vecho`)) {
-    const [command, ...rest] = msg.content.split(` `);
+    const [, ...rest] = msg.content.split(` `);
     const message = rest.join(` `);
     msg.channel.send(message);
   }
 
+  // List all participating players
   if (msg.content === `!players`) {
     const players = await prisma.player.findMany({
       where: { deletedAt: null },
@@ -170,6 +163,7 @@ client.on(`messageCreate`, async (msg) => {
     msg.channel.send(`Players: ${playerList.join(`, `)}\n`);
   }
 
+  // Hard delete player (remove from db altogether)
   if (msg.content === `!deletePlayer`) {
     const playerExists = await prisma.player.findFirst({
       where: { discordId: msg.author.id, deletedAt: null },
@@ -194,6 +188,7 @@ client.on(`messageCreate`, async (msg) => {
     }
   }
 
+  // Attack
   if (msg.content.toLowerCase().startsWith(`!doot`)) {
     // Command will be !doot <PlayerName> <Damage>
     const [, defendingUsername, atk] = msg.content.split(` `);
@@ -270,8 +265,6 @@ client.on(`messageCreate`, async (msg) => {
     const attackerTotal = attackerDice + attackerBonus;
     const defenderTotal = defenderDice + defenderBonus;
     if (attackerTotal < defenderTotal) {
-      // transaction to make sure that the attack and defend
-      // all update at the same time
       const result = await prisma.$transaction([
         prisma.player.update({
           where: { discordId: attackingPlayer.discordId },
@@ -296,42 +289,24 @@ client.on(`messageCreate`, async (msg) => {
       }
     } else {
       try {
+        const result = await prisma.$transaction([
+          prisma.player.update({
+            where: { discordId: defendingPlayer.discordId },
+            data: {
+              xp: defendingPlayer.xp - damage,
+            },
+          }),
+          prisma.player.update({
+            where: { discordId: attackingPlayer.discordId },
+            data: {
+              xp: attackingPlayer.xp + damage + 5,
+              lastDootedAt: new Date(),
+            },
+          }),
+        ]);
         msg.channel.send(
           `${attackingPlayer.username} successfully attacked ${defendingPlayer.username}!`,
         );
-        if (defendingPlayer.xp) {
-          // Make sure that the defending player doesn't go below zero xp
-          const isTooNegative = defendingPlayer.xp - damage < 0;
-          if (isTooNegative) {
-            await prisma.player.update({
-              where: { discordId: defendingPlayer.discordId },
-              data: {
-                xp: 0,
-              },
-            });
-            await prisma.player.update({
-              where: { discordId: attackingPlayer.discordId },
-              data: {
-                xp: attackingPlayer.xp + damage + 5,
-                lastDootedAt: new Date(),
-              },
-            });
-          } else {
-            await prisma.player.update({
-              where: { discordId: defendingPlayer.discordId },
-              data: {
-                xp: defendingPlayer?.xp - damage,
-              },
-            });
-            await prisma.player.update({
-              where: { discordId: attackingPlayer.discordId },
-              data: {
-                xp: attackingPlayer.xp + damage + 5,
-                lastDootedAt: new Date(),
-              },
-            });
-          }
-        }
       } catch (error) {
         if (error instanceof Error) {
           console.log(chalk.red(`Error updating player: `, error));
@@ -605,7 +580,7 @@ client.on(`ready`, async () => {
       player === 1 ? `` : `s`
     }`,
   );
-  job.start();
+  redootJob.start();
   // set status
   client.user?.setActivity(`Victorious 24/7`, { type: `WATCHING` });
 });
