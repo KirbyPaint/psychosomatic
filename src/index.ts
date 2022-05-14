@@ -17,6 +17,7 @@ import { get8Ball } from "./gets/8ball";
 import { vicLogic } from "./reactions/victoria.logic";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
+import { CronJob } from "cron";
 
 dotenv.config();
 
@@ -39,6 +40,18 @@ interface IError {
     message: string;
   };
 }
+
+const every5Minutes = `*/5 * * * *`;
+
+const job = new CronJob(
+  every5Minutes,
+  async () => {
+    console.log(chalk.green(`running cron job`));
+    // Here is where everyone gets a few extra doots
+  },
+  null,
+  true,
+);
 
 // this array has to stay in this file because otherwise it can't read the .env
 // can probably move the config line but nah
@@ -592,6 +605,7 @@ client.on(`ready`, async () => {
       player === 1 ? `` : `s`
     }`,
   );
+  job.start();
   // set status
   client.user?.setActivity(`Victorious 24/7`, { type: `WATCHING` });
 });
