@@ -205,7 +205,20 @@ client.on(`messageCreate`, async (msg) => {
       msg.channel.send(`You have no doots!`);
       return;
     }
-    // First check that the username is in the database
+    // Check that the attacker hasn't attacked too recently
+    const now = new Date();
+    const lastDooted = new Date(attackingPlayer.lastDootedAt ?? 0);
+    const timeDiff = now.getTime() - lastDooted.getTime();
+    console.log({ timeDiff });
+    if (timeDiff < 300000) {
+      msg.channel.send(
+        `You can only doot once every 5 minutes.\n  Next doot available in ${Math.round(
+          300 - timeDiff / 1000,
+        )} seconds!`,
+      );
+      return;
+    }
+    // Check that the defender is in the database
     const defendingPlayer = await prisma.player.findFirst({
       where: { username: defendingUsername, deletedAt: null },
     });
@@ -251,6 +264,7 @@ client.on(`messageCreate`, async (msg) => {
           where: { discordId: attackingPlayer.discordId },
           data: {
             xp: attackingPlayer.xp - 1,
+            lastDootedAt: new Date(),
           },
         }),
         prisma.player.update({
@@ -286,6 +300,7 @@ client.on(`messageCreate`, async (msg) => {
               where: { discordId: attackingPlayer.discordId },
               data: {
                 xp: attackingPlayer.xp + damage + 5,
+                lastDootedAt: new Date(),
               },
             });
           } else {
@@ -299,6 +314,7 @@ client.on(`messageCreate`, async (msg) => {
               where: { discordId: attackingPlayer.discordId },
               data: {
                 xp: attackingPlayer.xp + damage + 5,
+                lastDootedAt: new Date(),
               },
             });
           }
