@@ -16,7 +16,7 @@ import {
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
 import { vicLogic } from "./reactions/victoria.logic";
-import { Player, PrismaClient } from "@prisma/client";
+import { Item, PrismaClient } from "@prisma/client";
 import chalk from "chalk";
 import { redootJob } from "./cron/jobs";
 
@@ -235,6 +235,14 @@ client.on(`messageCreate`, async (msg) => {
       return;
     }
 
+    // Check that the defender has enough doots to be attacked
+    if (defendingPlayer.xp < 1) {
+      msg.channel.send(
+        `${defendingPlayer.username} has too few doots to be attacked!`,
+      );
+      return;
+    }
+
     // Then check that the damage is a) a number
     // and b) between 0 and the XP amount of the current player
     if (!Number.isInteger(damage)) {
@@ -242,7 +250,7 @@ client.on(`messageCreate`, async (msg) => {
       return;
     } else if (damage < 1 || damage > Math.floor(attackingPlayer.xp / 2)) {
       msg.channel.send(
-        `${damage} is not a valid doot number! Must be between 1 and ${Math.floor(
+        `${damage} is not a valid doot number for you! Must be between 1 and ${Math.floor(
           attackingPlayer.xp / 2,
         )}`,
       );
@@ -272,40 +280,45 @@ client.on(`messageCreate`, async (msg) => {
      * A successful defend will net 1/4 of the damage
      * Attacker will not receive any additional damage, just the xp loss
      *
+     * Attack Logic
+     * we will do 2d10 rolls
+     * no buffs from either side until items are implemented
+     * current rules are probably way imbalanced
+     *
      */
 
-    const attackerDice = getRandomArbitrary(1, 6);
-    const defenderDice = getRandomArbitrary(1, 6);
-    const attackerBonus =
-      attackingPlayer.xp +
-      getRandomArbitrary(1, Math.floor(attackingPlayer.xp / 10));
-    const defenderBonus =
-      attackingPlayer.xp +
-      getRandomArbitrary(1, Math.floor(attackingPlayer.xp / 20));
-    const attackerTotal = attackerDice + attackerBonus;
-    const defenderTotal = defenderDice + defenderBonus;
-    if (attackerTotal < defenderTotal) {
-      const result = await prisma.$transaction([
-        prisma.player.update({
-          where: { discordId: attackingPlayer.discordId },
-          data: {
-            xp: attackingPlayer.xp - 1,
-            lastDootedAt: new Date(),
-          },
-        }),
-        prisma.player.update({
-          where: { discordId: defendingPlayer.discordId },
-          data: {
-            xp: defendingPlayer.xp + 1,
-          },
-        }),
-      ]);
-      if (result) {
-        msg.channel.send(
-          `${defendingPlayer.username} defended against ${attackingPlayer.username}'s ${damage} doots!`,
-        );
-      } else {
-        msg.channel.send(`Something went wrong!`);
+    const attackerDice = getRandomArbitrary(1, 10);
+    const defenderDice = getRandomArbitrary(1, 10);
+    // Attack must EXCEED defend
+    if (attackerDice <= defenderDice) {
+      try {
+        const result = await prisma.$transaction([
+          prisma.player.update({
+            where: { discordId: attackingPlayer.discordId },
+            data: {
+              xp: attackingPlayer.xp - damage,
+              lastDootedAt: new Date(),
+            },
+          }),
+          prisma.player.update({
+            where: { discordId: defendingPlayer.discordId },
+            data: {
+              xp: defendingPlayer.xp + Math.floor(damage / 4) + 1,
+            },
+          }),
+        ]);
+        console.log(chalk.green(`${JSON.stringify(result)}`));
+        if (result.length === 2) {
+          msg.channel.send(
+            `${defendingPlayer.username} defended against ${attackingPlayer.username}'s ${damage} doots!`,
+          );
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(chalk.red(`Error updating player: `, error));
+          msg.channel.send(`Failed to complete doot: `);
+          msg.channel.send(error.toString());
+        }
       }
     } else {
       try {
@@ -324,18 +337,42 @@ client.on(`messageCreate`, async (msg) => {
             },
           }),
         ]);
-        msg.channel.send(
-          `${attackingPlayer.username} successfully attacked ${defendingPlayer.username}!`,
-        );
+        if (result.length === 2) {
+          msg.channel.send(
+            `${attackingPlayer.username} successfully attacked ${defendingPlayer.username}!`,
+          );
+        }
       } catch (error) {
         if (error instanceof Error) {
           console.log(chalk.red(`Error updating player: `, error));
           msg.channel.send(`Failed to complete doot: `);
           msg.channel.send(error.toString());
         }
-        console.log(chalk.red(`Error updating player: `, error));
       }
     }
+  }
+
+  if (msg.content === `!resetall` && msg.author.id === process.env.MY_ID) {
+    console.log(chalk.red(`FULL RESET`));
+    const playersToUpdate = await prisma.player.findMany({
+      where: { deletedAt: null },
+    });
+    // iterate through each player and reset them to defaults
+    for (const player of playersToUpdate) {
+      await prisma.player.update({
+        where: {
+          discordId: player.discordId,
+        },
+        data: {
+          xp: 50,
+          lastDootedAt: new Date(new Date().getTime() - fiveMinutes),
+        },
+      });
+      console.log(`${player.username} updated`);
+    }
+    msg.channel.send(
+      `All currently active players have been restored to default values.`,
+    );
   }
 
   if (msg.content === `!count`) {
@@ -344,10 +381,6 @@ client.on(`messageCreate`, async (msg) => {
     });
     if (!currentPlayer) {
       msg.channel.send(`You're not in the game!`);
-      return;
-    }
-    if (!currentPlayer.xp) {
-      msg.channel.send(`${currentPlayer.username} has no doots!`);
       return;
     }
     msg.channel.send(
@@ -361,6 +394,7 @@ client.on(`messageCreate`, async (msg) => {
       data: {
         deletedAt: null,
         xp: 50,
+        lastDootedAt: null,
       },
     });
     msg.channel.send(`Restored ${msg.author.username}!`);
@@ -374,13 +408,7 @@ client.on(`messageCreate`, async (msg) => {
       msg.channel.send(`You're not in the game!`);
       return;
     }
-    const output = `
-      Username:   ${player.username}
-      Created At: ${player.createdAt}
-      Updated At: ${player.updatedAt}
-      Deleted At: ${player.deletedAt}
-      Doots:      ${player.xp}
-    `;
+    const output = `\`\`\`Username:   ${player.username}\nDoots:      ${player.xp}\`\`\``;
     msg.channel.send(output);
   }
 
