@@ -268,8 +268,23 @@ export const weepRegex = /\b(weep)\b/;
 export const fiveMinutes = 300000;
 
 export function help(): string {
-  return `
-    you should just @KirbyPaint
-    https://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts
-  `;
+  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts
+
+    !DootVerse Commands:
+    !addPlayer    - add yourself to DootVerse (name in progress)
+    !rename       - Change your nickname (up to 32 characters)
+    !removePlayer - remove yourself from DootVerse (score can be recovered)
+    !deletePlayer - permanently remove yourself from game (lose score)
+    !restore
+    !players      - list all participating players
+    !count        - count your Doots
+    !stats        - show your stats
+
+    !doot         - doot someone, for example:
+                  !doot KirbyPaint 5\`\`\``;
 }
+
+export const gameAllowedChannels = [
+  `955950801157779477`, // chillbros bot spam
+  `799876599372840964`, // private server for testing
+];

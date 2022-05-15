@@ -55,3 +55,4 @@ export const dailyJob = new CronJob(
 );
 
 // want a cron to list out all players and their xp
+// this might require shenanigans to output it to discord
