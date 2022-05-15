@@ -265,6 +265,7 @@ export function getRandomArbitrary(min: number, max: number): number {
 
 export const jpegRegex = /^[^.]*(jpe?g)/;
 export const weepRegex = /\b(weep)\b/;
+export const fiveMinutes = 300000;
 
 export function help(): string {
   return `

@@ -5,6 +5,7 @@ import {
   alanisReactions,
   BRAIN_CELL_ID,
   CONCH_ID,
+  fiveMinutes,
   getRandomArbitrary,
   help,
   jpegReactions,
@@ -191,7 +192,10 @@ client.on(`messageCreate`, async (msg) => {
   // Attack
   if (msg.content.toLowerCase().startsWith(`!doot`)) {
     // Command will be !doot <PlayerName> <Damage>
-    const [, defendingUsername, atk] = msg.content.split(` `);
+    const [, ...rest] = msg.content.split(` `);
+    // This should handle a username being multiple words
+    const atk = rest[rest.length - 1];
+    const defendingUsername = rest.slice(0, rest.length - 1).join(` `);
     const damage = Number(atk);
     if (!defendingUsername || !damage) {
       msg.channel.send(
@@ -199,9 +203,8 @@ client.on(`messageCreate`, async (msg) => {
       );
       return;
     }
-    console.log(
-      chalk.green(`attempting to lookup player ${msg.author.username}`),
-    );
+
+    // Get attacking player entity, make sure they're playing
     const attackingPlayer = await prisma.player.findFirst({
       where: { discordId: msg.author.id, deletedAt: null },
     });
@@ -209,16 +212,12 @@ client.on(`messageCreate`, async (msg) => {
       msg.channel.send(`You're not in the game!`);
       return;
     }
-    if (!attackingPlayer.xp) {
-      msg.channel.send(`You have no doots!`);
-      return;
-    }
+
     // Check that the attacker hasn't attacked too recently
     const now = new Date();
     const lastDooted = new Date(attackingPlayer.lastDootedAt ?? 0);
     const timeDiff = now.getTime() - lastDooted.getTime();
-    console.log({ timeDiff });
-    if (timeDiff < 300000) {
+    if (timeDiff < fiveMinutes) {
       msg.channel.send(
         `You can only doot once every 5 minutes.\n  Next doot available in ${Math.round(
           300 - timeDiff / 1000,
@@ -226,6 +225,7 @@ client.on(`messageCreate`, async (msg) => {
       );
       return;
     }
+
     // Check that the defender is in the database
     const defendingPlayer = await prisma.player.findFirst({
       where: { username: defendingUsername, deletedAt: null },
@@ -234,25 +234,45 @@ client.on(`messageCreate`, async (msg) => {
       msg.channel.send(`${defendingUsername} is not in the game!`);
       return;
     }
+
     // Then check that the damage is a) a number
     // and b) between 0 and the XP amount of the current player
     if (!Number.isInteger(damage)) {
       msg.channel.send(`${damage} is not a positive, whole number!`);
       return;
-    } else if (damage < 1 || damage > attackingPlayer?.xp) {
+    } else if (damage < 1 || damage > Math.floor(attackingPlayer.xp / 2)) {
       msg.channel.send(
-        `${damage} is not a valid doot number! Must be between 1 and ${attackingPlayer?.xp}`,
+        `${damage} is not a valid doot number! Must be between 1 and ${Math.floor(
+          attackingPlayer.xp / 2,
+        )}`,
       );
       return;
     }
-    // Then check that the player is not attacking themselves
+
+    // Check that the player is not attacking themselves
     if (attackingPlayer.username === defendingPlayer.username) {
       msg.channel.send(`You can't doot yourself!`);
       return;
     }
-    // Hope I didn't miss any conditions!
-    // Now we can do the damage
-    // Roll 2 dice, one for each player, based on their doot levels + bonus for the attacker's doots
+
+    /*
+     * Attacking!
+     *
+     * In order for an attack to happen:
+     * The ATTACKER must have at least 1 xp
+     * The DEFENDER must have at least 1 xp
+     *
+     * Attacker can doot up to half of their xp
+     * Defender will never take more than half their xp in damage
+     *
+     * Attacker will gain all of the xp lost by defender UP TO 100 xp
+     *
+     * Defending!
+     *
+     * A successful defend will net 1/4 of the damage
+     * Attacker will not receive any additional damage, just the xp loss
+     *
+     */
 
     const attackerDice = getRandomArbitrary(1, 6);
     const defenderDice = getRandomArbitrary(1, 6);
