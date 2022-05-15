@@ -1,10 +1,9 @@
-import { Message } from "discord.js";
-import { victoriaReactions, getRandomArbitrary } from "../consts";
-import { toriQuotes } from "../gets/toriQuotes";
+import { victoriaReactions, getRandomArbitrary, toriQuotes } from "../consts";
 
 export function iThinkWeAll(msg: string) {
   // const { content } = msg;
-  const contentArray: Array<string> = msg.split(" ");
+  const contentArray: Array<string> = msg.split(` `);
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [i, think, conditionWord, ...rest] = contentArray;
   // Thanks to grammar, I have to do work
   const wouldCouldShouldHad = [
@@ -19,30 +18,30 @@ export function iThinkWeAll(msg: string) {
   const areWere = [`i'm`, `you're`, `we're`, `they're`];
   // The i'd and you'd need to be separate from the we've and the we're, etc.
   const wordsThatNeedNotBeInThePhrase = [
-    "i",
-    "you",
-    "he",
-    "she",
-    "it",
-    "we",
-    "they",
+    `i`,
+    `you`,
+    `he`,
+    `she`,
+    `it`,
+    `we`,
+    `they`,
   ];
 
   if (msg.toLowerCase().includes(`we all`)) {
-    return `I THINK WE ${rest.join(" ").toUpperCase()}`;
+    return `I THINK WE ${rest.join(` `).toUpperCase()}`;
   } else if (
     wordsThatNeedNotBeInThePhrase.includes(conditionWord.toLowerCase())
   ) {
-    return `I THINK WE ALL ${rest.join(" ").toUpperCase()}`;
+    return `I THINK WE ALL ${rest.join(` `).toUpperCase()}`;
   } else if (areWere.includes(conditionWord.toLowerCase())) {
-    return `I THINK WE'RE ALL ${rest.join(" ").toUpperCase()}`;
+    return `I THINK WE'RE ALL ${rest.join(` `).toUpperCase()}`;
   } else if (wouldCouldShouldHad.includes(conditionWord.toLowerCase())) {
-    return `I THINK WE'D ALL ${rest.join(" ").toUpperCase()}`;
+    return `I THINK WE'D ALL ${rest.join(` `).toUpperCase()}`;
   } else if (have.includes(conditionWord.toLowerCase())) {
-    return `I THINK WE'VE ALL ${rest.join(" ").toUpperCase()}`;
+    return `I THINK WE'VE ALL ${rest.join(` `).toUpperCase()}`;
   } else {
     return `I THINK WE ALL ${conditionWord.toUpperCase()} ${rest
-      .join(" ")
+      .join(` `)
       .toUpperCase()}`;
   }
 }

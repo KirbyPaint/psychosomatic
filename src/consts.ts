@@ -184,6 +184,7 @@ export const victoriaReactions = [
   `https://media.discordapp.net/attachments/960785166249361418/971209644833898557/victoriajustice-03052022-0001.jpg?width=1056&height=1320`,
   `https://media.discordapp.net/attachments/960785166249361418/973040012109164615/victoriajustice-08052022-0001.jpg?width=1056&height=1320`,
   `https://cdn.discordapp.com/attachments/960785166249361418/973040022292930610/victoriajustice-08052022-0001.mp4`,
+  `https://media.discordapp.net/attachments/960785166249361418/974544081508270110/victoriajustice-13052022-0001.jpg`,
 ];
 
 export const alanisReactions = [
@@ -205,23 +206,58 @@ export const alanisReactions = [
 ];
 
 export const jpegReactions = [
-  "https://youtu.be/ZXVhOPiM4mk", // hotdog.jpeg song
-  "https://youtu.be/EvKTOHVGNbg", // hotdog.jpeg
-  "https://cdn.discordapp.com/attachments/799876599372840964/949119835940466688/big_1482307605_image.png", // just the screen cap
+  `https://youtu.be/ZXVhOPiM4mk`, // hotdog.jpeg song
+  `https://youtu.be/EvKTOHVGNbg`, // hotdog.jpeg
+  `https://cdn.discordapp.com/attachments/799876599372840964/949119835940466688/big_1482307605_image.png`, // just the screen cap
 ];
 
 export const naughtyWordReactions = [
-  "We don't do that here.",
-  "You said the f-word.",
-  "Banned word detected.",
-  "👣",
-  "NO FUCKING FEET ON OUR FUCKING SERVER",
+  `We don't do that here.`,
+  `You said the f-word.`,
+  `Banned word detected.`,
+  `👣`,
+  `NO FUCKING FEET ON OUR FUCKING SERVER`,
 ];
 
-export const MANIFEST_ID = "769755766352642128";
-export const BRAIN_CELL_ID = "936895162074951730"; // custom emoji
-export const CONCH_ID = "809579247994929182";
-export const SHEEV_ID = "636777145921699852";
+export const toriQuotes = [
+  `Are you a good witch or a sandwich?`,
+  `Can we try it again without the physical assault?`,
+  `Cat! You weren't supposed to tell her that.`,
+  `Did you just call me Toro?`,
+  `Eat your pants!`,
+  `Everybody sweats.`,
+  `He's a puppet, he can't pee.`,
+  `Honestly, I wouldn't love it.`,
+  `I am a police officer! Would you like some Raisin Bran?`,
+  `I know what I meant.`,
+  `I like waffles.`,
+  `I see through your little plan.`,
+  `I swear, I thought I had it on vibrate.`,
+  `I thought he was homeless.`,
+  `I'm alone.`,
+  `It was 1934 when my husband left me... alone. Living on the prairie was a dreary existence. No telephone, no radio, only a large majestic bird with whom I shared my feelings. One day when I was feeling low, I said to him, 'Oh, bird. You can fly. You can soar miles from this lonely place, and yet you stay. Why?' And apparently, that question rang true, for that afternoon my bird left. And so went my spirit.`,
+  `It's not my fault!`,
+  `It's so hot!`,
+  `Let me have you on the couch.`,
+  `Love me? Love me now? Yeah you do. Come on, give Tori a squeeze.`,
+  `My throat is an instrument, I'm a throat player.`,
+  `Oh my god. I am so hot.`,
+  `That's not my head!`,
+  `Try not to swallow each other.`,
+  `Uhh...`,
+  `Wait! So neither of you are coming with us tomorrow night to the museum of large bones?`,
+  `We're not going out!`,
+  `Well, hello.`,
+  `Yo, yo, yo! Whattayaknow!`,
+  `You could... wazz.`,
+  `You know I'm half Latina.`,
+  `You're not supposed to hit her.`,
+];
+
+export const MANIFEST_ID = `769755766352642128`;
+export const BRAIN_CELL_ID = `936895162074951730`; // custom emoji
+export const CONCH_ID = `809579247994929182`;
+export const SHEEV_ID = `636777145921699852`;
 
 export function getRandomArbitrary(min: number, max: number): number {
   return Math.random() * (max - min) + min;
@@ -229,3 +265,26 @@ export function getRandomArbitrary(min: number, max: number): number {
 
 export const jpegRegex = /^[^.]*(jpe?g)/;
 export const weepRegex = /\b(weep)\b/;
+export const fiveMinutes = 300000;
+
+export function help(): string {
+  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts
+
+    !DootVerse Commands:
+    !addPlayer    - add yourself to DootVerse (name in progress)
+    !rename       - Change your nickname (up to 32 characters)
+    !removePlayer - remove yourself from DootVerse (score can be recovered)
+    !deletePlayer - permanently remove yourself from game (lose score)
+    !restore
+    !players      - list all participating players
+    !count        - count your Doots
+    !stats        - show your stats
+
+    !doot         - doot someone, for example:
+                  !doot KirbyPaint 5\`\`\``;
+}
+
+export const gameAllowedChannels = [
+  `955950801157779477`, // chillbros bot spam
+  `799876599372840964`, // private server for testing
+];
