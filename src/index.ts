@@ -47,8 +47,8 @@ const client = new Client({
 
 // this array has to stay in this file because otherwise it can't read the .env
 // can probably move the config line but nah
-const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
-let whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
+// const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
+// let whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
 
 client.on(`messageCreate`, async (msg) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
@@ -431,9 +431,31 @@ client.on(`messageCreate`, async (msg) => {
     // One brain cell
     // command to check the brain cell
     if (msg.content.toLowerCase().includes(`who has the brain cell`)) {
-      msg.channel.send(
-        `<@${whoHasTheBrainCell}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
-      );
+      // this should only have to happen once
+      const allBrainCells = await prisma.braincell.findMany({
+        where: { hasBrainCell: true },
+      });
+      if (allBrainCells.length === 0) {
+        await prisma.braincell.update({
+          where: { discordId: msg.author.id },
+          data: {
+            hasBrainCell: true,
+          },
+        });
+      }
+      const brainCell = await prisma.braincell.findFirst({
+        where: { hasBrainCell: true },
+      });
+      if (brainCell) {
+        msg.channel.send(
+          `<@${brainCell.discordId}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
+        );
+      } else {
+        // and ideally this NEVER happens
+        msg.channel.send(
+          `No one has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
+        );
+      }
     }
 
     // command to transfer the brain cell
@@ -441,31 +463,42 @@ client.on(`messageCreate`, async (msg) => {
     // for the future - this should be more like
     // "if the sender is trying to claim the brain cell, don't let them"
     if (msg.content.toLowerCase().includes(`!give`)) {
-      switch (whoHasTheBrainCell) {
-        case BRAIN_CELL_OWNERS[0]:
-          if (msg.author.id !== BRAIN_CELL_OWNERS[1]) {
-            whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
-            msg.channel.send(
-              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
-            );
-          } else {
-            msg.reply(
-              `You cannot take the brain cell, it must be given willingly`,
-            );
-          }
-          break;
-        case BRAIN_CELL_OWNERS[1]:
-          if (msg.author.id !== BRAIN_CELL_OWNERS[0]) {
-            whoHasTheBrainCell = BRAIN_CELL_OWNERS[0];
-            msg.channel.send(
-              `<@${whoHasTheBrainCell}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
-            );
-          } else {
-            msg.reply(
-              `You cannot take the brain cell, it must be given willingly`,
-            );
-          }
-          break;
+      const brainCells = await prisma.braincell.findMany();
+      const [brainCellOwner] = brainCells.filter(
+        (cell) => cell.hasBrainCell === true,
+      );
+      if (brainCellOwner.discordId === msg.author.id) {
+        // Swap the falses and trues in the database
+        // This calls for a transaction
+        // I do not love that this isn't procedural HOWEVER
+        // there will always only be 2 people and 1 braincell
+        // so this should never have to change
+        const result = await prisma.$transaction([
+          prisma.braincell.update({
+            where: { discordId: brainCells[0].discordId },
+            data: {
+              hasBrainCell: !brainCells[0].hasBrainCell,
+            },
+          }),
+          prisma.braincell.update({
+            where: { discordId: brainCells[1].discordId },
+            data: {
+              hasBrainCell: !brainCells[1].hasBrainCell,
+            },
+          }),
+        ]);
+        const newBrainCells = await prisma.braincell.findMany();
+        const [newBrainCellOwner] = brainCells.filter(
+          (cell) => cell.hasBrainCell === true,
+        );
+        msg.channel.send(
+          `<@${newBrainCellOwner.discordId}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
+        );
+        return;
+      } else {
+        msg.channel.send(
+          `You cannot steal the brain cell, it must be given willingly.`,
+        );
       }
     }
   }
@@ -621,16 +654,16 @@ client.on(`messageCreate`, async (msg) => {
 });
 
 client.on(`ready`, async () => {
-  const player = await prisma.player.count();
-  if (player === 0) {
-    console.log(chalk.red(`No users seeded in db`));
+  const braincells = await prisma.braincell.count();
+  if (braincells === 0) {
+    console.log(chalk.red(`no braincell has been given`));
     console.log(chalk.yellow(`Please run yarn seed`));
   }
-  console.log(
-    `Logged in as ${client?.user?.tag}!\n with ${player} Dootiverse player${
-      player === 1 ? `` : `s`
-    }`,
-  );
+  // console.log(
+  //   `Logged in as ${client?.user?.tag}!\n with ${player} Dootiverse player${
+  //     player === 1 ? `` : `s`
+  //   }`,
+  // );
   redootJob.start();
   // set status
   client.user?.setActivity(`Victorious 24/7`, { type: `WATCHING` });

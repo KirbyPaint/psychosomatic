@@ -4,12 +4,24 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.$connect();
-  // await prisma.testModel.create({
-  //   data: {
-  //     name: `test`,
-  //   },
-  // });
+  await prisma.braincell.create({
+    data: users[0],
+  });
+  await prisma.braincell.create({
+    data: users[1],
+  });
 }
+
+const users = [
+  {
+    discordId: `189997816406474752`,
+    hasBrainCell: true,
+  },
+  {
+    discordId: `241416328966045697`,
+    hasBrainCell: false,
+  },
+];
 
 main()
   .catch((e) => {

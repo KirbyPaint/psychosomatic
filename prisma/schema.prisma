@@ -30,3 +30,8 @@ model Item {
   ownerId     String
   description String
 }
+
+model Braincell {
+  discordId    String  @id
+  hasBrainCell Boolean
+}
