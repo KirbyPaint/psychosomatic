@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
+  blacklist,
   BRAIN_CELL_ID,
   CONCH_ID,
   fiveMinutes,
@@ -34,14 +35,15 @@ const client = new Client({
   ],
 });
 
-interface IError {
-  code: string;
-  clientVersion: string;
-  meta: {
-    code: string;
-    message: string;
-  };
-}
+// I will come back to this
+// interface IError {
+//   code: string;
+//   clientVersion: string;
+//   meta: {
+//     code: string;
+//     message: string;
+//   };
+// }
 
 // this array has to stay in this file because otherwise it can't read the .env
 // can probably move the config line but nah
@@ -487,16 +489,16 @@ client.on(`messageCreate`, async (msg) => {
     }
 
     // Victoria Justice
-    if (msg.content.toLowerCase().startsWith(`i think`)) {
+    if (
+      msg.content.toLowerCase().startsWith(`i think`) &&
+      !blacklist.includes(msg.author.id)
+    ) {
       if (msg.content.toLowerCase() === `i think we all sing`) {
         msg.reply(
           `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`,
         );
         return;
-      } else if (
-        getRandomArbitrary(1, 100) > 80 &&
-        msg.content.toLowerCase().length < 50
-      ) {
+      } else {
         msg.channel.send(vicLogic(msg.content));
         msg.channel.send(vicPic());
         return;

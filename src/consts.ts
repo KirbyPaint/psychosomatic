@@ -288,3 +288,5 @@ export const gameAllowedChannels = [
   `955950801157779477`, // chillbros bot spam
   `799876599372840964`, // private server for testing
 ];
+
+export const blacklist = [``];
