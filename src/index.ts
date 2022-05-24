@@ -5,6 +5,7 @@ import {
   alanisReactions,
   blacklist,
   BRAIN_CELL_ID,
+  channelBlacklist,
   CONCH_ID,
   fiveMinutes,
   gameAllowedChannels,
@@ -524,7 +525,8 @@ client.on(`messageCreate`, async (msg) => {
     // Victoria Justice
     if (
       msg.content.toLowerCase().startsWith(`i think`) &&
-      !blacklist.includes(msg.author.id)
+      !blacklist.includes(msg.author.id) &&
+      !channelBlacklist.includes(msg.channel.id)
     ) {
       if (msg.content.toLowerCase() === `i think we all sing`) {
         msg.reply(

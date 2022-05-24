@@ -290,3 +290,5 @@ export const gameAllowedChannels = [
 ];
 
 export const blacklist = [``];
+
+export const channelBlacklist = [`693210030236762183`];
