@@ -525,6 +525,7 @@ client.on(`messageCreate`, async (msg) => {
     // Victoria Justice
     if (
       msg.content.toLowerCase().startsWith(`i think`) &&
+      msg.content.length <= 50 &&
       !blacklist.includes(msg.author.id) &&
       !channelBlacklist.includes(msg.channel.id)
     ) {
