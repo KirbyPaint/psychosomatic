@@ -7,6 +7,8 @@ import {
   BRAIN_CELL_ID,
   channelBlacklist,
   CONCH_ID,
+  cursedRegex,
+  fastNFuriousRegex,
   fiveMinutes,
   gameAllowedChannels,
   getRandomArbitrary,
@@ -36,6 +38,10 @@ const client = new Client({
   ],
 });
 
+function isGameAllowedChannel(channelId: string) {
+  return gameAllowedChannels.includes(channelId);
+}
+
 // I will come back to this
 // interface IError {
 //   code: string;
@@ -51,11 +57,13 @@ const client = new Client({
 // const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
 // let whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
 
+// actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
-  if (gameAllowedChannels.includes(msg.channel.id)) {
+  // chillbros DOOTS game
+  if (isGameAllowedChannel(msg.channel.id)) {
     // Game channel
     if (msg.content.toLowerCase().startsWith(`!addplayer`)) {
       // Add Player
@@ -409,17 +417,17 @@ client.on(`messageCreate`, async (msg) => {
     }
   }
 
-  // Bot echo
+  // Bot echo command
   if (msg.content.startsWith(`!vecho`)) {
     const [, ...rest] = msg.content.split(` `);
     const message = rest.join(` `);
     msg.channel.send(message);
   }
 
-  // Processes only for our special server
-  if (currentGuildId === process.env.GUILD_ID && !isPostedByBot) {
+  // Processes to be used only for our special server
+  if (currentGuildId === process.env.DUMMIES && !isPostedByBot) {
     if (
-      msg.content.toLowerCase().match(/\bfoot\b|\bfeet\b/) &&
+      msg.content.toLowerCase().match(cursedRegex) &&
       !msg.content.toLowerCase().includes(`victoria`)
     ) {
       msg.channel.send(vicLogic(msg.content) ?? `I don't know what to say`);
@@ -542,13 +550,14 @@ client.on(`messageCreate`, async (msg) => {
     }
 
     if (msg.content.toLowerCase().includes(`victoria`)) {
-      // ask her a question
+      // any command having to do with addressing the bot by name
       if (
         (msg.content.toLowerCase().startsWith(`victoria`) &&
           msg.content.includes(`?`)) ||
         (msg.content.toLowerCase().startsWith(`hey victoria`) &&
           msg.content.includes(`?`))
       ) {
+        // ask her a question
         msg.reply(JSON.stringify(get8Ball()));
         msg.channel.send(vicPic());
         return;
@@ -585,10 +594,16 @@ client.on(`messageCreate`, async (msg) => {
     // Alanis
     if (
       msg.content.toLowerCase().includes(`ironic`) ||
-      msg.content.toLowerCase().includes(`alanis`)
+      msg.content.toLowerCase().includes(`alanis`) ||
+      msg.channel.id === `715766875971256322`
     ) {
+      console.log(msg.channel.id);
+      console.log(msg.channelId);
       // 1/20 chance of Alanisposting
-      if (getRandomArbitrary(1, 100) >= 95) {
+      if (
+        getRandomArbitrary(1, 100) >= 95 ||
+        msg.channel.id === `715766875971256322` // always allow Alanis in Her Channel until it's annoying
+      ) {
         msg.channel.send(
           `${
             alanisReactions[
@@ -613,12 +628,8 @@ client.on(`messageCreate`, async (msg) => {
     }
 
     // 2 Fast 2 Furious converter
-    if (
-      msg.content.toLowerCase().match(/(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i)
-    ) {
-      const wordsArray = msg.content.match(
-        /(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i,
-      ); // this might be shit but it'll do the job
+    if (msg.content.toLowerCase().match(fastNFuriousRegex)) {
+      const wordsArray = msg.content.match(fastNFuriousRegex);
       if (wordsArray) {
         const wordsArray2 = wordsArray[0].split(` `);
         wordsArray2[0] = `2`;
