@@ -24,6 +24,7 @@ import { vicLogic } from "./reactions/victoria.logic";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
 import { redootJob } from "./cron/jobs";
+import { whichEpisode } from "./episode-finder";
 
 dotenv.config();
 
@@ -662,6 +663,11 @@ client.on(`messageCreate`, async (msg) => {
 
     if (msg.content.toLowerCase().includes(`noncanonical`)) {
       msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
+    }
+
+    if (msg.content.toLowerCase().includes(`which episode`)) {
+      whichEpisode();
+      // msg.channel.send(`NOT IMPLEMENTED YET`);
     }
   }
 });
