@@ -643,8 +643,19 @@ client.on(`messageCreate`, async (msg) => {
     }
 
     // 2 Fast 2 Furious converter
-    if (msg.content.toLowerCase().match(fastNFuriousRegex)) {
-      msg.channel.send(tooFastToFurious(msg.content.toLowerCase()));
+    if (
+      msg.content.toLowerCase().match(/(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i)
+    ) {
+      const wordsArray = msg.content.match(
+        /(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i,
+      );
+      if (wordsArray) {
+        const wordsArray2 = wordsArray[0].split(` `);
+        wordsArray2[0] = `2`;
+        wordsArray2[2] = `2`;
+        const newString = wordsArray2.join(` `);
+        msg.channel.send(newString);
+      }
     }
 
     // Shia Surprise
