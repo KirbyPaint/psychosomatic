@@ -2,50 +2,50 @@
 
 Bot originally based off of The Avalanches' "Frontier Psychiatrist" and now it does whatever I want it to do
 
+---
+
+Commands:
+
 !vecho
 
 > bot repeats what you write after !vecho
 
-forbidden word
+"who has the brain cell" (verbatim)
 
-> bot scolds you for posting forbidden words
+> bot posts which user has the brain cell
 
-phrase contains "weep"
-
-> bot corrects your bad French with \*ouiiip
-
-"who has the brain cell"
-
-> bot posts who has the brain cell
-
-!give
+!give (any text may follow)
 
 > owner of the brain cell transfers ownership. brain cell cannot be taken, only given willingly
 
-any part of message contains "psychosomatic"
+Message contains !help
 
-> Bot responds "THAT BOY NEEDS THERAPY"
+> Bot explains game and links to readme.md
 
-any part of message contains "manifest"
+---
 
-> Bot reacts with a custom emoji
+Message contains the following word(s) (case-insensitive):
 
-any part of message contains "maybe someday"
+| keyword          | bot response                                                    |
+| ---------------- | --------------------------------------------------------------- |
+| foot or feet     | you are shamed                                                  |
+| weep             | bot corrects you with \*ouiiip                                  |
+| psychosomatic    | THAT BOY NEEDS THERAPY                                          |
+| manifest         | bot reacts with weird little emoji                              |
+| maybe someday    | bot reacts to message with the magic conch shell from SpongeBob |
+| jenny            | 8️⃣6️⃣7️⃣5️⃣3️⃣0️⃣9️⃣                                                  |
+| Alanis or Ironic | 1/20 chance of Alanisposting                                    |
+| jpeg             | Hank Hill (doesn't trigger if a posted image is .jpeg or .jpg)  |
+| too `x` to `y`   | 2 fast 2 furious                                                |
+| Shia Labeouf     | Shia Surprise                                                   |
+| do it            | Sheev Palpatine reaction (DEW IT)                               |
+| burgerboss       | Bob response                                                    |
+| noncanonical     | Tina response                                                   |
+|                  |                                                                 |
 
-> Bot reacts with the magic conch shell from SpongeBob
+---
 
-!kitty
-
-> fetches random cat gif
-
-!apod OR !apod YYYY-MM-DD (for dates past June 1996 generally)
-
-> fetches Astronomy Pic Of the Day from NASA's API
-
-!weatherboy CITY,STATE,COUNTRYCODE (2 letters)
-
-> fetches weather  
-> !weatherboy Salem,Oregon,US
+Victoria-specific commands:
 
 message _starts with_ "I think"
 
@@ -66,39 +66,3 @@ Tell the bot "I love you"
 Message contains "Toro"
 
 > "Did you just call me Toro?"
-
-Message contains "Jenny"
-
-> 8️⃣6️⃣7️⃣5️⃣3️⃣0️⃣9️⃣
-
-Message contains "Alanis" or "Ironic"
-
-> 1/20 chance of Alanisposting
-
-Messages matches jpeg regex
-
-> Hank Hill doesn't know what a jpeg is
-
-Message matches pattern "too x to y"
-
-> 2 fast 2 furious response
-
-Message contains "Shia Labeouf"
-
-> Shia Surprise
-
-Message contains "do it"
-
-> Sheev Palpatine reaction (DEW IT)
-
-Message contains !help
-
-> Bot explains game and links to readme.md
-
-Message contains "burgerboss"
-
-> Bob response
-
-Message contains "noncanonical"
-
-> Tina response
