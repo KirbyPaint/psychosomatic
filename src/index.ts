@@ -42,6 +42,17 @@ function isGameAllowedChannel(channelId: string) {
   return gameAllowedChannels.includes(channelId);
 }
 
+export function tooFastToFurious(message: string) {
+  const wordsArray = message.split(` `);
+  const wordsArray2 = wordsArray[0].split(` `);
+  wordsArray2[0] = `2`;
+  wordsArray2[1] = wordsArray[1];
+  wordsArray2[2] = `2`;
+  wordsArray2[3] = wordsArray[3];
+  const newString = wordsArray2.join(` `);
+  return newString;
+}
+
 // I will come back to this
 // interface IError {
 //   code: string;
@@ -51,11 +62,6 @@ function isGameAllowedChannel(channelId: string) {
 //     message: string;
 //   };
 // }
-
-// this array has to stay in this file because otherwise it can't read the .env
-// can probably move the config line but nah
-// const BRAIN_CELL_OWNERS = [process.env.MY_ID, process.env.HER_ID];
-// let whoHasTheBrainCell = BRAIN_CELL_OWNERS[1];
 
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg) => {
@@ -629,14 +635,7 @@ client.on(`messageCreate`, async (msg) => {
 
     // 2 Fast 2 Furious converter
     if (msg.content.toLowerCase().match(fastNFuriousRegex)) {
-      const wordsArray = msg.content.match(fastNFuriousRegex);
-      if (wordsArray) {
-        const wordsArray2 = wordsArray[0].split(` `);
-        wordsArray2[0] = `2`;
-        wordsArray2[2] = `2`;
-        const newString = wordsArray2.join(` `);
-        msg.channel.send(newString);
-      }
+      msg.channel.send(tooFastToFurious(msg.content.toLowerCase()));
     }
 
     // Shia Surprise

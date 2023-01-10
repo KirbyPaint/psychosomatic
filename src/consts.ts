@@ -422,11 +422,11 @@ export const jpegRegex = /^[^.]*(jpe?g)/;
 export const weepRegex = /\b(weep)\b/;
 export const cursedRegex = /\bfoot\b|\bfeet\b/;
 // this might be shit but it'll do the job
-export const fastNFuriousRegex = /(too)+ [\s\S]+ (to?o)+ [\s\S]+/;
+export const fastNFuriousRegex = /(too)+ [^ ]+ (to?o)+ [^ \r\n]+/i;
 export const fiveMinutes = 300000;
 
 export function help(): string {
-  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts
+  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic/blob/76117f0353fce9eb3286c34cd5f7d63f6f04fdc5/README.md
 
     !DootVerse Commands:
     !addPlayer    - add yourself to DootVerse (name in progress)
