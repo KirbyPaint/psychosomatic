@@ -11,5 +11,5 @@ export function whichEpisode(): string {
     // return random element of array
     return array[getRandomArbitrary(0, array.length - 1)];
   }
-  return ``;
+  return `no empty messages`;
 }
