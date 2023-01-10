@@ -9,11 +9,11 @@ export function whichEpisode(): string {
   const showToWatch = Math.floor(getRandomArbitrary(2, showArray.length));
   console.log({ showToWatch });
   console.log(`showArray[showToWatch]: ${showArray[showToWatch]}`);
-  console.log(showArray[getRandomArbitrary(2, showArray.length - 1)]);
+  // console.log(showArray[getRandomArbitrary(2, showArray.length - 1)]);
   // for (const i in array) {
   // const showArray = array[i];
   // console.log({ showArray });
-  const show = showArray[getRandomArbitrary(2, showArray.length - 1)];
+  const show = showArray[showToWatch];
   console.log(`show: ${show}`);
   return show;
   // }
