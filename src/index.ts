@@ -474,6 +474,10 @@ client.on(`messageCreate`, async (msg) => {
       }
     }
 
+    if (msg.content.toLowerCase().includes(`which show`)) {
+      msg.channel.send(whichShow());
+    }
+
     // command to transfer the brain cell
 
     // for the future - this should be more like
@@ -663,10 +667,6 @@ client.on(`messageCreate`, async (msg) => {
 
     if (msg.content.toLowerCase().includes(`noncanonical`)) {
       msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
-    }
-
-    if (msg.content.toLowerCase().includes(`which show`)) {
-      msg.channel.send(whichShow());
     }
   }
 });
