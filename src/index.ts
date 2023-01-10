@@ -24,7 +24,7 @@ import { vicLogic } from "./reactions/victoria.logic";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
 import { redootJob } from "./cron/jobs";
-import { whichShow } from "./episode-finder";
+import { whichMovie, whichShow } from "./episode-finder";
 
 dotenv.config();
 
@@ -476,6 +476,10 @@ client.on(`messageCreate`, async (msg) => {
 
     if (msg.content.toLowerCase().includes(`which show`)) {
       msg.channel.send(whichShow());
+    }
+
+    if (msg.content.toLowerCase().includes(`which movie`)) {
+      msg.channel.send(whichMovie());
     }
 
     // command to transfer the brain cell
