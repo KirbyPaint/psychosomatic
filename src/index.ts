@@ -666,8 +666,7 @@ client.on(`messageCreate`, async (msg) => {
     }
 
     if (msg.content.toLowerCase().includes(`which episode`)) {
-      whichEpisode();
-      // msg.channel.send(`NOT IMPLEMENTED YET`);
+      msg.channel.send(whichEpisode());
     }
   }
 });
