@@ -6,7 +6,7 @@ export function whichEpisode(): string {
   const tvDirectory = path.join(process.cwd(), `episodeList.txt`);
   const showArray = fs.readFileSync(tvDirectory).toString().split(`\n`);
   console.log(showArray);
-  const showToWatch = getRandomArbitrary(2, showArray.length - 1);
+  const showToWatch = Math.floor(getRandomArbitrary(2, showArray.length));
   console.log({ showToWatch });
   console.log(`showArray[showToWatch]: ${showArray[showToWatch]}`);
   console.log(showArray[getRandomArbitrary(2, showArray.length - 1)]);
