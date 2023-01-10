@@ -24,7 +24,7 @@ import { vicLogic } from "./reactions/victoria.logic";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
 import { redootJob } from "./cron/jobs";
-import { whichEpisode } from "./episode-finder";
+import { whichShow } from "./episode-finder";
 
 dotenv.config();
 
@@ -665,8 +665,8 @@ client.on(`messageCreate`, async (msg) => {
       msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
     }
 
-    if (msg.content.toLowerCase().includes(`which episode`)) {
-      msg.channel.send(whichEpisode());
+    if (msg.content.toLowerCase().includes(`which show`)) {
+      msg.channel.send(whichShow());
     }
   }
 });

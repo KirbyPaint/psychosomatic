@@ -2,20 +2,9 @@ import * as fs from "fs";
 import path from "path";
 import { getRandomArbitrary } from "./consts";
 
-export function whichEpisode(): string {
+export function whichShow(): string {
   const tvDirectory = path.join(process.cwd(), `episodeList.txt`);
   const showArray = fs.readFileSync(tvDirectory).toString().split(`\n`);
-  console.log(showArray);
-  const showToWatch = Math.floor(getRandomArbitrary(2, showArray.length));
-  console.log({ showToWatch });
-  console.log(`showArray[showToWatch]: ${showArray[showToWatch]}`);
-  // console.log(showArray[getRandomArbitrary(2, showArray.length - 1)]);
-  // for (const i in array) {
-  // const showArray = array[i];
-  // console.log({ showArray });
-  const show = showArray[showToWatch];
-  console.log(`show: ${show}`);
+  const show = showArray[Math.floor(getRandomArbitrary(2, showArray.length))];
   return show;
-  // }
-  // return `no empty messages`;
 }
