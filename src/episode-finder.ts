@@ -29,7 +29,7 @@ export function whichPlaylist(): string {
     .readFileSync(tvDirectory)
     .toString()
     .split(`\n`)
-    .filter((x) => x !== undefined);
+    .filter((n) => n);
   console.log(showArray.length);
   const index = Math.floor(getRandomArbitrary(0, showArray.length));
   console.log({ index });
@@ -41,6 +41,6 @@ export function whichPlaylist(): string {
 export function addToPlaylist(input: string): string {
   console.log(input);
   const playlistFile = path.join(process.cwd(), `playlist.txt`);
-  fs.appendFileSync(playlistFile, `${input}` + `\n`);
+  fs.appendFileSync(playlistFile, `\n + ${input}`);
   return `Appended ${input} to playlist`;
 }
