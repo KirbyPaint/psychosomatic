@@ -29,6 +29,7 @@ export function whichPlaylist(): string {
   console.log(showArray.length);
   const index = Math.floor(getRandomArbitrary(0, showArray.length));
   console.log({ index });
+  console.log(`showArray result = `, showArray[index]);
   const show = showArray[index];
   return show;
 }
