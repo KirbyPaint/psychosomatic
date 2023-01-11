@@ -30,17 +30,16 @@ export function whichPlaylist(): string {
     .toString()
     .split(`\n`)
     .filter((n) => n);
-  console.log(showArray.length);
+  if (showArray.length < 1) {
+    return `No items in playlist`;
+  }
   const index = Math.floor(getRandomArbitrary(0, showArray.length));
-  console.log({ index });
-  console.log(`showArray result = `, showArray[index]);
   const show = showArray[index];
   return show;
 }
 
 export function addToPlaylist(input: string): string {
-  console.log(input);
   const playlistFile = path.join(process.cwd(), `playlist.txt`);
-  fs.appendFileSync(playlistFile, `\n + ${input}`);
+  fs.appendFileSync(playlistFile, `${input} + \n`);
   return `Appended ${input} to playlist`;
 }
