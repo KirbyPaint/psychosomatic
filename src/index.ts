@@ -491,7 +491,7 @@ client.on(`messageCreate`, async (msg) => {
       msg.channel.send(whichMovie());
     }
 
-    if (msg.content.toLowerCase().startsWith(`!addPlaylist`)) {
+    if (msg.content.toLowerCase().startsWith(`!addplaylist`)) {
       const [, ...rest] = msg.content.split(` `);
       msg.channel.send(addToPlaylist(rest.toString()));
     }
