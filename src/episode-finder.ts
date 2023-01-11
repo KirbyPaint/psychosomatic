@@ -23,6 +23,13 @@ export function whichMovie(): string {
   return show;
 }
 
+export function whichPlaylist(): string {
+  const tvDirectory = path.join(process.cwd(), `playlist.txt`);
+  const showArray = fs.readFileSync(tvDirectory).toString().split(`\n`);
+  const show = showArray[Math.floor(getRandomArbitrary(0, showArray.length))];
+  return show;
+}
+
 export function addToPlaylist(input: string): string {
   console.log(input);
   const playlistFile = path.join(process.cwd(), `playlist.txt`);

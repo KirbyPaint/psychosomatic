@@ -28,6 +28,7 @@ import {
   addToPlaylist,
   whichEpisode,
   whichMovie,
+  whichPlaylist,
   whichShow,
 } from "./episode-finder";
 
@@ -494,6 +495,10 @@ client.on(`messageCreate`, async (msg) => {
     if (msg.content.toLowerCase().startsWith(`!addplaylist`)) {
       const [, ...rest] = msg.content.split(` `);
       msg.channel.send(addToPlaylist(rest.toString()));
+    }
+
+    if (msg.content.toLowerCase().includes(`which playlist`)) {
+      msg.channel.send(whichPlaylist());
     }
 
     // command to transfer the brain cell
