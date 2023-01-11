@@ -40,6 +40,6 @@ export function whichPlaylist(): string {
 
 export function addToPlaylist(input: string): string {
   const playlistFile = path.join(process.cwd(), `playlist.txt`);
-  fs.appendFileSync(playlistFile, `${input} + \n`);
+  fs.appendFileSync(playlistFile, `${input}\n`);
   return `Appended ${input} to playlist`;
 }

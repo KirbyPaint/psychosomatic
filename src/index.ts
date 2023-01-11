@@ -494,7 +494,7 @@ client.on(`messageCreate`, async (msg) => {
 
     if (msg.content.toLowerCase().startsWith(`!addplaylist`)) {
       const [, ...rest] = msg.content.split(` `);
-      msg.channel.send(addToPlaylist(rest.toString()));
+      msg.channel.send(addToPlaylist(rest.join(` `)));
     }
 
     if (msg.content.toLowerCase().includes(`which playlist`)) {
