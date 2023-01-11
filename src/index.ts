@@ -493,7 +493,7 @@ client.on(`messageCreate`, async (msg) => {
 
     if (msg.content.toLowerCase().startsWith(`!addPlaylist`)) {
       const [, ...rest] = msg.content.split(` `);
-      addToPlaylist(rest.toString());
+      msg.channel.send(addToPlaylist(rest.toString()));
     }
 
     // command to transfer the brain cell
