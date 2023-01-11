@@ -26,7 +26,10 @@ export function whichMovie(): string {
 export function whichPlaylist(): string {
   const tvDirectory = path.join(process.cwd(), `playlist.txt`);
   const showArray = fs.readFileSync(tvDirectory).toString().split(`\n`);
-  const show = showArray[Math.floor(getRandomArbitrary(0, showArray.length))];
+  console.log(showArray.length);
+  const index = Math.floor(getRandomArbitrary(0, showArray.length));
+  console.log({ index });
+  const show = showArray[index];
   return show;
 }
 
