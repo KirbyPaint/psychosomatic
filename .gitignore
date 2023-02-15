@@ -1,7 +1,6 @@
 .env
 node_modules
 package-lock.json
-yarn.lock
 dist
 episodeList.txt
 movieList.txt
