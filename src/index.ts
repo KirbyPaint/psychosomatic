@@ -1,6 +1,6 @@
-import { Client, Intents } from "discord.js";
+import { ActivityType, Client, Events, GatewayIntentBits } from "discord.js";
 import dotenv from "dotenv";
-import { vicPic, vicQuote } from "./reactions/victoria";
+import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
   blacklist,
@@ -10,17 +10,17 @@ import {
   cursedRegex,
   fastNFuriousRegex,
   fiveMinutes,
-  gameAllowedChannels,
   getRandomArbitrary,
   help,
+  isGameAllowedChannel,
   jpegReactions,
   jpegRegex,
   MANIFEST_ID,
+  naughtyWordReactions,
   SHEEV_ID,
   weepRegex,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
-import { vicLogic } from "./reactions/victoria.logic";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
 import { redootJob } from "./cron/jobs";
@@ -36,29 +36,37 @@ dotenv.config();
 
 const prisma = new PrismaClient();
 
-//create new client
+// create new client
+/**
+ * Error:
+ * Privileged intent provided is not enabled or whitelisted.
+ *
+ * Solution:
+ * Bot must be given these intents in the Discord Developer Portal
+ */
 const client = new Client({
   intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+    GatewayIntentBits.Guilds,
+    // GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildModeration,
+    GatewayIntentBits.GuildEmojisAndStickers,
+    GatewayIntentBits.GuildIntegrations,
+    GatewayIntentBits.GuildWebhooks,
+    GatewayIntentBits.GuildInvites,
+    GatewayIntentBits.GuildVoiceStates,
+    // GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.GuildMessageTyping,
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.DirectMessageReactions,
+    GatewayIntentBits.DirectMessageTyping,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildScheduledEvents,
+    GatewayIntentBits.AutoModerationConfiguration,
+    GatewayIntentBits.AutoModerationExecution,
   ],
 });
-
-function isGameAllowedChannel(channelId: string) {
-  return gameAllowedChannels.includes(channelId);
-}
-
-export function tooFastToFurious(message: string) {
-  const wordsArray = message.split(` `);
-  const wordsArray2 = wordsArray[0].split(` `);
-  wordsArray2[0] = `2`;
-  wordsArray2[1] = wordsArray[1];
-  wordsArray2[2] = `2`;
-  wordsArray2[3] = wordsArray[3];
-  const newString = wordsArray2.join(` `);
-  return newString;
-}
 
 // I will come back to this
 // interface IError {
@@ -71,7 +79,7 @@ export function tooFastToFurious(message: string) {
 // }
 
 // actions to take when the bot receives a message
-client.on(`messageCreate`, async (msg) => {
+client.on(Events.MessageCreate, async (msg) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
@@ -296,7 +304,7 @@ client.on(`messageCreate`, async (msg) => {
        * Attacker will not receive any additional damage, just the xp loss
        *
        * Attack Logic
-       * we will do 2d10 rolls
+       * we will do 2 d10 rolls
        * no buffs from either side until items are implemented
        * current rules are probably way imbalanced
        *
@@ -443,7 +451,8 @@ client.on(`messageCreate`, async (msg) => {
       msg.content.toLowerCase().match(cursedRegex) &&
       !msg.content.toLowerCase().includes(`victoria`)
     ) {
-      msg.channel.send(vicLogic(msg.content) ?? `I don't know what to say`);
+      const randomNumber = getRandomArbitrary(0, naughtyWordReactions.length);
+      msg.channel.send(`${naughtyWordReactions[Math.floor(randomNumber)]}`);
     }
 
     if (msg.content.toLowerCase().match(weepRegex)) {
@@ -516,21 +525,21 @@ client.on(`messageCreate`, async (msg) => {
         // I do not love that this isn't procedural HOWEVER
         // there will always only be 2 people and 1 braincell
         // so this should never have to change
-        const result = await prisma.$transaction([
-          prisma.braincell.update({
-            where: { discordId: brainCells[0].discordId },
-            data: {
-              hasBrainCell: !brainCells[0].hasBrainCell,
-            },
-          }),
-          prisma.braincell.update({
-            where: { discordId: brainCells[1].discordId },
-            data: {
-              hasBrainCell: !brainCells[1].hasBrainCell,
-            },
-          }),
-        ]);
-        const newBrainCells = await prisma.braincell.findMany();
+        // const result = await prisma.$transaction([
+        //   prisma.braincell.update({
+        //     where: { discordId: brainCells[0].discordId },
+        //     data: {
+        //       hasBrainCell: !brainCells[0].hasBrainCell,
+        //     },
+        //   }),
+        //   prisma.braincell.update({
+        //     where: { discordId: brainCells[1].discordId },
+        //     data: {
+        //       hasBrainCell: !brainCells[1].hasBrainCell,
+        //     },
+        //   }),
+        // ]);
+        // const newBrainCells = await prisma.braincell.findMany();
         const [newBrainCellOwner] = brainCells.filter(
           (cell) => cell.hasBrainCell === true,
         );
@@ -571,16 +580,15 @@ client.on(`messageCreate`, async (msg) => {
       !blacklist.includes(msg.author.id) &&
       !channelBlacklist.includes(msg.channel.id)
     ) {
-      if (msg.content.toLowerCase() === `i think we all sing`) {
-        msg.reply(
+      if (msg.content.toLowerCase().includes(`i think we all sing`)) {
+        msg.channel.send(
           `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`,
         );
         return;
-      } else {
-        msg.channel.send(vicLogic(msg.content));
-        msg.channel.send(vicPic());
-        return;
       }
+      msg.channel.send(iThinkWeAll(msg.content));
+      msg.channel.send(vicPic());
+      return;
     }
 
     if (msg.content.toLowerCase().includes(`victoria`)) {
@@ -662,12 +670,8 @@ client.on(`messageCreate`, async (msg) => {
     }
 
     // 2 Fast 2 Furious converter
-    if (
-      msg.content.toLowerCase().match(/(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i)
-    ) {
-      const wordsArray = msg.content.match(
-        /(too)+ [a-zA-Z]+ (to?o)+ [a-zA-Z]+/i,
-      );
+    if (msg.content.toLowerCase().match(fastNFuriousRegex)) {
+      const wordsArray = msg.content.match(fastNFuriousRegex);
       if (wordsArray) {
         const wordsArray2 = wordsArray[0].split(` `);
         wordsArray2[0] = `2`;
@@ -705,7 +709,7 @@ client.on(`messageCreate`, async (msg) => {
   }
 });
 
-client.on(`ready`, async () => {
+client.on(Events.ClientReady, async () => {
   const braincells = await prisma.braincell.count();
   if (braincells === 0) {
     console.log(chalk.red(`no braincell has been given`));
@@ -718,8 +722,8 @@ client.on(`ready`, async () => {
   // );
   redootJob.start();
   // set status
-  client.user?.setActivity(`Victorious 24/7`, { type: `WATCHING` });
+  client.user?.setActivity(`Victorious 24/7`, { type: ActivityType.Watching });
 });
 
-//make sure this line is the last line
+// make sure this line is the last line
 client.login(process.env.CLIENT_TOKEN);

@@ -450,3 +450,32 @@ export const gameAllowedChannels = [
 export const blacklist = [``];
 
 export const channelBlacklist = [`693210030236762183`];
+
+export function isGameAllowedChannel(channelId: string) {
+  return gameAllowedChannels.includes(channelId);
+}
+
+export function tooFastToFurious(message: string) {
+  const wordsArray = message.split(` `);
+  const wordsArray2 = wordsArray[0].split(` `);
+  wordsArray2[0] = `2`;
+  wordsArray2[1] = wordsArray[1];
+  wordsArray2[2] = `2`;
+  wordsArray2[3] = wordsArray[3];
+  const newString = wordsArray2.join(` `);
+  return newString;
+}
+
+// Thanks to grammar, I have to do work
+export const wouldCouldShouldHad = [
+  `i'd`,
+  `you'd`,
+  `we'd`,
+  `they'd`,
+  `he'd`,
+  `she'd`,
+];
+export const have = [`i've`, `you've`, `we've`, `they've`];
+export const areWere = [`i'm`, `you're`, `we're`, `they're`];
+// The i'd and you'd need to be separate from the we've and the we're, etc.
+export const pronouns = [`i`, `you`, `he`, `she`, `it`, `we`, `they`];
