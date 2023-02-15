@@ -1,4 +1,4 @@
-import { ActivityType, Client, Events, GatewayIntentBits } from "discord.js";
+import { Client, Message } from "discord.js";
 import dotenv from "dotenv";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
@@ -46,25 +46,27 @@ const prisma = new PrismaClient();
  */
 const client = new Client({
   intents: [
-    GatewayIntentBits.Guilds,
-    // GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildModeration,
-    GatewayIntentBits.GuildEmojisAndStickers,
-    GatewayIntentBits.GuildIntegrations,
-    GatewayIntentBits.GuildWebhooks,
-    GatewayIntentBits.GuildInvites,
-    GatewayIntentBits.GuildVoiceStates,
-    // GatewayIntentBits.GuildPresences,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMessageReactions,
-    GatewayIntentBits.GuildMessageTyping,
-    GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.DirectMessageReactions,
-    GatewayIntentBits.DirectMessageTyping,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildScheduledEvents,
-    GatewayIntentBits.AutoModerationConfiguration,
-    GatewayIntentBits.AutoModerationExecution,
+    1, 4, 8, 16, 32, 64, 128, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536,
+    1048576, 2097152,
+    // GatewayIntentBits.Guilds,
+    // // GatewayIntentBits.GuildMembers,
+    // GatewayIntentBits.GuildModeration,
+    // GatewayIntentBits.GuildEmojisAndStickers,
+    // GatewayIntentBits.GuildIntegrations,
+    // GatewayIntentBits.GuildWebhooks,
+    // GatewayIntentBits.GuildInvites,
+    // GatewayIntentBits.GuildVoiceStates,
+    // // GatewayIntentBits.GuildPresences,
+    // GatewayIntentBits.GuildMessages,
+    // GatewayIntentBits.GuildMessageReactions,
+    // GatewayIntentBits.GuildMessageTyping,
+    // GatewayIntentBits.DirectMessages,
+    // GatewayIntentBits.DirectMessageReactions,
+    // GatewayIntentBits.DirectMessageTyping,
+    // GatewayIntentBits.MessageContent,
+    // GatewayIntentBits.GuildScheduledEvents,
+    // GatewayIntentBits.AutoModerationConfiguration,
+    // GatewayIntentBits.AutoModerationExecution,
   ],
 });
 
@@ -79,7 +81,7 @@ const client = new Client({
 // }
 
 // actions to take when the bot receives a message
-client.on(Events.MessageCreate, async (msg) => {
+client.on(`messageCreate`, async (msg: Message) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
@@ -709,7 +711,7 @@ client.on(Events.MessageCreate, async (msg) => {
   }
 });
 
-client.on(Events.ClientReady, async () => {
+client.on(`ready`, async () => {
   const braincells = await prisma.braincell.count();
   if (braincells === 0) {
     console.log(chalk.red(`no braincell has been given`));
@@ -722,7 +724,7 @@ client.on(Events.ClientReady, async () => {
   // );
   redootJob.start();
   // set status
-  client.user?.setActivity(`Victorious 24/7`, { type: ActivityType.Watching });
+  client.user?.setActivity(`Victorious 24/7`, { type: 3 });
 });
 
 // make sure this line is the last line
