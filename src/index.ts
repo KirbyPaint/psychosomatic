@@ -39,7 +39,7 @@ const prisma = new PrismaClient();
 // create new client
 /**
  * Error:
- * Privileged intent provided is not enabled or whitelisted.
+ * "Privileged intent provided is not enabled or whitelisted."
  *
  * Solution:
  * Bot must be given these intents in the Discord Developer Portal
@@ -578,6 +578,7 @@ client.on(`messageCreate`, async (msg: Message) => {
     // Victoria Justice
     if (
       msg.content.toLowerCase().startsWith(`i think`) &&
+      msg.content.length >= 8 &&
       msg.content.length <= 50 &&
       !blacklist.includes(msg.author.id) &&
       !channelBlacklist.includes(msg.channel.id)
@@ -717,13 +718,16 @@ client.on(`ready`, async () => {
     console.log(chalk.red(`no braincell has been given`));
     console.log(chalk.yellow(`Please run yarn seed`));
   }
+
+  // not using rn come back to this later
   // console.log(
   //   `Logged in as ${client?.user?.tag}!\n with ${player} Dootiverse player${
   //     player === 1 ? `` : `s`
   //   }`,
   // );
   redootJob.start();
-  // set status
+
+  // set bot status
   client.user?.setActivity(`Victorious 24/7`, { type: 3 });
 });
 

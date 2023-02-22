@@ -18,19 +18,18 @@ export function endText(endOfSentence: string[]) {
 export function iThinkWeAll(msg: string) {
   const contentArray: Array<string> = msg.split(` `);
   const [i, think, conditionWord, ...rest] = contentArray;
-  console.log({ conditionWord });
   let phrase = `${i} ${think} `;
   switch (true) {
-    case pronouns.includes(conditionWord.toLowerCase()):
+    case pronouns.includes(conditionWord?.toLowerCase()):
       phrase += `WE ALL `;
       break;
-    case areWere.includes(conditionWord.toLowerCase()):
+    case areWere.includes(conditionWord?.toLowerCase()):
       phrase += `WE'RE ALL `;
       break;
-    case wouldCouldShouldHad.includes(conditionWord.toLowerCase()):
+    case wouldCouldShouldHad.includes(conditionWord?.toLowerCase()):
       phrase += `WE'D ALL `;
       break;
-    case have.includes(conditionWord.toLowerCase()):
+    case have.includes(conditionWord?.toLowerCase()):
       phrase += `WE'VE ALL `;
       break;
     default:
