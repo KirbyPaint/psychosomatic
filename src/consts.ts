@@ -480,20 +480,22 @@ export const areWere = [`i'm`, `you're`, `we're`, `they're`];
 // The i'd and you'd need to be separate from the we've and the we're, etc.
 export const pronouns = [`i`, `you`, `he`, `she`, `it`, `we`, `they`];
 
-export const DOOTS_COMMANDS = {
-  add: `!add`,
-  addplayer: `!addplayer`,
-  count: `!count`,
-  delete: `!delete`,
-  deleteplayer: `!deleteplayer`,
-  players: `!players`,
-  remove: `!remove`,
-  removeplayer: `!removeplayer`,
-  rename: `!rename`,
-  renameplayer: `!renameplayer`,
-  resetall: `!resetall`,
-  restore: `!restore`,
-  restoreplayer: `!restoreplayer`,
-  score: `!score`,
-  stats: `!stats`,
-};
+export const DOOT_COMMANDS = [
+  `!add`,
+  `!addplayer`,
+  `!remove`,
+  `!removeplayer`,
+  `!rename`,
+  `!renameplayer`,
+  `!score`,
+  `!players`,
+  `!delete`,
+  `!deleteplayer`,
+  `!count`,
+  `!stats`,
+  `!restore`,
+  `!restoreplayer`,
+  `!resetall`,
+  `!doot`,
+  `!attack`,
+];
