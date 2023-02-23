@@ -31,7 +31,7 @@ import {
   whichPlaylist,
   whichShow,
 } from "./episode-finder";
-import { addPlayer, removePlayer } from "./doots_game";
+import { addPlayer, removePlayer, renamePlayer } from "./doots_game";
 
 dotenv.config();
 
@@ -59,19 +59,25 @@ client.on(`messageCreate`, async (msg: Message) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
-  const DOOTS_COMMANDS = [`!addplayer`, `!removeplayer`];
+  // Connect the commands to the switch case
+  // so if I rename here, it will rename in the switch case
+  const DOOTS_COMMANDS = [`!add`, `!remove`, `!rename`];
   if (isGameAllowedChannel(msg.channel.id)) {
     const [command, ...rest] = msg.content.split(` `);
     const { id, username } = msg.author;
     if (DOOTS_COMMANDS.includes(command.toLowerCase())) {
       console.log({ command, rest });
       switch (command.toLowerCase()) {
-        case `!addplayer`: {
+        case `!add`: {
           msg.channel.send(await addPlayer(rest, id, username));
           break;
         }
-        case `!removeplayer`: {
+        case `!remove`: {
           msg.channel.send(await removePlayer(id));
+          break;
+        }
+        case `!rename`: {
+          msg.channel.send(await renamePlayer(rest, id));
           break;
         }
       }
@@ -80,101 +86,6 @@ client.on(`messageCreate`, async (msg: Message) => {
 
   // chillbros DOOTS game
   if (isGameAllowedChannel(msg.channel.id)) {
-    // Game channel
-    // if (msg.content.toLowerCase().startsWith(`!addplayer`)) {
-    //   // Add Player
-    //   const [, ...rest] = msg.content.split(` `);
-    //   const playerNickname = rest.join(` `);
-    //   const playerExists = await prisma.player.findFirst({
-    //     where: { discordId: msg.author.id },
-    //   });
-    //   if (playerExists) {
-    //     if (playerExists.deletedAt) {
-    //       await prisma.player.update({
-    //         where: { discordId: msg.author.id },
-    //         data: { deletedAt: null },
-    //       });
-    //       console.log(chalk.green(`Restored ${playerExists.username}!`));
-    //       msg.channel.send(`${playerExists.username} has been restored!`);
-    //       return;
-    //     }
-    //     msg.channel.send(`You're already in the game!`);
-    //     return;
-    //   }
-    //   try {
-    //     const db = await prisma.player.create({
-    //       data: {
-    //         username: playerNickname ? playerNickname : msg.author.username,
-    //         discordId: msg.author.id,
-    //         xp: 50,
-    //       },
-    //     });
-    //     console.log(chalk.green(`Added ${JSON.stringify(db.username)}!`));
-    //     msg.channel.send(`Added player ${JSON.stringify(db.username)}`);
-    //   } catch (error) {
-    //     console.log(chalk.red(`Error adding player: `, error));
-    //     msg.channel.send(
-    //       `Failed to add player, ask KirbyPaint to see what happened`,
-    //     );
-    //   }
-    // }
-    // Remove Player (soft delete)
-    // if (msg.content.toLowerCase().startsWith(`!removeplayer`)) {
-    //   const playerExists = await prisma.player.findFirst({
-    //     where: { discordId: msg.author.id, deletedAt: null },
-    //   });
-    //   if (!playerExists) {
-    //     msg.channel.send(`You're already not in the game!`);
-    //     return;
-    //   }
-    //   try {
-    //     const db = await prisma.player.update({
-    //       where: {
-    //         discordId: msg.author.id,
-    //       },
-    //       data: {
-    //         deletedAt: new Date(),
-    //       },
-    //     });
-    //     console.log(chalk.green(`Removed ${db.username}!`));
-    //     msg.channel.send(`Removed player ${JSON.stringify(db.username)}`);
-    //   } catch (error) {
-    //     console.log(chalk.red(`Error removing player: `, error));
-    //     msg.channel.send(
-    //       `Failed to remove player, ask KirbyPaint to see what happened`,
-    //     );
-    //   }
-    // }
-    // Rename
-    if (msg.content.toLowerCase().startsWith(`!rename`)) {
-      const [, ...rest] = msg.content.split(` `);
-      const newName = rest.join(` `);
-      if (!newName) {
-        msg.channel.send(`You need to provide a new name!`);
-        return;
-      }
-      if (newName.length > 32) {
-        msg.channel.send(`That nickname is too long!`);
-        return;
-      }
-      try {
-        const db = await prisma.player.update({
-          where: {
-            discordId: msg.author.id,
-          },
-          data: {
-            username: newName,
-          },
-        });
-        console.log(chalk.green(`Renamed to ${JSON.stringify(db.username)}!`));
-        msg.channel.send(`Renamed player to ${JSON.stringify(db.username)}`);
-      } catch (error) {
-        console.log(chalk.red(`Error renaming player: `, error));
-        msg.channel.send(
-          `Failed to rename player, ask KirbyPaint to see what happened`,
-        );
-      }
-    }
     // List all participating players
     if (msg.content.toLowerCase().startsWith(`!players`)) {
       const players = await prisma.player.findMany({
@@ -573,6 +484,8 @@ client.on(`messageCreate`, async (msg: Message) => {
     }
 
     // Victoria Justice
+
+    // EDGE CASES: "I think so?"
     if (
       msg.content.toLowerCase().startsWith(`i think`) &&
       msg.content.length >= 8 &&

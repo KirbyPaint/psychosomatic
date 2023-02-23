@@ -63,6 +63,35 @@ export async function removePlayer(discordId: string): Promise<string> {
     return `Failed to remove player, ask KirbyPaint to see what happened`;
   }
 }
+
+export async function renamePlayer(
+  rest: string[],
+  discordId: string,
+): Promise<string> {
+  const newName = rest.join(` `);
+  if (!newName) {
+    return `You need to provide a new name!`;
+  }
+  if (newName.length > 32) {
+    return `That nickname is too long!`;
+  }
+  try {
+    const db = await prisma.player.update({
+      where: {
+        discordId,
+      },
+      data: {
+        username: newName,
+      },
+    });
+    console.log(chalk.green(`Renamed to ${JSON.stringify(db.username)}!`));
+    return `Renamed player to ${JSON.stringify(db.username)}`;
+  } catch (error) {
+    console.log(chalk.red(`Error renaming player: `, error));
+    return `Failed to rename player, ask KirbyPaint to see what happened`;
+  }
+}
+
 // // Rename
 // if (msg.content.toLowerCase().startsWith(`!rename`)) {
 //   const [, ...rest] = msg.content.split(` `);
