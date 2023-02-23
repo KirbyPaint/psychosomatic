@@ -9,9 +9,9 @@ import chalk from "chalk";
 const prisma = new PrismaClient();
 
 export async function addPlayer(
-  rest: string[],
   discordId: string,
   username: string,
+  rest: string[],
 ): Promise<string> {
   const playerNickname = rest.join(` `);
   const playerExists = await prisma.player.findFirst({
@@ -69,8 +69,8 @@ export async function removePlayer(discordId: string): Promise<string> {
 }
 
 export async function renamePlayer(
-  rest: string[],
   discordId: string,
+  rest: string[],
 ): Promise<string> {
   const newName = rest.join(` `);
   if (!newName) {

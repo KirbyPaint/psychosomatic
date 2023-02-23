@@ -8,6 +8,7 @@ import {
   channelBlacklist,
   CONCH_ID,
   cursedRegex,
+  DOOTS_COMMANDS,
   fastNFuriousRegex,
   fiveMinutes,
   getRandomArbitrary,
@@ -67,67 +68,48 @@ client.on(`messageCreate`, async (msg: Message) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
-  // Connect the commands to the switch case
-  // so if I rename here, it will rename in the switch case
-  const DOOTS_COMMANDS = [
-    `!add`,
-    `!addplayer`,
-    `!remove`,
-    `!removeplayer`,
-    `!rename`,
-    `!renameplayer`,
-    `!score`,
-    `!players`,
-    `!delete`,
-    `!deleteplayer`,
-    `!count`,
-    `!stats`,
-    `!restore`,
-    `!restoreplayer`,
-    `!resetall`,
-  ];
   if (isGameAllowedChannel(msg.channel.id)) {
     const [command, ...rest] = msg.content.split(` `);
     const { id, username } = msg.author;
-    if (DOOTS_COMMANDS.includes(command.toLowerCase())) {
-      console.log({ command, rest });
+
+    if (Object.values(DOOTS_COMMANDS).includes(command.toLowerCase())) {
       switch (command.toLowerCase()) {
-        case `!addplayer`:
-        case `!add`: {
-          msg.channel.send(await addPlayer(rest, id, username));
+        case DOOTS_COMMANDS.add:
+        case DOOTS_COMMANDS.addplayer: {
+          msg.channel.send(await addPlayer(id, username, rest));
           break;
         }
-        case `!removeplayer`:
-        case `!remove`: {
+        case DOOTS_COMMANDS.remove:
+        case DOOTS_COMMANDS.removeplayer: {
           msg.channel.send(await removePlayer(id));
           break;
         }
-        case `!renameplayer`:
-        case `!rename`: {
-          msg.channel.send(await renamePlayer(rest, id));
+        case DOOTS_COMMANDS.rename:
+        case DOOTS_COMMANDS.renameplayer: {
+          msg.channel.send(await renamePlayer(id, rest));
           break;
         }
-        case `!score`:
-        case `!players`: {
+        case DOOTS_COMMANDS.score:
+        case DOOTS_COMMANDS.players: {
           msg.channel.send(await listPlayers());
           break;
         }
-        case `!delete`:
-        case `!deleteplayer`: {
+        case DOOTS_COMMANDS.deleteplayer:
+        case DOOTS_COMMANDS.delete: {
           msg.channel.send(await deletePlayer(id));
           break;
         }
-        case `!count`:
-        case `!stats`: {
+        case DOOTS_COMMANDS.count:
+        case DOOTS_COMMANDS.stats: {
           msg.channel.send(await stats(id));
           break;
         }
-        case `!restore`:
-        case `!restoreplayer`: {
+        case DOOTS_COMMANDS.restore:
+        case DOOTS_COMMANDS.restoreplayer: {
           msg.channel.send(await restore(id));
           break;
         }
-        case `!resetall`: {
+        case DOOTS_COMMANDS.resetall: {
           msg.channel.send(await resetAll(id));
           break;
         }
