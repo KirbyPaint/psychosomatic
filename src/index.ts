@@ -1,6 +1,4 @@
-// import { Client, GatewayIntentBits, Message } from "discord.js";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Client, GatewayIntentBits, Message } = require(`@discord.js`);
+import { Client, Intents, Message } from "discord.js";
 import dotenv from "dotenv";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
@@ -46,58 +44,17 @@ const prisma = new PrismaClient();
  * Solution:
  * Bot must be given these intents in the Discord Developer Portal
  */
+const DISALLOWED_INTENTS = [2, 256];
+const intents = Object.values({ ...Intents.FLAGS }).filter(
+  (intent) => !DISALLOWED_INTENTS.includes(intent),
+);
+
 const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    4,
-    8,
-    16,
-    32,
-    64,
-    128,
-    512,
-    1024,
-    2048,
-    4096,
-    8192,
-    16384,
-    32768,
-    65536,
-    1048576,
-    2097152,
-    // // GatewayIntentBits.GuildMembers,
-    // GatewayIntentBits.GuildModeration,
-    // GatewayIntentBits.GuildEmojisAndStickers,
-    // GatewayIntentBits.GuildIntegrations,
-    // GatewayIntentBits.GuildWebhooks,
-    // GatewayIntentBits.GuildInvites,
-    // GatewayIntentBits.GuildVoiceStates,
-    // // GatewayIntentBits.GuildPresences,
-    // GatewayIntentBits.GuildMessages,
-    // GatewayIntentBits.GuildMessageReactions,
-    // GatewayIntentBits.GuildMessageTyping,
-    // GatewayIntentBits.DirectMessages,
-    // GatewayIntentBits.DirectMessageReactions,
-    // GatewayIntentBits.DirectMessageTyping,
-    // GatewayIntentBits.MessageContent,
-    // GatewayIntentBits.GuildScheduledEvents,
-    // GatewayIntentBits.AutoModerationConfiguration,
-    // GatewayIntentBits.AutoModerationExecution,
-  ],
+  intents,
 });
 
-// I will come back to this
-// interface IError {
-//   code: string;
-//   clientVersion: string;
-//   meta: {
-//     code: string;
-//     message: string;
-//   };
-// }
-
 // actions to take when the bot receives a message
-client.on(`messageCreate`, async (msg: typeof Message) => {
+client.on(`messageCreate`, async (msg: Message) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
