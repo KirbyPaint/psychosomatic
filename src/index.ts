@@ -36,6 +36,7 @@ import {
   deletePlayer,
   doot,
   listPlayers,
+  playerCount,
   removePlayer,
   renamePlayer,
   resetAll,
@@ -91,6 +92,10 @@ client.on(`messageCreate`, async (msg: Message) => {
         }
         case `!score`:
         case `!players`: {
+          if ((await playerCount()) < 1) {
+            msg.channel.send(`No players in the game`);
+            return;
+          }
           msg.channel.send(await listPlayers());
           break;
         }
@@ -101,6 +106,10 @@ client.on(`messageCreate`, async (msg: Message) => {
         }
         case `!count`:
         case `!stats`: {
+          if ((await playerCount()) < 1) {
+            msg.channel.send(`No players in the game`);
+            return;
+          }
           msg.reply(await stats(id));
           break;
         }

@@ -4,6 +4,13 @@ import chalk from "chalk";
 
 const prisma = new PrismaClient();
 
+export async function playerCount(): Promise<number> {
+  const players = await prisma.player.findMany({
+    where: { deletedAt: null },
+  });
+  return players.length;
+}
+
 export async function addPlayer(
   discordId: string,
   username: string,
