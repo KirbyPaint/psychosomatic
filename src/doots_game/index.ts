@@ -111,14 +111,27 @@ export async function listPlayers(): Promise<string> {
 `)}\`\`\``;
 }
 
-// // List all participating players
-// if (msg.content.toLowerCase().startsWith(`!players`)) {
-//   const players = await prisma.player.findMany({
-//     where: { deletedAt: null },
-//   });
-//   const playerList = players.map((player) => player.username);
-//   msg.channel.send(`Players: ${playerList.join(`, `)}\n`);
-// }
+export async function deletePlayer(discordId: string): Promise<string> {
+  const playerExists = await prisma.player.findFirst({
+    where: { discordId, deletedAt: null },
+  });
+  if (!playerExists) {
+    return `You're already not in the game!`;
+  }
+  try {
+    const db = await prisma.player.delete({
+      where: {
+        discordId,
+      },
+    });
+    console.log(chalk.green(`Deleted ${JSON.stringify(db.username)}!`));
+    return `Deleted player ${JSON.stringify(db.username)}`;
+  } catch (error) {
+    console.log(chalk.red(`Error deleting player: `, error));
+    return `Failed to delete player, ask KirbyPaint to see what happened`;
+  }
+}
+
 // // Hard delete player (remove from db altogether)
 // if (msg.content === `!deletePlayer`) {
 //   const playerExists = await prisma.player.findFirst({

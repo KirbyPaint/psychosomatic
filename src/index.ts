@@ -33,6 +33,7 @@ import {
 } from "./episode-finder";
 import {
   addPlayer,
+  deletePlayer,
   listPlayers,
   removePlayer,
   renamePlayer,
@@ -66,7 +67,14 @@ client.on(`messageCreate`, async (msg: Message) => {
 
   // Connect the commands to the switch case
   // so if I rename here, it will rename in the switch case
-  const DOOTS_COMMANDS = [`!add`, `!remove`, `!rename`, `!players`];
+  const DOOTS_COMMANDS = [
+    `!add`,
+    `!remove`,
+    `!rename`,
+    `!score`,
+    `!players`,
+    `!deleteplayer`,
+  ];
   if (isGameAllowedChannel(msg.channel.id)) {
     const [command, ...rest] = msg.content.split(` `);
     const { id, username } = msg.author;
@@ -85,8 +93,13 @@ client.on(`messageCreate`, async (msg: Message) => {
           msg.channel.send(await renamePlayer(rest, id));
           break;
         }
+        case `!score`:
         case `!players`: {
           msg.channel.send(await listPlayers());
+          break;
+        }
+        case `!deleteplayer`: {
+          msg.channel.send(await deletePlayer(id));
           break;
         }
       }
@@ -95,30 +108,6 @@ client.on(`messageCreate`, async (msg: Message) => {
 
   // chillbros DOOTS game
   if (isGameAllowedChannel(msg.channel.id)) {
-    // Hard delete player (remove from db altogether)
-    if (msg.content === `!deletePlayer`) {
-      const playerExists = await prisma.player.findFirst({
-        where: { discordId: msg.author.id, deletedAt: null },
-      });
-      if (!playerExists) {
-        msg.channel.send(`You're already not in the game!`);
-        return;
-      }
-      try {
-        const db = await prisma.player.delete({
-          where: {
-            discordId: msg.author.id,
-          },
-        });
-        console.log(chalk.green(`Deleted ${JSON.stringify(db.username)}!`));
-        msg.channel.send(`Deleted player ${JSON.stringify(db.username)}`);
-      } catch (error) {
-        console.log(chalk.red(`Error deleting player: `, error));
-        msg.channel.send(
-          `Failed to delete player, ask KirbyPaint to see what happened`,
-        );
-      }
-    }
     // Attack
     if (msg.content.toLowerCase().startsWith(`!doot`)) {
       // Command will be !doot <PlayerName> <Damage>
