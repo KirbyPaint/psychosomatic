@@ -10,7 +10,6 @@ import {
   cursedRegex,
   DOOT_COMMANDS,
   fastNFuriousRegex,
-  fiveMinutes,
   getRandomArbitrary,
   help,
   isGameAllowedChannel,
