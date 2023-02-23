@@ -1,5 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { getRandomArbitrary, isGameAllowedChannel } from "../consts";
+import {
+  fiveMinutes,
+  getRandomArbitrary,
+  isGameAllowedChannel,
+} from "../consts";
 import chalk from "chalk";
 
 const prisma = new PrismaClient();
@@ -132,14 +136,52 @@ export async function deletePlayer(discordId: string): Promise<string> {
   }
 }
 
-export async function count(discordId: string): Promise<string> {
-  const currentPlayer = await prisma.player.findFirst({
+export async function stats(discordId: string) {
+  const player = await prisma.player.findFirst({
     where: { discordId, deletedAt: null },
   });
-  if (!currentPlayer) {
+  if (!player) {
     return `You're not in the game!`;
   }
-  return `${currentPlayer.username} has ${currentPlayer.xp} doots!`;
+  const output = `\`\`\`Username:   ${player.username}\nDoots:      ${player.xp}\`\`\``;
+  return output;
+}
+
+export async function restore(discordId: string): Promise<string> {
+  const player = await prisma.player.update({
+    where: { discordId },
+    data: {
+      deletedAt: null,
+      xp: 50,
+      lastDootedAt: null,
+    },
+  });
+  return `Restored ${player.username}!`;
+}
+
+export async function resetAll(discordId: string): Promise<string> {
+  // only admin can run this command
+  if (discordId === process.env.MY_ID) {
+    console.log(chalk.red(`FULL RESET`));
+    const playersToUpdate = await prisma.player.findMany({
+      where: { deletedAt: null },
+    });
+    // iterate through each active player and reset them to defaults
+    for (const player of playersToUpdate) {
+      await prisma.player.update({
+        where: {
+          discordId: player.discordId,
+        },
+        data: {
+          xp: 50,
+          lastDootedAt: new Date(new Date().getTime() - fiveMinutes),
+        },
+      });
+      console.log(`${player.username} updated`);
+    }
+    return `All currently active players have been restored to default values.`;
+  }
+  return `You don't have permission to do that!`;
 }
 
 // // Count one's own doots
@@ -350,13 +392,5 @@ export async function count(discordId: string): Promise<string> {
 
 // // Stats
 // if (msg.content.toLowerCase().startsWith(`!stats`)) {
-//   const player = await prisma.player.findFirst({
-//     where: { discordId: msg.author.id, deletedAt: null },
-//   });
-//   if (!player) {
-//     msg.channel.send(`You're not in the game!`);
-//     return;
-//   }
-//   const output = `\`\`\`Username:   ${player.username}\nDoots:      ${player.xp}\`\`\``;
-//   msg.channel.send(output);
+
 // }

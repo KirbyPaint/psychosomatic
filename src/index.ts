@@ -33,11 +33,13 @@ import {
 } from "./episode-finder";
 import {
   addPlayer,
-  count,
   deletePlayer,
   listPlayers,
   removePlayer,
   renamePlayer,
+  resetAll,
+  restore,
+  stats,
 } from "./doots_game";
 
 dotenv.config();
@@ -56,7 +58,6 @@ const DISALLOWED_INTENTS = [2, 256];
 const intents = Object.values({ ...Intents.FLAGS }).filter(
   (intent) => !DISALLOWED_INTENTS.includes(intent),
 );
-
 const client = new Client({
   intents,
 });
@@ -70,12 +71,20 @@ client.on(`messageCreate`, async (msg: Message) => {
   // so if I rename here, it will rename in the switch case
   const DOOTS_COMMANDS = [
     `!add`,
+    `!addplayer`,
     `!remove`,
+    `!removeplayer`,
     `!rename`,
+    `!renameplayer`,
     `!score`,
     `!players`,
+    `!delete`,
     `!deleteplayer`,
     `!count`,
+    `!stats`,
+    `!restore`,
+    `!restoreplayer`,
+    `!resetall`,
   ];
   if (isGameAllowedChannel(msg.channel.id)) {
     const [command, ...rest] = msg.content.split(` `);
@@ -83,14 +92,17 @@ client.on(`messageCreate`, async (msg: Message) => {
     if (DOOTS_COMMANDS.includes(command.toLowerCase())) {
       console.log({ command, rest });
       switch (command.toLowerCase()) {
+        case `!addplayer`:
         case `!add`: {
           msg.channel.send(await addPlayer(rest, id, username));
           break;
         }
+        case `!removeplayer`:
         case `!remove`: {
           msg.channel.send(await removePlayer(id));
           break;
         }
+        case `!renameplayer`:
         case `!rename`: {
           msg.channel.send(await renamePlayer(rest, id));
           break;
@@ -100,12 +112,23 @@ client.on(`messageCreate`, async (msg: Message) => {
           msg.channel.send(await listPlayers());
           break;
         }
+        case `!delete`:
         case `!deleteplayer`: {
           msg.channel.send(await deletePlayer(id));
           break;
         }
-        case `!count`: {
-          msg.channel.send(await count(id));
+        case `!count`:
+        case `!stats`: {
+          msg.channel.send(await stats(id));
+          break;
+        }
+        case `!restore`:
+        case `!restoreplayer`: {
+          msg.channel.send(await restore(id));
+          break;
+        }
+        case `!resetall`: {
+          msg.channel.send(await resetAll(id));
           break;
         }
       }
@@ -277,57 +300,6 @@ client.on(`messageCreate`, async (msg: Message) => {
           }
         }
       }
-    }
-    // Completely reset all active players
-    if (msg.content === `!resetall` && msg.author.id === process.env.MY_ID) {
-      console.log(chalk.red(`FULL RESET`));
-      const playersToUpdate = await prisma.player.findMany({
-        where: { deletedAt: null },
-      });
-      // iterate through each player and reset them to defaults
-      for (const player of playersToUpdate) {
-        await prisma.player.update({
-          where: {
-            discordId: player.discordId,
-          },
-          data: {
-            xp: 50,
-            lastDootedAt: new Date(new Date().getTime() - fiveMinutes),
-          },
-        });
-        console.log(`${player.username} updated`);
-      }
-      msg.channel.send(
-        `All currently active players have been restored to default values.`,
-      );
-    }
-    // Restore a player to default values
-    if (msg.content.toLowerCase().startsWith(`!restore`)) {
-      await prisma.player.update({
-        where: { discordId: msg.author.id },
-        data: {
-          deletedAt: null,
-          xp: 50,
-          lastDootedAt: null,
-        },
-      });
-      msg.channel.send(`Restored ${msg.author.username}!`);
-    }
-    // Stats
-    if (msg.content.toLowerCase().startsWith(`!stats`)) {
-      const player = await prisma.player.findFirst({
-        where: { discordId: msg.author.id, deletedAt: null },
-      });
-      if (!player) {
-        msg.channel.send(`You're not in the game!`);
-        return;
-      }
-      const output = `
-      \`\`\`Username:   ${player.username}
-      \nDoots:      ${player.xp} (Available: ${Math.floor(
-        player.xp / 2,
-      )})\`\`\``;
-      msg.channel.send(output);
     }
   }
 
