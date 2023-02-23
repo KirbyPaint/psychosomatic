@@ -31,7 +31,12 @@ import {
   whichPlaylist,
   whichShow,
 } from "./episode-finder";
-import { addPlayer, removePlayer, renamePlayer } from "./doots_game";
+import {
+  addPlayer,
+  listPlayers,
+  removePlayer,
+  renamePlayer,
+} from "./doots_game";
 
 dotenv.config();
 
@@ -61,7 +66,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 
   // Connect the commands to the switch case
   // so if I rename here, it will rename in the switch case
-  const DOOTS_COMMANDS = [`!add`, `!remove`, `!rename`];
+  const DOOTS_COMMANDS = [`!add`, `!remove`, `!rename`, `!players`];
   if (isGameAllowedChannel(msg.channel.id)) {
     const [command, ...rest] = msg.content.split(` `);
     const { id, username } = msg.author;
@@ -80,20 +85,16 @@ client.on(`messageCreate`, async (msg: Message) => {
           msg.channel.send(await renamePlayer(rest, id));
           break;
         }
+        case `!players`: {
+          msg.channel.send(await listPlayers());
+          break;
+        }
       }
     }
   }
 
   // chillbros DOOTS game
   if (isGameAllowedChannel(msg.channel.id)) {
-    // List all participating players
-    if (msg.content.toLowerCase().startsWith(`!players`)) {
-      const players = await prisma.player.findMany({
-        where: { deletedAt: null },
-      });
-      const playerList = players.map((player) => player.username);
-      msg.channel.send(`Players: ${playerList.join(`, `)}\n`);
-    }
     // Hard delete player (remove from db altogether)
     if (msg.content === `!deletePlayer`) {
       const playerExists = await prisma.player.findFirst({

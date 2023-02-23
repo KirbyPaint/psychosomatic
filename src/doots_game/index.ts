@@ -92,36 +92,24 @@ export async function renamePlayer(
   }
 }
 
-// // Rename
-// if (msg.content.toLowerCase().startsWith(`!rename`)) {
-//   const [, ...rest] = msg.content.split(` `);
-//   const newName = rest.join(` `);
-//   if (!newName) {
-//     msg.channel.send(`You need to provide a new name!`);
-//     return;
-//   }
-//   if (newName.length > 32) {
-//     msg.channel.send(`That nickname is too long!`);
-//     return;
-//   }
-//   try {
-//     const db = await prisma.player.update({
-//       where: {
-//         discordId: msg.author.id,
-//       },
-//       data: {
-//         username: newName,
-//       },
-//     });
-//     console.log(chalk.green(`Renamed to ${JSON.stringify(db.username)}!`));
-//     msg.channel.send(`Renamed player to ${JSON.stringify(db.username)}`);
-//   } catch (error) {
-//     console.log(chalk.red(`Error renaming player: `, error));
-//     msg.channel.send(
-//       `Failed to rename player, ask KirbyPaint to see what happened`,
-//     );
-//   }
-// }
+export async function listPlayers(): Promise<string> {
+  const players = await prisma.player.findMany({
+    where: { deletedAt: null },
+  });
+  // Make array of all players with their scores and sort by score
+  const playerList = players
+    .map((player) => `${player.username} (${player.xp})`)
+    .sort((a, b) => {
+      const [, aScore] = a.split(`(`);
+      const [, bScore] = b.split(`(`);
+      return (
+        Number(bScore.slice(0, bScore.length - 1)) -
+        Number(aScore.slice(0, aScore.length - 1))
+      );
+    });
+  return `\`\`\`${playerList.join(`
+`)}\`\`\``;
+}
 
 // // List all participating players
 // if (msg.content.toLowerCase().startsWith(`!players`)) {
