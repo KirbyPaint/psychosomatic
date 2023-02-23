@@ -444,7 +444,7 @@ export function help(): string {
 
 export const gameAllowedChannels = [
   `955950801157779477`, // chillbros bot spam
-  `799876599372840964`, // private server for testing
+  `1060094887397163048`, // private server for testing
 ];
 
 export const blacklist = [``];
