@@ -428,18 +428,28 @@ export const fiveMinutes = 300000;
 export function help(): string {
   return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic/blob/76117f0353fce9eb3286c34cd5f7d63f6f04fdc5/README.md
 
-    !DootVerse Commands:
-    !addPlayer    - add yourself to DootVerse (name in progress)
-    !rename       - Change your nickname (up to 32 characters)
-    !removePlayer - remove yourself from DootVerse (score can be recovered)
-    !deletePlayer - permanently remove yourself from game (lose score)
-    !restore
-    !players      - list all participating players
-    !count        - count your Doots
-    !stats        - show your stats
+  automated list of all doot commands:\n  ${DOOT_COMMANDS.join(`
+  `)}
 
-    !doot         - doot someone, for example:
-                  !doot KirbyPaint 5\`\`\``;
+    !DootVerse Commands:
+    !add,
+    !addPlayer     - add yourself to DootVerse (name in progress)
+    !rename,
+    !renamePlayer  - Change your nickname (up to 32 characters)
+    !remove,
+    !removePlayer  - remove yourself from DootVerse (score can be recovered)
+    !delete,
+    !deletePlayer  - permanently remove yourself from game (lose score)
+    !restore,
+    !restorePlayer - rejoin the game (if you were removed)
+    !score,
+    !players       - list all participating players
+    !count,
+    !stats         - show your stats
+
+    !attack,
+    !doot          - doot someone, for example:
+                   !doot KirbyPaint 5\`\`\``;
 }
 
 export const gameAllowedChannels = [

@@ -375,7 +375,7 @@ client.on(`messageCreate`, async (msg: Message) => {
     }
 
     // Help
-    if (msg.content.toLowerCase() === `!help`) {
+    if (msg.content.toLowerCase() === `!vhelp`) {
       msg.channel.send(help());
     }
 
