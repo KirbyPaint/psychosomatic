@@ -6,3 +6,4 @@ episodeList.txt
 movieList.txt
 yarn-error.log
 showList.txt
+prisma/db.db
