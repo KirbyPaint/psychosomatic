@@ -1,4 +1,6 @@
-import { Client, GatewayIntentBits, Message } from "discord.js";
+// import { Client, GatewayIntentBits, Message } from "discord.js";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { Client, GatewayIntentBits, Message } = require(`discord.js`);
 import dotenv from "dotenv";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
@@ -95,7 +97,7 @@ const client = new Client({
 // }
 
 // actions to take when the bot receives a message
-client.on(`messageCreate`, async (msg: Message) => {
+client.on(`messageCreate`, async (msg: typeof Message) => {
   const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
