@@ -1,4 +1,4 @@
-import { Client, Message } from "discord.js";
+import { Client, GatewayIntentBits, Message } from "discord.js";
 import dotenv from "dotenv";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
@@ -46,9 +46,23 @@ const prisma = new PrismaClient();
  */
 const client = new Client({
   intents: [
-    1, 4, 8, 16, 32, 64, 128, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536,
-    1048576, 2097152,
-    // GatewayIntentBits.Guilds,
+    GatewayIntentBits.Guilds,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    512,
+    1024,
+    2048,
+    4096,
+    8192,
+    16384,
+    32768,
+    65536,
+    1048576,
+    2097152,
     // // GatewayIntentBits.GuildMembers,
     // GatewayIntentBits.GuildModeration,
     // GatewayIntentBits.GuildEmojisAndStickers,
