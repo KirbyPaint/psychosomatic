@@ -1,6 +1,6 @@
 // import { Client, GatewayIntentBits, Message } from "discord.js";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Client, GatewayIntentBits, Message } = require(`discord.js`);
+const { Client, GatewayIntentBits, Message } = require(`@discord.js`);
 import dotenv from "dotenv";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
