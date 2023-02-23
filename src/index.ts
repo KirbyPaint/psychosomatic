@@ -33,6 +33,7 @@ import {
 } from "./episode-finder";
 import {
   addPlayer,
+  count,
   deletePlayer,
   listPlayers,
   removePlayer,
@@ -74,6 +75,7 @@ client.on(`messageCreate`, async (msg: Message) => {
     `!score`,
     `!players`,
     `!deleteplayer`,
+    `!count`,
   ];
   if (isGameAllowedChannel(msg.channel.id)) {
     const [command, ...rest] = msg.content.split(` `);
@@ -100,6 +102,10 @@ client.on(`messageCreate`, async (msg: Message) => {
         }
         case `!deleteplayer`: {
           msg.channel.send(await deletePlayer(id));
+          break;
+        }
+        case `!count`: {
+          msg.channel.send(await count(id));
           break;
         }
       }
@@ -293,19 +299,6 @@ client.on(`messageCreate`, async (msg: Message) => {
       }
       msg.channel.send(
         `All currently active players have been restored to default values.`,
-      );
-    }
-    // Count one's own doots
-    if (msg.content.toLowerCase().startsWith(`!count`)) {
-      const currentPlayer = await prisma.player.findFirst({
-        where: { discordId: msg.author.id, deletedAt: null },
-      });
-      if (!currentPlayer) {
-        msg.channel.send(`You're not in the game!`);
-        return;
-      }
-      msg.channel.send(
-        `${currentPlayer.username} has ${currentPlayer.xp} doots!`,
       );
     }
     // Restore a player to default values

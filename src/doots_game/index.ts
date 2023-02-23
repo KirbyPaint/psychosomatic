@@ -132,29 +132,18 @@ export async function deletePlayer(discordId: string): Promise<string> {
   }
 }
 
-// // Hard delete player (remove from db altogether)
-// if (msg.content === `!deletePlayer`) {
-//   const playerExists = await prisma.player.findFirst({
-//     where: { discordId: msg.author.id, deletedAt: null },
-//   });
-//   if (!playerExists) {
-//     msg.channel.send(`You're already not in the game!`);
-//     return;
-//   }
-//   try {
-//     const db = await prisma.player.delete({
-//       where: {
-//         discordId: msg.author.id,
-//       },
-//     });
-//     console.log(chalk.green(`Deleted ${JSON.stringify(db.username)}!`));
-//     msg.channel.send(`Deleted player ${JSON.stringify(db.username)}`);
-//   } catch (error) {
-//     console.log(chalk.red(`Error deleting player: `, error));
-//     msg.channel.send(
-//       `Failed to delete player, ask KirbyPaint to see what happened`,
-//     );
-//   }
+export async function count(discordId: string): Promise<string> {
+  const currentPlayer = await prisma.player.findFirst({
+    where: { discordId, deletedAt: null },
+  });
+  if (!currentPlayer) {
+    return `You're not in the game!`;
+  }
+  return `${currentPlayer.username} has ${currentPlayer.xp} doots!`;
+}
+
+// // Count one's own doots
+// if (msg.content.toLowerCase().startsWith(`!count`)) {
 // }
 
 // // Attack
@@ -344,18 +333,6 @@ export async function deletePlayer(discordId: string): Promise<string> {
 //   msg.channel.send(
 //     `All currently active players have been restored to default values.`,
 //   );
-// }
-
-// // Count one's own doots
-// if (msg.content.toLowerCase().startsWith(`!count`)) {
-//   const currentPlayer = await prisma.player.findFirst({
-//     where: { discordId: msg.author.id, deletedAt: null },
-//   });
-//   if (!currentPlayer) {
-//     msg.channel.send(`You're not in the game!`);
-//     return;
-//   }
-//   msg.channel.send(`${currentPlayer.username} has ${currentPlayer.xp} doots!`);
 // }
 
 // // Restore a player to default values
