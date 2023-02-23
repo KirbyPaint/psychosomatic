@@ -77,17 +77,17 @@ client.on(`messageCreate`, async (msg: Message) => {
       switch (command.toLowerCase()) {
         case `!add`:
         case `!addplayer`: {
-          msg.channel.send(await addPlayer(id, username, rest));
+          msg.reply(await addPlayer(id, username, rest));
           break;
         }
         case `!remove`:
         case `!removeplayer`: {
-          msg.channel.send(await removePlayer(id));
+          msg.reply(await removePlayer(id));
           break;
         }
         case `!rename`:
         case `renameplayer`: {
-          msg.channel.send(await renamePlayer(id, rest));
+          msg.reply(await renamePlayer(id, rest));
           break;
         }
         case `!score`:
@@ -97,17 +97,17 @@ client.on(`messageCreate`, async (msg: Message) => {
         }
         case `!deleteplayer`:
         case `!delete`: {
-          msg.channel.send(await deletePlayer(id));
+          msg.reply(await deletePlayer(id));
           break;
         }
         case `!count`:
         case `!stats`: {
-          msg.channel.send(await stats(id));
+          msg.reply(await stats(id));
           break;
         }
         case `!restore`:
         case `!restoreplayer`: {
-          msg.channel.send(await restore(id));
+          msg.reply(await restore(id));
           break;
         }
         case `!resetall`: {
@@ -116,171 +116,11 @@ client.on(`messageCreate`, async (msg: Message) => {
         }
         case `!attack`:
         case `!doot`: {
-          msg.channel.send(await doot());
+          msg.reply(await doot(id, rest));
           break;
         }
       }
     }
-  }
-
-  // chillbros DOOTS game
-  if (isGameAllowedChannel(msg.channel.id)) {
-    // Attack
-    // if (msg.content.toLowerCase().startsWith(`!doot`)) {
-    //   // Command will be !doot <PlayerName> <Damage>
-    //   const [, ...rest] = msg.content.split(` `);
-    //   // This should handle a username being multiple words
-    //   const atk = rest[rest.length - 1];
-    //   const defendingUsername = rest.slice(0, rest.length - 1).join(` `);
-    //   const damage = Number(atk);
-    //   if (!defendingUsername || !damage) {
-    //     msg.channel.send(
-    //       `Invalid command, please post in !doot <PlayerName> <Damage> form (with no brackets)`,
-    //     );
-    //     return;
-    //   }
-    //   // Get attacking player entity, make sure they're playing
-    //   const attackingPlayer = await prisma.player.findFirst({
-    //     where: { discordId: msg.author.id, deletedAt: null },
-    //   });
-    //   if (!attackingPlayer) {
-    //     msg.channel.send(`You're not in the game!`);
-    //     return;
-    //   }
-    //   // Check that the attacker hasn't attacked too recently
-    //   const now = new Date();
-    //   const lastDooted = new Date(attackingPlayer.lastDootedAt ?? 0);
-    //   const timeDiff = now.getTime() - lastDooted.getTime();
-    //   if (timeDiff < fiveMinutes) {
-    //     msg.channel.send(
-    //       `You can only doot once every 5 minutes.\n  Next doot available in ${Math.round(
-    //         300 - timeDiff / 1000,
-    //       )} seconds!`,
-    //     );
-    //     return;
-    //   }
-    //   // Check that the defender is in the database
-    //   const defendingPlayer = await prisma.player.findFirst({
-    //     where: { username: defendingUsername, deletedAt: null },
-    //   });
-    //   if (!defendingPlayer) {
-    //     msg.channel.send(`${defendingUsername} is not in the game!`);
-    //     return;
-    //   }
-    //   // Check that the defender has enough doots to be attacked
-    //   if (defendingPlayer.xp < 1) {
-    //     msg.channel.send(
-    //       `${defendingPlayer.username} has too few doots to be attacked!`,
-    //     );
-    //     return;
-    //   }
-    //   // Then check that the damage is a) a number
-    //   // and b) between 0 and the XP amount of the current player
-    //   if (!Number.isInteger(damage)) {
-    //     msg.channel.send(`${damage} is not a positive, whole number!`);
-    //     return;
-    //   } else if (damage < 1 || damage > Math.floor(attackingPlayer.xp / 2)) {
-    //     msg.channel.send(
-    //       `${damage} is not a valid doot number for you! Must be between 1 and ${Math.floor(
-    //         attackingPlayer.xp / 2,
-    //       )}`,
-    //     );
-    //     return;
-    //   }
-    //   // Check that the player is not attacking themselves
-    //   if (attackingPlayer.username === defendingPlayer.username) {
-    //     msg.channel.send(`You can't doot yourself!`);
-    //     return;
-    //   }
-    //   /*
-    //    * Attacking!
-    //    *
-    //    * In order for an attack to happen:
-    //    * The ATTACKER must have at least 1 xp
-    //    * The DEFENDER must have at least 1 xp
-    //    *
-    //    * Attacker can doot up to half of their xp
-    //    * Defender will take all doots damage
-    //    *
-    //    * Attacker will gain all of the xp lost by defender UP TO 100 xp
-    //    *
-    //    * Defending!
-    //    *
-    //    * A successful defend will net 1/4 of the damage
-    //    * Attacker will not receive any additional damage, just the xp loss
-    //    *
-    //    * Attack Logic
-    //    * we will do 2 d10 rolls
-    //    * no buffs from either side until items are implemented
-    //    * current rules are probably way imbalanced
-    //    *
-    //    */
-    //   const attackerDice = getRandomArbitrary(1, 10);
-    //   const defenderDice = getRandomArbitrary(1, 10);
-    //   // Attack must EXCEED OR MEET defend
-    //   if (attackerDice <= defenderDice) {
-    //     try {
-    //       const result = await prisma.$transaction([
-    //         prisma.player.update({
-    //           where: { discordId: attackingPlayer.discordId },
-    //           data: {
-    //             xp: attackingPlayer.xp - damage,
-    //             lastDootedAt: new Date(),
-    //           },
-    //         }),
-    //         prisma.player.update({
-    //           where: { discordId: defendingPlayer.discordId },
-    //           data: {
-    //             xp: defendingPlayer.xp + Math.floor(damage / 4) + 1,
-    //           },
-    //         }),
-    //       ]);
-    //       console.log(chalk.green(`${JSON.stringify(result)}`));
-    //       if (result.length === 2) {
-    //         msg.channel.send(
-    //           `${defendingPlayer.username} defended against ${attackingPlayer.username}'s ${damage} doots!`,
-    //         );
-    //       }
-    //     } catch (error) {
-    //       if (error instanceof Error) {
-    //         console.log(chalk.red(`Error updating player: `, error));
-    //         msg.channel.send(`Failed to complete doot: `);
-    //         msg.channel.send(error.toString());
-    //       }
-    //     }
-    //   } else {
-    //     // Attacker gains all xp lost by defender up to 100
-    //     const attackerGains = Math.min(damage, 100);
-    //     try {
-    //       const result = await prisma.$transaction([
-    //         prisma.player.update({
-    //           where: { discordId: defendingPlayer.discordId },
-    //           data: {
-    //             xp: defendingPlayer.xp - damage,
-    //           },
-    //         }),
-    //         prisma.player.update({
-    //           where: { discordId: attackingPlayer.discordId },
-    //           data: {
-    //             xp: attackingPlayer.xp + attackerGains,
-    //             lastDootedAt: new Date(),
-    //           },
-    //         }),
-    //       ]);
-    //       if (result.length === 2) {
-    //         msg.channel.send(
-    //           `${attackingPlayer.username} successfully attacked ${defendingPlayer.username}!`,
-    //         );
-    //       }
-    //     } catch (error) {
-    //       if (error instanceof Error) {
-    //         console.log(chalk.red(`Error updating player: `, error));
-    //         msg.channel.send(`Failed to complete doot: `);
-    //         msg.channel.send(error.toString());
-    //       }
-    //     }
-    //   }
-    // }
   }
 
   // Bot echo command
