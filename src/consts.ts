@@ -509,4 +509,6 @@ export const DOOT_COMMANDS = [
   `!doot`,
   `!attack`,
   `!items`,
+  `!finditem`,
+  `!myitems`,
 ];

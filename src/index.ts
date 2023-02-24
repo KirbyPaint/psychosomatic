@@ -43,7 +43,12 @@ import {
   restore,
   stats,
 } from "./doots_game";
-import { countItems, listItems } from "./doots_game/items";
+import {
+  countItems,
+  getRandomItem,
+  listItems,
+  listMyItems,
+} from "./doots_game/items";
 
 dotenv.config();
 
@@ -130,6 +135,14 @@ client.on(`messageCreate`, async (msg: Message) => {
         }
         case `!items`: {
           msg.channel.send(await listItems());
+          break;
+        }
+        case `!finditem`: {
+          msg.reply(await getRandomItem(id));
+          break;
+        }
+        case `!myitems`: {
+          msg.reply(await listMyItems(id));
           break;
         }
       }
