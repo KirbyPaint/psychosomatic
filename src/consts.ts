@@ -508,4 +508,5 @@ export const DOOT_COMMANDS = [
   `!resetall`,
   `!doot`,
   `!attack`,
+  `!items`,
 ];
