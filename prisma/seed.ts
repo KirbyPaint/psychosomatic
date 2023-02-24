@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Item, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -22,6 +22,8 @@ const users = [
     hasBrainCell: false,
   },
 ];
+
+// const items: Item[] = [{}, {}, {}];
 
 main()
   .catch((e) => {

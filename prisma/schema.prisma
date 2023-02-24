@@ -11,24 +11,33 @@ datasource db {
 }
 
 model Player {
-  discordId    String    @id
-  username     String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  deletedAt    DateTime?
-  items        Item[]    @relation()
-  xp           Int
+  discordId String    @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
   lastDootedAt DateTime?
+  username     String
+  xp           Int
+
+  items        Item[]  @relation()
+  equippedItem String?
 }
 
 model Item {
-  id          Int      @id @default(autoincrement())
-  name        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  Owner       Player   @relation(fields: [ownerId], references: [discordId])
-  ownerId     String
+  id        String    @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  action      String // my db doesn't support enums
+  attribute   String?
   description String
+  rarity      String // use enums in TS to typeguard
+  stat        Int
+  type        String
+
+  Owner   Player? @relation(fields: [ownerId], references: [discordId])
+  ownerId String?
 }
 
 model Braincell {

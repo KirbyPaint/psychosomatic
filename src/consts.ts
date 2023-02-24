@@ -415,7 +415,7 @@ export const CONCH_ID = `809579247994929182`;
 export const SHEEV_ID = `636777145921699852`;
 
 export function getRandomArbitrary(min: number, max: number): number {
-  return Math.random() * (max - min) + min;
+  return Math.round(Math.random() * (max - min) + min);
 }
 
 export const jpegRegex = /^[^.]*(jpe?g)/;
