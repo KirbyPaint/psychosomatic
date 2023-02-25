@@ -23,7 +23,7 @@ import {
 import { get8Ball } from "./gets/8ball";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
-import { redootJob } from "./cron/jobs";
+import { itemJob, redootJob } from "./cron/jobs";
 import {
   addToPlaylist,
   whichEpisode,
@@ -432,6 +432,7 @@ client.on(`ready`, async () => {
   //   }`,
   // );
   redootJob.start();
+  itemJob.start();
 
   // set bot status
   client.user?.setActivity(`Victorious 24/7`, { type: 3 });

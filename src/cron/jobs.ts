@@ -1,10 +1,12 @@
 import { CronJob } from "cron";
 import chalk from "chalk";
 import { PrismaClient } from "@prisma/client";
+import { weaponGenerator } from "../doots_game/item-generator";
 
 const every5Minutes = `*/5 * * * *`;
 const daily = `30 18 * * *`;
 const testing = `*/1 * * * *`;
+const every30Minutes = `*/30 * * * *`;
 
 const prisma = new PrismaClient();
 
@@ -54,5 +56,29 @@ export const dailyJob = new CronJob(
   true,
 );
 
-// want a cron to list out all players and their xp
-// this might require shenanigans to output it to discord
+export const itemJob = new CronJob(
+  every30Minutes,
+  async () => {
+    const items = await prisma.item.findMany({
+      where: {
+        Owner: {
+          is: null,
+        },
+      },
+    });
+    if (items.length > 10) {
+      return;
+    }
+    const itemsToCreate = weaponGenerator(10 - items.length);
+    for (const item of itemsToCreate) {
+      await prisma.item.create({
+        data: item,
+      });
+    }
+    console.log(
+      chalk.blueBright(`Generated ${itemsToCreate.length} new items.`),
+    );
+  },
+  null,
+  true,
+);

@@ -65,19 +65,34 @@ export async function getRandomItem(discordId: string): Promise<string> {
     return `You're not playing!`;
   }
   // connect the item to the user who requested it
-  const connectedItem = await prisma.item.update({
-    where: {
-      id: randomItem.id,
-    },
-    data: {
-      Owner: {
-        connect: {
-          discordId,
+  // and deduct points from the user
+  const transaction = await prisma.$transaction([
+    prisma.item.update({
+      where: {
+        id: randomItem.id,
+      },
+      data: {
+        Owner: {
+          connect: {
+            discordId,
+          },
         },
       },
-    },
-  });
-  if (!connectedItem) {
+    }),
+    prisma.player.update({
+      where: {
+        discordId,
+      },
+      data: {
+        xp: {
+          decrement: 5,
+        },
+      },
+    }),
+  ]);
+
+  const [connectedItem, connectedPlayer] = transaction;
+  if (!transaction || !connectedItem || !connectedPlayer) {
     return `Error connecting item to user`;
   }
   return `You found: ${connectedItem.description}`;
