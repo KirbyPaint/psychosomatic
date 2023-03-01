@@ -422,20 +422,24 @@ client.on(`messageCreate`, async (msg: Message) => {
       msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
     }
 
-    if (msg.content.startsWith(`AI`)) {
+    if (msg.content.startsWith(`@Tori`)) {
+      const [, ...rest] = msg.content.split(` `);
+      const prompt = rest.join(` `);
       try {
         const completion = await openai.createCompletion({
-          model: `text-davinci-003`,
-          prompt: `Suggest three names for a cat.`,
+          model: `text-davinci-001`,
+          prompt,
           temperature: 0.6,
+          max_tokens: 100,
         });
-        const completionString = JSON.stringify(completion.data);
-        msg.channel.send(completionString);
+        msg.channel.send(
+          completion?.data?.choices[0]?.text || `Something went awry`,
+        );
       } catch (error) {
-        console.log(error);
+        console.log(chalk.red(`OpenAI Error:`));
+        console.log(chalk.red(error));
         msg.channel.send(JSON.stringify(error));
       }
-      // get the axios response turned into a string
     }
   }
 });
