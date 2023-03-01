@@ -415,6 +415,22 @@ client.on(`messageCreate`, async (msg: Message) => {
     if (msg.content.toLowerCase().includes(`noncanonical`)) {
       msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
     }
+
+    if (msg.content.startsWith(`AI`)) {
+      try {
+        const completion = await openai.createCompletion({
+          model: `text-davinci-003`,
+          prompt: `Suggest three names for a cat.`,
+          temperature: 0.6,
+        });
+        const completionString = JSON.stringify(completion.data);
+        msg.channel.send(completionString);
+      } catch (error) {
+        console.log(error);
+        msg.channel.send(JSON.stringify(error));
+      }
+      // get the axios response turned into a string
+    }
   }
 });
 
