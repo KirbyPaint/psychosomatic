@@ -49,6 +49,7 @@ import {
   listItems,
   listMyItems,
 } from "./doots_game/items";
+import { Configuration, OpenAIApi } from "openai";
 
 dotenv.config();
 
@@ -69,6 +70,11 @@ const intents = Object.values({ ...Intents.FLAGS }).filter(
 const client = new Client({
   intents,
 });
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg: Message) => {
