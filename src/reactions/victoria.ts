@@ -9,7 +9,7 @@ import {
 } from "../consts";
 
 export function endText(endOfSentence: string[]) {
-  if (endOfSentence[0].toLowerCase() === `all`) {
+  if (endOfSentence[0]?.toLowerCase() === `all`) {
     endOfSentence.shift();
   }
   return endOfSentence.join(` `).toUpperCase();

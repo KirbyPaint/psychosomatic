@@ -23,7 +23,7 @@ import {
 import { get8Ball } from "./gets/8ball";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
-import { redootJob } from "./cron/jobs";
+import { itemJob, redootJob } from "./cron/jobs";
 import {
   addToPlaylist,
   whichEpisode,
@@ -43,6 +43,12 @@ import {
   restore,
   stats,
 } from "./doots_game";
+import {
+  countItems,
+  getRandomItem,
+  listItems,
+  listMyItems,
+} from "./doots_game/items";
 
 dotenv.config();
 
@@ -125,6 +131,18 @@ client.on(`messageCreate`, async (msg: Message) => {
         case `!attack`:
         case `!doot`: {
           msg.reply(await doot(id, rest));
+          break;
+        }
+        case `!items`: {
+          msg.channel.send(await listItems());
+          break;
+        }
+        case `!finditem`: {
+          msg.reply(await getRandomItem(id));
+          break;
+        }
+        case `!myitems`: {
+          msg.reply(await listMyItems(id));
           break;
         }
       }
@@ -414,6 +432,7 @@ client.on(`ready`, async () => {
   //   }`,
   // );
   redootJob.start();
+  itemJob.start();
 
   // set bot status
   client.user?.setActivity(`Victorious 24/7`, { type: 3 });
