@@ -409,57 +409,47 @@ export const toriQuotes = [
   `You're not supposed to hit her.`,
 ];
 
-export const MANIFEST_ID = `769755766352642128`;
-export const BRAIN_CELL_ID = `936895162074951730`; // custom emoji
-export const CONCH_ID = `809579247994929182`;
-export const SHEEV_ID = `636777145921699852`;
+export const EMOJI_ID = {
+  MANIFEST: `769755766352642128`,
+  BRAIN_CELL: `936895162074951730`,
+  CONCH: `809579247994929182`,
+  SHEEV: `636777145921699852`,
+};
 
-export function getRandomArbitrary(min: number, max: number): number {
-  return Math.round(Math.random() * (max - min) + min);
+export const BRAINCELL_USER_ID = {
+  ME: `189997816406474752`,
+  CHABI: `241416328966045697`,
+};
+
+export const SERVER_ID = {
+  DUMMIES: `625931911029850118`,
+};
+
+export const CHANNEL_ID = {
+  BAJALANIS: `715766875971256322`,
+};
+
+export function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
 }
 
 export const jpegRegex = /^[^.]*(jpe?g)/;
 export const weepRegex = /\b(weep)\b/;
 export const cursedRegex = /\bfoot\b|\bfeet\b/;
+export const heyVictoriaRegex = /(hey )?\bvictoria\b/i;
+export const whichRegex = /(which|what)/i;
 // this might be shit but it'll do the job
 export const fastNFuriousRegex = /(too)+ [^ ]+ (to?o)+ [^ \r\n]+/i;
 export const fiveMinutes = 300000;
 
 export function help(): string {
-  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic/blob/76117f0353fce9eb3286c34cd5f7d63f6f04fdc5/README.md
-
-  automated list of all doot commands:\n  ${DOOT_COMMANDS.join(`
-  `)}
-
-    !DootVerse Commands:
-    !add,
-    !addPlayer     - add yourself to DootVerse (name in progress)
-    !rename,
-    !renamePlayer  - Change your nickname (up to 32 characters)
-    !remove,
-    !removePlayer  - remove yourself from DootVerse (score can be recovered)
-    !delete,
-    !deletePlayer  - permanently remove yourself from game (lose score)
-    !restore,
-    !restorePlayer - rejoin the game (if you were removed)
-    !score,
-    !players       - list all participating players
-    !count,
-    !stats         - show your stats
-
-    !attack,
-    !doot          - doot someone, for example:
-                   !doot KirbyPaint 5\`\`\``;
+  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic#readme\`\`\``;
 }
 
 export const gameAllowedChannels = [
   `955950801157779477`, // chillbros bot spam
   `1060094887397163048`, // private server for testing
 ];
-
-export const blacklist = [``];
-
-export const channelBlacklist = [`693210030236762183`];
 
 export function isGameAllowedChannel(channelId: string) {
   return gameAllowedChannels.includes(channelId);
@@ -489,26 +479,3 @@ export const have = [`i've`, `you've`, `we've`, `they've`];
 export const areWere = [`i'm`, `you're`, `we're`, `they're`];
 // The i'd and you'd need to be separate from the we've and the we're, etc.
 export const pronouns = [`i`, `you`, `he`, `she`, `it`, `we`, `they`];
-
-export const DOOT_COMMANDS = [
-  `!add`,
-  `!addplayer`,
-  `!remove`,
-  `!removeplayer`,
-  `!rename`,
-  `!renameplayer`,
-  `!score`,
-  `!players`,
-  `!delete`,
-  `!deleteplayer`,
-  `!count`,
-  `!stats`,
-  `!restore`,
-  `!restoreplayer`,
-  `!resetall`,
-  `!doot`,
-  `!attack`,
-  `!items`,
-  `!finditem`,
-  `!myitems`,
-];

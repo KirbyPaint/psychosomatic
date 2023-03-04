@@ -10,36 +10,6 @@ datasource db {
   url      = "file:./db.db"
 }
 
-model Player {
-  discordId String    @id
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-
-  lastDootedAt DateTime?
-  username     String
-  xp           Int
-
-  items        Item[]  @relation()
-  equippedItem String?
-}
-
-model Item {
-  id        String    @id
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-
-  action      String // my db doesn't support enums
-  attribute   String?
-  description String
-  rarity      String // use enums in TS to typeguard
-  stat        Int
-  type        String
-
-  Owner   Player? @relation(fields: [ownerId], references: [discordId])
-  ownerId String?
-}
-
 model Braincell {
   discordId    String  @id
   hasBrainCell Boolean

@@ -1,45 +1,49 @@
 import * as fs from "fs";
 import path from "path";
-import { getRandomArbitrary } from "./consts";
+import { getRandomInt } from "./consts";
 
-export function whichEpisode(): string {
-  const tvDirectory = path.join(process.cwd(), `episodeList.txt`);
-  const showArray = fs.readFileSync(tvDirectory).toString().split(`\n`);
-  const show = showArray[Math.floor(getRandomArbitrary(0, showArray.length))];
-  return show;
-}
+const directory = `/home/plex/Documents/text_files`;
 
-export function whichShow(): string {
-  const tvDirectory = path.join(process.cwd(), `showList.txt`);
-  const showArray = fs.readFileSync(tvDirectory).toString().split(`\n`);
-  const show = showArray[Math.floor(getRandomArbitrary(0, showArray.length))];
-  return show;
-}
-
-export function whichMovie(): string {
-  const tvDirectory = path.join(process.cwd(), `movieList.txt`);
-  const showArray = fs.readFileSync(tvDirectory).toString().split(`\n`);
-  const show = showArray[Math.floor(getRandomArbitrary(0, showArray.length))];
-  return show;
-}
-
-export function whichPlaylist(): string {
-  const tvDirectory = path.join(process.cwd(), `playlist.txt`);
-  const showArray = fs
-    .readFileSync(tvDirectory)
+export function media(prompt: string): string {
+  let file = ``;
+  switch (prompt.toLowerCase()) {
+    case `episode`: {
+      file = `episodeList.txt`;
+      break;
+    }
+    case `show`: {
+      file = `showList.txt`;
+      break;
+    }
+    case `movie`: {
+      file = `movieList.txt`;
+      break;
+    }
+    case `playlist`: {
+      file = `playList.txt`;
+      break;
+    }
+    default: {
+      return `Invalid/unrecognized prompt`;
+    }
+  }
+  const filepath = path.join(directory, file);
+  const list = fs
+    .readFileSync(filepath)
     .toString()
     .split(`\n`)
     .filter((n) => n);
-  if (showArray.length < 1) {
-    return `No items in playlist`;
+  if (list.length < 1) {
+    return `No items in ${
+      prompt === `playlist` ? `playlist` : `${prompt} list`
+    }`;
   }
-  const index = Math.floor(getRandomArbitrary(0, showArray.length));
-  const show = showArray[index];
-  return show;
+  const media = list[getRandomInt(list.length)];
+  return media;
 }
 
 export function addToPlaylist(input: string): string {
-  const playlistFile = path.join(process.cwd(), `playlist.txt`);
-  fs.appendFileSync(playlistFile, `${input}\n`);
+  const filepath = path.join(directory, `playList.txt`);
+  fs.appendFileSync(filepath, `${input}\n`);
   return `Appended ${input} to playlist`;
 }

@@ -1,5 +1,4 @@
-import { Item, PrismaClient } from "@prisma/client";
-import { weaponGenerator } from "../src/doots_game/item-generator";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -12,15 +11,6 @@ async function main() {
     await prisma.braincell.create({
       data: users[1],
     });
-  }
-  if ((await prisma.item.count()) === 0) {
-    const items = weaponGenerator(10);
-    // createMany not supported for sqlite
-    for (const item of items) {
-      await prisma.item.create({
-        data: item,
-      });
-    }
   }
 }
 

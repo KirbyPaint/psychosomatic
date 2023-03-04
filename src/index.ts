@@ -3,48 +3,26 @@ import dotenv from "dotenv";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
-  blacklist,
-  BRAIN_CELL_ID,
-  channelBlacklist,
-  CONCH_ID,
+  BRAINCELL_USER_ID,
+  CHANNEL_ID,
   cursedRegex,
-  DOOT_COMMANDS,
+  EMOJI_ID,
   fastNFuriousRegex,
-  getRandomArbitrary,
+  getRandomInt,
   help,
-  isGameAllowedChannel,
   jpegReactions,
   jpegRegex,
-  MANIFEST_ID,
   naughtyWordReactions,
-  SHEEV_ID,
+  SERVER_ID,
+  tooFastToFurious,
   weepRegex,
+  whichRegex,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
 import { PrismaClient } from "@prisma/client";
+import { addToPlaylist, media } from "./episode-finder";
+import { aiPrompt } from "./openai/openai";
 import chalk from "chalk";
-import { itemJob, redootJob } from "./cron/jobs";
-import {
-  addToPlaylist,
-  whichEpisode,
-  whichMovie,
-  whichPlaylist,
-  whichShow,
-} from "./episode-finder";
-import {
-  addPlayer,
-  deletePlayer,
-  doot,
-  listPlayers,
-  playerCount,
-  removePlayer,
-  renamePlayer,
-  resetAll,
-  restore,
-  stats,
-} from "./doots_game";
-import { getRandomItem, listItems, listMyItems } from "./doots_game/items";
-import { Configuration, OpenAIApi } from "openai";
 
 dotenv.config();
 
@@ -66,105 +44,25 @@ const client = new Client({
   intents,
 });
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
-
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg: Message) => {
-  const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
-
-  if (isGameAllowedChannel(msg.channel.id)) {
-    const [command, ...rest] = msg.content.split(` `);
-    const { id, username } = msg.author;
-
-    if (DOOT_COMMANDS.includes(command.toLowerCase())) {
-      switch (command.toLowerCase()) {
-        case `!add`:
-        case `!addplayer`: {
-          msg.reply(await addPlayer(id, username, rest));
-          break;
-        }
-        case `!remove`:
-        case `!removeplayer`: {
-          msg.reply(await removePlayer(id));
-          break;
-        }
-        case `!rename`:
-        case `renameplayer`: {
-          msg.reply(await renamePlayer(id, rest));
-          break;
-        }
-        case `!score`:
-        case `!players`: {
-          if ((await playerCount()) < 1) {
-            msg.channel.send(`No players in the game`);
-            return;
-          }
-          msg.channel.send(await listPlayers());
-          break;
-        }
-        case `!deleteplayer`:
-        case `!delete`: {
-          msg.reply(await deletePlayer(id));
-          break;
-        }
-        case `!count`:
-        case `!stats`: {
-          if ((await playerCount()) < 1) {
-            msg.channel.send(`No players in the game`);
-            return;
-          }
-          msg.reply(await stats(id));
-          break;
-        }
-        case `!restore`:
-        case `!restoreplayer`: {
-          msg.reply(await restore(id));
-          break;
-        }
-        case `!resetall`: {
-          msg.channel.send(await resetAll(id));
-          break;
-        }
-        case `!attack`:
-        case `!doot`: {
-          msg.reply(await doot(id, rest));
-          break;
-        }
-        case `!items`: {
-          msg.channel.send(await listItems());
-          break;
-        }
-        case `!finditem`: {
-          msg.reply(await getRandomItem(id));
-          break;
-        }
-        case `!myitems`: {
-          msg.reply(await listMyItems(id));
-          break;
-        }
-      }
-    }
-  }
-
-  // Bot echo command
-  if (msg.content.startsWith(`!vecho`)) {
-    const [, ...rest] = msg.content.split(` `);
-    const message = rest.join(` `);
-    msg.channel.send(message);
+  const isDev = process.env.BOT_ENV === `dev`;
+  // log all messages to trace errors
+  if (isDev || !msg.author.bot) {
+    console.log(chalk.cyan(`\n\n\nMessage received:`));
+    console.log(msg);
   }
 
   // Processes to be used only for our special server
-  if (currentGuildId === process.env.DUMMIES && !isPostedByBot) {
-    if (
-      msg.content.toLowerCase().match(cursedRegex) &&
-      !msg.content.toLowerCase().includes(`victoria`)
-    ) {
-      const randomNumber = getRandomArbitrary(0, naughtyWordReactions.length);
-      msg.channel.send(`${naughtyWordReactions[Math.floor(randomNumber)]}`);
+  if (
+    (currentGuildId === SERVER_ID.DUMMIES && !msg.author.bot) ||
+    (isDev && !msg.author.bot)
+  ) {
+    if (msg.content.toLowerCase().match(cursedRegex)) {
+      msg.channel.send(
+        `${naughtyWordReactions[getRandomInt(naughtyWordReactions.length)]}`,
+      );
     }
 
     if (msg.content.toLowerCase().match(weepRegex)) {
@@ -191,72 +89,56 @@ client.on(`messageCreate`, async (msg: Message) => {
       });
       if (brainCell) {
         msg.channel.send(
-          `<@${brainCell.discordId}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
+          `<@${brainCell.discordId}> has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
         );
       } else {
         // and ideally this NEVER happens
         msg.channel.send(
-          `No one has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
+          `No one has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
         );
       }
     }
 
-    if (msg.content.toLowerCase().includes(`which episode`)) {
-      msg.channel.send(whichEpisode());
+    // TV finder
+    if (msg.content.match(whichRegex)) {
+      const [firstWord, secondWord] = msg.content.split(` `);
+      if (firstWord.match(whichRegex)) {
+        msg.channel.send(media(secondWord));
+      }
     }
-
-    if (msg.content.toLowerCase().includes(`which show`)) {
-      msg.channel.send(whichShow());
-    }
-
-    if (msg.content.toLowerCase().includes(`which movie`)) {
-      msg.channel.send(whichMovie());
-    }
-
     if (msg.content.toLowerCase().startsWith(`!addplaylist`)) {
       const [, ...rest] = msg.content.split(` `);
       msg.channel.send(addToPlaylist(rest.join(` `)));
     }
 
-    if (msg.content.toLowerCase().includes(`which playlist`)) {
-      msg.channel.send(whichPlaylist());
-    }
-
-    // command to transfer the brain cell
-
-    // for the future - this should be more like
-    // "if the sender is trying to claim the brain cell, don't let them"
     if (msg.content.toLowerCase().includes(`!give`)) {
-      const brainCells = await prisma.braincell.findMany();
-      const [brainCellOwner] = brainCells.filter(
-        (cell) => cell.hasBrainCell === true,
-      );
-      if (brainCellOwner.discordId === msg.author.id) {
-        // Swap the falses and trues in the database
-        // This calls for a transaction
-        // I do not love that this isn't procedural HOWEVER
-        // there will always only be 2 people and 1 braincell
-        // so this should never have to change
-        // const result = await prisma.$transaction([
-        //   prisma.braincell.update({
-        //     where: { discordId: brainCells[0].discordId },
-        //     data: {
-        //       hasBrainCell: !brainCells[0].hasBrainCell,
-        //     },
-        //   }),
-        //   prisma.braincell.update({
-        //     where: { discordId: brainCells[1].discordId },
-        //     data: {
-        //       hasBrainCell: !brainCells[1].hasBrainCell,
-        //     },
-        //   }),
-        // ]);
-        // const newBrainCells = await prisma.braincell.findMany();
-        const [newBrainCellOwner] = brainCells.filter(
-          (cell) => cell.hasBrainCell === true,
-        );
+      const discordId = msg.author.id;
+      const brainCellOwner = await prisma.braincell.findFirst({
+        where: { discordId },
+      });
+      if (brainCellOwner?.hasBrainCell) {
+        const result = await prisma.$transaction([
+          prisma.braincell.update({
+            where: { discordId },
+            data: {
+              hasBrainCell: false,
+            },
+          }),
+          prisma.braincell.update({
+            where: {
+              discordId: Object.values(BRAINCELL_USER_ID).find(
+                (id) => id !== discordId,
+              ),
+            },
+            data: {
+              hasBrainCell: false,
+            },
+          }),
+        ]);
         msg.channel.send(
-          `<@${newBrainCellOwner.discordId}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
+          `<@${
+            result.filter((owner) => owner.hasBrainCell)[0].discordId
+          }> now has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
         );
         return;
       } else {
@@ -266,10 +148,14 @@ client.on(`messageCreate`, async (msg: Message) => {
       }
     }
   }
-  // wrap this all in a big IF that checks if the message is from herself
-  // Also a section that limits certain commands to certain servers
 
-  if (!isPostedByBot) {
+  if (!msg.author.bot) {
+    // Bot echo command
+    if (msg.content.toLowerCase().startsWith(`!vecho`)) {
+      const [, ...rest] = msg.content.split(` `);
+      msg.channel.send(rest.join(` `));
+    }
+
     // PSYCHOSOMATIC
     if (msg.content.toLowerCase().includes(`psychosomatic`)) {
       msg.reply(`THAT BOY NEEDS THERAPY`);
@@ -277,23 +163,19 @@ client.on(`messageCreate`, async (msg: Message) => {
 
     // Manifest
     if (msg.content.toLowerCase().includes(`manifest`)) {
-      msg.react(MANIFEST_ID);
+      msg.react(EMOJI_ID.MANIFEST);
     }
 
     // Conch
     if (msg.content.toLowerCase().includes(`maybe someday`)) {
-      msg.react(CONCH_ID);
+      msg.react(EMOJI_ID.CONCH);
     }
 
     // Victoria Justice
-
-    // EDGE CASES: "I think so?"
     if (
       msg.content.toLowerCase().startsWith(`i think`) &&
       msg.content.length >= 8 &&
-      msg.content.length <= 50 &&
-      !blacklist.includes(msg.author.id) &&
-      !channelBlacklist.includes(msg.channel.id)
+      msg.content.length <= 50
     ) {
       if (msg.content.toLowerCase().includes(`i think we all sing`)) {
         msg.channel.send(
@@ -316,19 +198,12 @@ client.on(`messageCreate`, async (msg: Message) => {
       ) {
         // ask her a question
         msg.reply(JSON.stringify(get8Ball()));
-        msg.channel.send(vicPic());
-        return;
       } else if (msg.content.toLowerCase().includes(`i love you`)) {
         msg.reply(`I love you too`);
-        msg.channel.send(vicPic());
-        // Intentional early return to prevent 2 vicpics
-        return;
       } else {
         // low chance of a random Victorious quote
-        if (getRandomArbitrary(0, 100) >= 95) {
+        if (getRandomInt(100) >= 95) {
           msg.channel.send(vicQuote());
-          msg.channel.send(vicPic());
-          return;
         }
       }
       msg.channel.send(vicPic());
@@ -352,29 +227,21 @@ client.on(`messageCreate`, async (msg: Message) => {
     if (
       msg.content.toLowerCase().includes(`ironic`) ||
       msg.content.toLowerCase().includes(`alanis`) ||
-      msg.channel.id === `715766875971256322`
+      msg.channel.id === CHANNEL_ID.BAJALANIS
     ) {
       // 1/20 chance of Alanisposting
-      if (getRandomArbitrary(1, 100) >= 95) {
+      if (getRandomInt(100) >= 95) {
         msg.channel.send(
-          `${
-            alanisReactions[
-              Math.floor(getRandomArbitrary(0, alanisReactions.length - 1))
-            ]
-          }`,
+          `${alanisReactions[getRandomInt(alanisReactions.length)]}`,
         );
       }
     }
 
     // do I look like I know what a jpeg is?
     if (msg.content.toLowerCase().match(jpegRegex)) {
-      if (getRandomArbitrary(1, 100) > 85) {
+      if (getRandomInt(100) >= 85) {
         msg.channel.send(
-          `${
-            jpegReactions[
-              Math.floor(getRandomArbitrary(0, jpegReactions.length - 1))
-            ]
-          }`,
+          `${jpegReactions[getRandomInt(jpegReactions.length)]}`,
         );
       }
     }
@@ -383,11 +250,7 @@ client.on(`messageCreate`, async (msg: Message) => {
     if (msg.content.toLowerCase().match(fastNFuriousRegex)) {
       const wordsArray = msg.content.match(fastNFuriousRegex);
       if (wordsArray) {
-        const wordsArray2 = wordsArray[0].split(` `);
-        wordsArray2[0] = `2`;
-        wordsArray2[2] = `2`;
-        const newString = wordsArray2.join(` `);
-        msg.channel.send(newString);
+        msg.channel.send(tooFastToFurious(wordsArray[0]));
       }
     }
 
@@ -398,7 +261,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 
     // DO IT
     if (msg.content.toLowerCase().includes(`do it`)) {
-      msg.react(SHEEV_ID);
+      msg.react(EMOJI_ID.SHEEV);
     }
 
     // Help
@@ -417,46 +280,18 @@ client.on(`messageCreate`, async (msg: Message) => {
       msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
     }
 
-    if (msg.content.startsWith(`@Tori`)) {
+    // AI
+    if (msg.content.toLowerCase().startsWith(`@tori`)) {
       const [, ...rest] = msg.content.split(` `);
       const prompt = rest.join(` `);
-      try {
-        const completion = await openai.createCompletion({
-          model: `text-davinci-001`,
-          prompt,
-          temperature: 0.6,
-          max_tokens: 100,
-        });
-        msg.channel.send(
-          completion?.data?.choices[0]?.text || `Something went awry`,
-        );
-      } catch (error) {
-        console.log(chalk.red(`OpenAI Error:`));
-        console.log(chalk.red(error));
-        msg.channel.send(JSON.stringify(error));
-      }
+      msg.channel.send(await aiPrompt(prompt));
     }
   }
 });
 
 client.on(`ready`, async () => {
-  const braincells = await prisma.braincell.count();
-  if (braincells === 0) {
-    console.log(chalk.red(`no braincell has been given`));
-    console.log(chalk.yellow(`Please run yarn seed`));
-  }
-
-  // not using rn come back to this later
-  // console.log(
-  //   `Logged in as ${client?.user?.tag}!\n with ${player} Dootiverse player${
-  //     player === 1 ? `` : `s`
-  //   }`,
-  // );
-  redootJob.start();
-  itemJob.start();
-
   // set bot status
-  client.user?.setActivity(`Victorious 24/7`, { type: 3 });
+  client.user?.setActivity(`DEBUGGING 24/7`, { type: 4 });
 });
 
 // make sure this line is the last line

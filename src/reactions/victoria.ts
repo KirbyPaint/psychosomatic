@@ -1,11 +1,11 @@
 import {
   victoriaReactions,
-  getRandomArbitrary,
   toriQuotes,
   areWere,
   have,
   wouldCouldShouldHad,
   pronouns,
+  getRandomInt,
 } from "../consts";
 
 export function endText(endOfSentence: string[]) {
@@ -41,12 +41,10 @@ export function iThinkWeAll(msg: string) {
 
 export function vicPic() {
   return victoriaReactions[
-    Math.floor(getRandomArbitrary(0, victoriaReactions.length))
+    Math.floor(getRandomInt(victoriaReactions.length))
   ].toString();
 }
 
 export function vicQuote() {
-  return toriQuotes[
-    Math.floor(getRandomArbitrary(0, toriQuotes.length))
-  ].toString();
+  return toriQuotes[Math.floor(getRandomInt(toriQuotes.length))].toString();
 }
