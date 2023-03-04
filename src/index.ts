@@ -15,16 +15,11 @@ import {
   SERVER_ID,
   tooFastToFurious,
   weepRegex,
+  whichRegex,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
 import { PrismaClient } from "@prisma/client";
-import {
-  addToPlaylist,
-  whichEpisode,
-  whichMovie,
-  whichPlaylist,
-  whichShow,
-} from "./episode-finder";
+import { addToPlaylist, media } from "./episode-finder";
 import { aiPrompt } from "./openai/openai";
 
 dotenv.config();
@@ -97,29 +92,19 @@ client.on(`messageCreate`, async (msg: Message) => {
       }
     }
 
-    if (msg.content.toLowerCase().includes(`which episode`)) {
-      msg.channel.send(whichEpisode());
+    // TV finder
+    if (msg.content.match(whichRegex)) {
+      const [firstWord, secondWord] = msg.content.split(` `);
+      if (firstWord.match(whichRegex)) {
+        msg.channel.send(media(secondWord));
+      }
     }
-
-    if (msg.content.toLowerCase().includes(`which show`)) {
-      msg.channel.send(whichShow());
-    }
-
-    if (msg.content.toLowerCase().includes(`which movie`)) {
-      msg.channel.send(whichMovie());
-    }
-
     if (msg.content.toLowerCase().startsWith(`!addplaylist`)) {
       const [, ...rest] = msg.content.split(` `);
       msg.channel.send(addToPlaylist(rest.join(` `)));
     }
 
-    if (msg.content.toLowerCase().includes(`which playlist`)) {
-      msg.channel.send(whichPlaylist());
-    }
-
     // command to transfer the brain cell
-
     // for the future - this should be more like
     // "if the sender is trying to claim the brain cell, don't let them"
     if (msg.content.toLowerCase().includes(`!give`)) {
@@ -162,8 +147,6 @@ client.on(`messageCreate`, async (msg: Message) => {
       }
     }
   }
-  // wrap this all in a big IF that checks if the message is from herself
-  // Also a section that limits certain commands to certain servers
 
   if (!msg.author.bot) {
     // Bot echo command
