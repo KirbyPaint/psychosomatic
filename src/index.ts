@@ -210,19 +210,12 @@ client.on(`messageCreate`, async (msg: Message) => {
       ) {
         // ask her a question
         msg.reply(JSON.stringify(get8Ball()));
-        msg.channel.send(vicPic());
-        return;
       } else if (msg.content.toLowerCase().includes(`i love you`)) {
         msg.reply(`I love you too`);
-        msg.channel.send(vicPic());
-        // Intentional early return to prevent 2 vicpics
-        return;
       } else {
         // low chance of a random Victorious quote
         if (getRandomInt(100) >= 95) {
           msg.channel.send(vicQuote());
-          msg.channel.send(vicPic());
-          return;
         }
       }
       msg.channel.send(vicPic());
