@@ -13,6 +13,7 @@ import {
   jpegRegex,
   naughtyWordReactions,
   SERVER_ID,
+  tooFastToFurious,
   weepRegex,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
@@ -263,11 +264,7 @@ client.on(`messageCreate`, async (msg: Message) => {
     if (msg.content.toLowerCase().match(fastNFuriousRegex)) {
       const wordsArray = msg.content.match(fastNFuriousRegex);
       if (wordsArray) {
-        const wordsArray2 = wordsArray[0].split(` `);
-        wordsArray2[0] = `2`;
-        wordsArray2[2] = `2`;
-        const newString = wordsArray2.join(` `);
-        msg.channel.send(newString);
+        msg.channel.send(tooFastToFurious(wordsArray[0]));
       }
     }
 
