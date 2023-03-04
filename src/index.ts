@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
+  BRAINCELL_USER_ID,
   CHANNEL_ID,
   cursedRegex,
   EMOJI_ID,
@@ -21,6 +22,7 @@ import { get8Ball } from "./gets/8ball";
 import { PrismaClient } from "@prisma/client";
 import { addToPlaylist, media } from "./episode-finder";
 import { aiPrompt } from "./openai/openai";
+import chalk from "chalk";
 
 dotenv.config();
 
@@ -46,6 +48,11 @@ const client = new Client({
 client.on(`messageCreate`, async (msg: Message) => {
   const currentGuildId = msg.guildId;
   const isDev = process.env.BOT_ENV === `dev`;
+  // log all messages to trace errors
+  if (isDev || !msg.author.bot) {
+    console.log(chalk.cyan(`\n\n\nMessage received:`));
+    console.log(msg);
+  }
 
   // Processes to be used only for our special server
   if (
@@ -104,40 +111,34 @@ client.on(`messageCreate`, async (msg: Message) => {
       msg.channel.send(addToPlaylist(rest.join(` `)));
     }
 
-    // command to transfer the brain cell
-    // for the future - this should be more like
-    // "if the sender is trying to claim the brain cell, don't let them"
     if (msg.content.toLowerCase().includes(`!give`)) {
-      const brainCells = await prisma.braincell.findMany();
-      const [brainCellOwner] = brainCells.filter(
-        (cell) => cell.hasBrainCell === true,
-      );
-      if (brainCellOwner.discordId === msg.author.id) {
-        // Swap the falses and trues in the database
-        // This calls for a transaction
-        // I do not love that this isn't procedural HOWEVER
-        // there will always only be 2 people and 1 braincell
-        // so this should never have to change
-        // const result = await prisma.$transaction([
-        //   prisma.braincell.update({
-        //     where: { discordId: brainCells[0].discordId },
-        //     data: {
-        //       hasBrainCell: !brainCells[0].hasBrainCell,
-        //     },
-        //   }),
-        //   prisma.braincell.update({
-        //     where: { discordId: brainCells[1].discordId },
-        //     data: {
-        //       hasBrainCell: !brainCells[1].hasBrainCell,
-        //     },
-        //   }),
-        // ]);
-        // const newBrainCells = await prisma.braincell.findMany();
-        const [newBrainCellOwner] = brainCells.filter(
-          (cell) => cell.hasBrainCell === true,
-        );
+      const discordId = msg.author.id;
+      const brainCellOwner = await prisma.braincell.findFirst({
+        where: { discordId },
+      });
+      if (brainCellOwner?.hasBrainCell) {
+        const result = await prisma.$transaction([
+          prisma.braincell.update({
+            where: { discordId },
+            data: {
+              hasBrainCell: false,
+            },
+          }),
+          prisma.braincell.update({
+            where: {
+              discordId: Object.values(BRAINCELL_USER_ID).find(
+                (id) => id !== discordId,
+              ),
+            },
+            data: {
+              hasBrainCell: false,
+            },
+          }),
+        ]);
         msg.channel.send(
-          `<@${newBrainCellOwner.discordId}> now has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
+          `<@${
+            result.filter((owner) => owner.hasBrainCell)[0].discordId
+          }> now has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
         );
         return;
       } else {

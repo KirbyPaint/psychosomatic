@@ -416,7 +416,7 @@ export const EMOJI_ID = {
   SHEEV: `636777145921699852`,
 };
 
-export const USER_ID = {
+export const BRAINCELL_USER_ID = {
   ME: `189997816406474752`,
   CHABI: `241416328966045697`,
 };
