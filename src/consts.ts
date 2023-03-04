@@ -425,7 +425,9 @@ export const SERVER_ID = {
   DUMMIES: `625931911029850118`,
 };
 
-export const CHANNEL_ID = {};
+export const CHANNEL_ID = {
+  BAJALANIS: `715766875971256322`,
+};
 
 export function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);

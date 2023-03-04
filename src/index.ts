@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
+  CHANNEL_ID,
   cursedRegex,
   EMOJI_ID,
   fastNFuriousRegex,
@@ -239,23 +240,21 @@ client.on(`messageCreate`, async (msg: Message) => {
     if (
       msg.content.toLowerCase().includes(`ironic`) ||
       msg.content.toLowerCase().includes(`alanis`) ||
-      msg.channel.id === `715766875971256322`
+      msg.channel.id === CHANNEL_ID.BAJALANIS
     ) {
       // 1/20 chance of Alanisposting
       if (getRandomInt(100) >= 95) {
         msg.channel.send(
-          `${
-            alanisReactions[Math.floor(getRandomInt(alanisReactions.length))]
-          }`,
+          `${alanisReactions[getRandomInt(alanisReactions.length)]}`,
         );
       }
     }
 
     // do I look like I know what a jpeg is?
     if (msg.content.toLowerCase().match(jpegRegex)) {
-      if (getRandomInt(100) > 85) {
+      if (getRandomInt(100) >= 85) {
         msg.channel.send(
-          `${jpegReactions[Math.floor(getRandomInt(jpegReactions.length))]}`,
+          `${jpegReactions[getRandomInt(jpegReactions.length)]}`,
         );
       }
     }
