@@ -53,15 +53,15 @@ client.on(`messageCreate`, async (msg: Message) => {
   // Bot echo command
   if (msg.content.toLowerCase().startsWith(`!vecho`)) {
     const [, ...rest] = msg.content.split(` `);
-    const message = rest.join(` `);
-    msg.channel.send(message);
+    msg.channel.send(rest.join(` `));
   }
 
   // Processes to be used only for our special server
   if (currentGuildId === SERVER_ID.DUMMIES && !msg.author.bot) {
     if (msg.content.toLowerCase().match(cursedRegex)) {
-      const randomNumber = getRandomInt(naughtyWordReactions.length);
-      msg.channel.send(`${naughtyWordReactions[Math.floor(randomNumber)]}`);
+      msg.channel.send(
+        `${naughtyWordReactions[getRandomInt(naughtyWordReactions.length)]}`,
+      );
     }
 
     if (msg.content.toLowerCase().match(weepRegex)) {
