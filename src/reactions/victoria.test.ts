@@ -1,5 +1,6 @@
 import {
   fastNFuriousRegex,
+  heyVictoriaRegex,
   jpegRegex,
   naughtyWordReactions,
   tooFastToFurious,
@@ -131,6 +132,17 @@ describe(`regex`, () => {
         `too hot to handle on a pleasant summer's day`,
       );
       expect(result5).toMatch(`2 hot 2 handle`);
+    });
+  });
+  describe(`hey victoria`, () => {
+    it(`should match these strings`, () => {
+      expect(`hey victoria`).toMatch(heyVictoriaRegex);
+      expect(`victoria`).toMatch(heyVictoriaRegex);
+      expect(`Hey Victoria`).toMatch(heyVictoriaRegex);
+      expect(`Victoria`).toMatch(heyVictoriaRegex);
+    });
+    it(`should not match these strings`, () => {
+      expect(`He Vic`).not.toMatch(heyVictoriaRegex);
     });
   });
 });
