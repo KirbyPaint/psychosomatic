@@ -1,3 +1,5 @@
+import { getRandomInt } from "../consts";
+
 const ball = [
   `It is certain.`,
   `It is decidedly so.`,
@@ -24,5 +26,5 @@ const ball = [
 ];
 
 export function get8Ball() {
-  return ball[Math.floor(Math.random() * ball.length)];
+  return ball[getRandomInt(ball.length)];
 }
