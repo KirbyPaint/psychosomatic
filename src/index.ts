@@ -50,6 +50,7 @@ const client = new Client({
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg: Message) => {
   const currentGuildId = msg.guildId;
+  const isDev = process.env.BOT_ENV === `dev`;
 
   // Bot echo command
   if (msg.content.toLowerCase().startsWith(`!vecho`)) {
@@ -58,7 +59,10 @@ client.on(`messageCreate`, async (msg: Message) => {
   }
 
   // Processes to be used only for our special server
-  if (currentGuildId === SERVER_ID.DUMMIES && !msg.author.bot) {
+  if (
+    (currentGuildId === SERVER_ID.DUMMIES && !msg.author.bot) ||
+    (isDev && !msg.author.bot)
+  ) {
     if (msg.content.toLowerCase().match(cursedRegex)) {
       msg.channel.send(
         `${naughtyWordReactions[getRandomInt(naughtyWordReactions.length)]}`,
@@ -184,8 +188,6 @@ client.on(`messageCreate`, async (msg: Message) => {
     }
 
     // Victoria Justice
-
-    // EDGE CASES: "I think so?"
     if (
       msg.content.toLowerCase().startsWith(`i think`) &&
       msg.content.length >= 8 &&
