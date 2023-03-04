@@ -413,6 +413,10 @@ export const MANIFEST_ID = `769755766352642128`;
 export const BRAIN_CELL_ID = `936895162074951730`; // custom emoji
 export const CONCH_ID = `809579247994929182`;
 export const SHEEV_ID = `636777145921699852`;
+export const BOT_ID = `928832019474047066`;
+export const MY_ID = `189997816406474752`;
+export const HER_ID = `241416328966045697`;
+export const DUMMIES = `625931911029850118`;
 
 export function getRandomArbitrary(min: number, max: number): number {
   return Math.round(Math.random() * (max - min) + min);

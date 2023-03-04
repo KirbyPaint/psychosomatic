@@ -73,7 +73,6 @@ const openai = new OpenAIApi(configuration);
 
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg: Message) => {
-  const isPostedByBot = msg.author.id === process.env.BOT_ID;
   const currentGuildId = msg.guildId;
 
   if (isGameAllowedChannel(msg.channel.id)) {
@@ -158,7 +157,7 @@ client.on(`messageCreate`, async (msg: Message) => {
   }
 
   // Processes to be used only for our special server
-  if (currentGuildId === process.env.DUMMIES && !isPostedByBot) {
+  if (currentGuildId === process.env.DUMMIES && !msg.author.bot) {
     if (
       msg.content.toLowerCase().match(cursedRegex) &&
       !msg.content.toLowerCase().includes(`victoria`)
@@ -269,7 +268,7 @@ client.on(`messageCreate`, async (msg: Message) => {
   // wrap this all in a big IF that checks if the message is from herself
   // Also a section that limits certain commands to certain servers
 
-  if (!isPostedByBot) {
+  if (!msg.author.bot) {
     // PSYCHOSOMATIC
     if (msg.content.toLowerCase().includes(`psychosomatic`)) {
       msg.reply(`THAT BOY NEEDS THERAPY`);
