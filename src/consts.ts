@@ -434,6 +434,7 @@ export function getRandomInt(max: number) {
 export const jpegRegex = /^[^.]*(jpe?g)/;
 export const weepRegex = /\b(weep)\b/;
 export const cursedRegex = /\bfoot\b|\bfeet\b/;
+export const heyVictoriaRegex = /(hey )?\bvictoria\b/i;
 // this might be shit but it'll do the job
 export const fastNFuriousRegex = /(too)+ [^ ]+ (to?o)+ [^ \r\n]+/i;
 export const fiveMinutes = 300000;
