@@ -7,14 +7,12 @@ import {
 } from "../consts";
 import { endText, iThinkWeAll } from "./victoria";
 
-describe.skip(`Victoria tests`, () => {
+describe(`Victoria tests`, () => {
   describe(`I Think We All (tests)`, () => {
     let message;
     it(`should return 'I think we all sing' photo`, () => {
       message = `i think we all sing`;
-      expect(iThinkWeAll(message)).toBe(
-        `https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`,
-      );
+      expect(iThinkWeAll(message)).toBe(`I THINK WE ALL SING`);
     });
 
     it(`I Think We All [VERB]`, () => {
