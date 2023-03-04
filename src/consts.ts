@@ -409,14 +409,23 @@ export const toriQuotes = [
   `You're not supposed to hit her.`,
 ];
 
-export const MANIFEST_ID = `769755766352642128`;
-export const BRAIN_CELL_ID = `936895162074951730`; // custom emoji
-export const CONCH_ID = `809579247994929182`;
-export const SHEEV_ID = `636777145921699852`;
-export const BOT_ID = `928832019474047066`;
-export const MY_ID = `189997816406474752`;
-export const HER_ID = `241416328966045697`;
-export const DUMMIES = `625931911029850118`;
+export const EMOJI_ID = {
+  MANIFEST: `769755766352642128`,
+  BRAIN_CELL: `936895162074951730`,
+  CONCH: `809579247994929182`,
+  SHEEV: `636777145921699852`,
+};
+
+export const USER_ID = {
+  ME: `189997816406474752`,
+  CHABI: `241416328966045697`,
+};
+
+export const SERVER_ID = {
+  DUMMIES: `625931911029850118`,
+};
+
+export const CHANNEL_ID = {};
 
 export function getRandomArbitrary(min: number, max: number): number {
   return Math.round(Math.random() * (max - min) + min);
@@ -437,10 +446,6 @@ export const gameAllowedChannels = [
   `955950801157779477`, // chillbros bot spam
   `1060094887397163048`, // private server for testing
 ];
-
-export const blacklist = [``];
-
-export const channelBlacklist = [`693210030236762183`];
 
 export function isGameAllowedChannel(channelId: string) {
   return gameAllowedChannels.includes(channelId);

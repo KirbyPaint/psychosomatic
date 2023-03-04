@@ -3,24 +3,19 @@ import dotenv from "dotenv";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
-  blacklist,
-  BRAIN_CELL_ID,
-  channelBlacklist,
-  CONCH_ID,
   cursedRegex,
+  EMOJI_ID,
   fastNFuriousRegex,
   getRandomArbitrary,
   help,
   jpegReactions,
   jpegRegex,
-  MANIFEST_ID,
   naughtyWordReactions,
-  SHEEV_ID,
+  SERVER_ID,
   weepRegex,
 } from "./consts";
 import { get8Ball } from "./gets/8ball";
 import { PrismaClient } from "@prisma/client";
-import chalk from "chalk";
 import {
   addToPlaylist,
   whichEpisode,
@@ -28,7 +23,7 @@ import {
   whichPlaylist,
   whichShow,
 } from "./episode-finder";
-import { Configuration, OpenAIApi } from "openai";
+import { aiPrompt } from "./openai/openai";
 
 dotenv.config();
 
@@ -50,28 +45,20 @@ const client = new Client({
   intents,
 });
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
-
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg: Message) => {
   const currentGuildId = msg.guildId;
 
   // Bot echo command
-  if (msg.content.startsWith(`!vecho`)) {
+  if (msg.content.toLowerCase().startsWith(`!vecho`)) {
     const [, ...rest] = msg.content.split(` `);
     const message = rest.join(` `);
     msg.channel.send(message);
   }
 
   // Processes to be used only for our special server
-  if (currentGuildId === process.env.DUMMIES && !msg.author.bot) {
-    if (
-      msg.content.toLowerCase().match(cursedRegex) &&
-      !msg.content.toLowerCase().includes(`victoria`)
-    ) {
+  if (currentGuildId === SERVER_ID.DUMMIES && !msg.author.bot) {
+    if (msg.content.toLowerCase().match(cursedRegex)) {
       const randomNumber = getRandomArbitrary(0, naughtyWordReactions.length);
       msg.channel.send(`${naughtyWordReactions[Math.floor(randomNumber)]}`);
     }
@@ -100,12 +87,12 @@ client.on(`messageCreate`, async (msg: Message) => {
       });
       if (brainCell) {
         msg.channel.send(
-          `<@${brainCell.discordId}> has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
+          `<@${brainCell.discordId}> has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
         );
       } else {
         // and ideally this NEVER happens
         msg.channel.send(
-          `No one has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
+          `No one has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
         );
       }
     }
@@ -165,7 +152,7 @@ client.on(`messageCreate`, async (msg: Message) => {
           (cell) => cell.hasBrainCell === true,
         );
         msg.channel.send(
-          `<@${newBrainCellOwner.discordId}> now has the brain cell <:onebraincell:${BRAIN_CELL_ID}>`,
+          `<@${newBrainCellOwner.discordId}> now has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
         );
         return;
       } else {
@@ -186,12 +173,12 @@ client.on(`messageCreate`, async (msg: Message) => {
 
     // Manifest
     if (msg.content.toLowerCase().includes(`manifest`)) {
-      msg.react(MANIFEST_ID);
+      msg.react(EMOJI_ID.MANIFEST);
     }
 
     // Conch
     if (msg.content.toLowerCase().includes(`maybe someday`)) {
-      msg.react(CONCH_ID);
+      msg.react(EMOJI_ID.CONCH);
     }
 
     // Victoria Justice
@@ -200,9 +187,7 @@ client.on(`messageCreate`, async (msg: Message) => {
     if (
       msg.content.toLowerCase().startsWith(`i think`) &&
       msg.content.length >= 8 &&
-      msg.content.length <= 50 &&
-      !blacklist.includes(msg.author.id) &&
-      !channelBlacklist.includes(msg.channel.id)
+      msg.content.length <= 50
     ) {
       if (msg.content.toLowerCase().includes(`i think we all sing`)) {
         msg.channel.send(
@@ -307,7 +292,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 
     // DO IT
     if (msg.content.toLowerCase().includes(`do it`)) {
-      msg.react(SHEEV_ID);
+      msg.react(EMOJI_ID.SHEEV);
     }
 
     // Help
@@ -326,24 +311,11 @@ client.on(`messageCreate`, async (msg: Message) => {
       msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
     }
 
-    if (msg.content.startsWith(`@Tori`)) {
+    // AI
+    if (msg.content.toLowerCase().startsWith(`@tori`)) {
       const [, ...rest] = msg.content.split(` `);
       const prompt = rest.join(` `);
-      try {
-        const completion = await openai.createCompletion({
-          model: `text-davinci-001`,
-          prompt,
-          temperature: 0.6,
-          max_tokens: 100,
-        });
-        msg.channel.send(
-          completion?.data?.choices[0]?.text || `Something went awry`,
-        );
-      } catch (error) {
-        console.log(chalk.red(`OpenAI Error:`));
-        console.log(chalk.red(error));
-        msg.channel.send(JSON.stringify(error));
-      }
+      msg.channel.send(await aiPrompt(prompt));
     }
   }
 });
