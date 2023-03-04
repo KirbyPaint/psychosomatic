@@ -1,7 +1,9 @@
 import {
+  cursedRegex,
   fastNFuriousRegex,
   heyVictoriaRegex,
   jpegRegex,
+  naughtyWordReactions,
   tooFastToFurious,
   weepRegex,
 } from "../consts";
@@ -79,35 +81,17 @@ describe(`regex`, () => {
   });
 
   describe(`cursed`, () => {
-    let message;
     // ok I know how this test reads but I don't want to say the f word
-    it(`should return a naughty response message`, () => {
-      // Flag message as inappropriate
-      message = `foot`;
-      // expect(naughtyWordReactions.includes(vicLogic(message))).toBeTruthy();
-      message = `feet`;
-      // expect(naughtyWordReactions.includes(vicLogic(message))).toBeTruthy();
-      // Validate with spaces
-      message = ` foot `;
-      // expect(naughtyWordReactions.includes(vicLogic(message))).toBeTruthy();
-      message = ` feet `;
-      // expect(naughtyWordReactions.includes(vicLogic(message))).toBeTruthy();
+    it(`should match these strings`, () => {
+      expect(`foot`).toMatch(cursedRegex);
+      expect(`feet`).toMatch(cursedRegex);
+      expect(` foot `).toMatch(cursedRegex);
+      expect(` feet `).toMatch(cursedRegex);
     });
 
-    it(`should not flag partial matches`, () => {
-      // Only flag entire word matches
-      message = `afoot`;
-      // expect(naughtyWordReactions.includes(vicLogic(message))).toBeFalsy();
-      message = `crowfeet`;
-      // expect(naughtyWordReactions.includes(vicLogic(message))).toBeFalsy();
-    });
-
-    it(`should not return when Victoria's name is mentioned`, () => {
-      // Basic logic where if you are caught saying a naughty word
-      // If you also say her name, you acknowledge her judgment
-      message = `victoria foot`;
-      // expect(naughtyWordReactions.includes(vicLogic(message))).toBeFalsy();
-      // expect(victoriaReactions.includes(vicLogic(message))).toBeTruthy();
+    it(`should not match these strings`, () => {
+      expect(`afoot`).not.toMatch(cursedRegex);
+      expect(`crowsfeet`).not.toMatch(cursedRegex);
     });
   });
   describe(`fastNFurious`, () => {
