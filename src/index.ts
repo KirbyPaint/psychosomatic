@@ -43,12 +43,7 @@ import {
   restore,
   stats,
 } from "./doots_game";
-import {
-  countItems,
-  getRandomItem,
-  listItems,
-  listMyItems,
-} from "./doots_game/items";
+import { getRandomItem, listItems, listMyItems } from "./doots_game/items";
 import { Configuration, OpenAIApi } from "openai";
 
 dotenv.config();
