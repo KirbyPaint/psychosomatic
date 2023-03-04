@@ -6,7 +6,7 @@ import {
   cursedRegex,
   EMOJI_ID,
   fastNFuriousRegex,
-  getRandomArbitrary,
+  getRandomInt,
   help,
   jpegReactions,
   jpegRegex,
@@ -59,7 +59,7 @@ client.on(`messageCreate`, async (msg: Message) => {
   // Processes to be used only for our special server
   if (currentGuildId === SERVER_ID.DUMMIES && !msg.author.bot) {
     if (msg.content.toLowerCase().match(cursedRegex)) {
-      const randomNumber = getRandomArbitrary(0, naughtyWordReactions.length);
+      const randomNumber = getRandomInt(naughtyWordReactions.length);
       msg.channel.send(`${naughtyWordReactions[Math.floor(randomNumber)]}`);
     }
 
@@ -219,7 +219,7 @@ client.on(`messageCreate`, async (msg: Message) => {
         return;
       } else {
         // low chance of a random Victorious quote
-        if (getRandomArbitrary(0, 100) >= 95) {
+        if (getRandomInt(100) >= 95) {
           msg.channel.send(vicQuote());
           msg.channel.send(vicPic());
           return;
@@ -249,12 +249,10 @@ client.on(`messageCreate`, async (msg: Message) => {
       msg.channel.id === `715766875971256322`
     ) {
       // 1/20 chance of Alanisposting
-      if (getRandomArbitrary(1, 100) >= 95) {
+      if (getRandomInt(100) >= 95) {
         msg.channel.send(
           `${
-            alanisReactions[
-              Math.floor(getRandomArbitrary(0, alanisReactions.length - 1))
-            ]
+            alanisReactions[Math.floor(getRandomInt(alanisReactions.length))]
           }`,
         );
       }
@@ -262,13 +260,9 @@ client.on(`messageCreate`, async (msg: Message) => {
 
     // do I look like I know what a jpeg is?
     if (msg.content.toLowerCase().match(jpegRegex)) {
-      if (getRandomArbitrary(1, 100) > 85) {
+      if (getRandomInt(100) > 85) {
         msg.channel.send(
-          `${
-            jpegReactions[
-              Math.floor(getRandomArbitrary(0, jpegReactions.length - 1))
-            ]
-          }`,
+          `${jpegReactions[Math.floor(getRandomInt(jpegReactions.length))]}`,
         );
       }
     }

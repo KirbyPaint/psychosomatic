@@ -427,8 +427,8 @@ export const SERVER_ID = {
 
 export const CHANNEL_ID = {};
 
-export function getRandomArbitrary(min: number, max: number): number {
-  return Math.round(Math.random() * (max - min) + min);
+export function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
 }
 
 export const jpegRegex = /^[^.]*(jpe?g)/;
