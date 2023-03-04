@@ -8,11 +8,9 @@ import {
   channelBlacklist,
   CONCH_ID,
   cursedRegex,
-  DOOT_COMMANDS,
   fastNFuriousRegex,
   getRandomArbitrary,
   help,
-  isGameAllowedChannel,
   jpegReactions,
   jpegRegex,
   MANIFEST_ID,
@@ -23,7 +21,6 @@ import {
 import { get8Ball } from "./gets/8ball";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
-import { itemJob, redootJob } from "./cron/jobs";
 import {
   addToPlaylist,
   whichEpisode,
@@ -31,19 +28,6 @@ import {
   whichPlaylist,
   whichShow,
 } from "./episode-finder";
-import {
-  addPlayer,
-  deletePlayer,
-  doot,
-  listPlayers,
-  playerCount,
-  removePlayer,
-  renamePlayer,
-  resetAll,
-  restore,
-  stats,
-} from "./doots_game";
-import { getRandomItem, listItems, listMyItems } from "./doots_game/items";
 import { Configuration, OpenAIApi } from "openai";
 
 dotenv.config();
@@ -74,80 +58,6 @@ const openai = new OpenAIApi(configuration);
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg: Message) => {
   const currentGuildId = msg.guildId;
-
-  if (isGameAllowedChannel(msg.channel.id)) {
-    const [command, ...rest] = msg.content.split(` `);
-    const { id, username } = msg.author;
-
-    if (DOOT_COMMANDS.includes(command.toLowerCase())) {
-      switch (command.toLowerCase()) {
-        case `!add`:
-        case `!addplayer`: {
-          msg.reply(await addPlayer(id, username, rest));
-          break;
-        }
-        case `!remove`:
-        case `!removeplayer`: {
-          msg.reply(await removePlayer(id));
-          break;
-        }
-        case `!rename`:
-        case `renameplayer`: {
-          msg.reply(await renamePlayer(id, rest));
-          break;
-        }
-        case `!score`:
-        case `!players`: {
-          if ((await playerCount()) < 1) {
-            msg.channel.send(`No players in the game`);
-            return;
-          }
-          msg.channel.send(await listPlayers());
-          break;
-        }
-        case `!deleteplayer`:
-        case `!delete`: {
-          msg.reply(await deletePlayer(id));
-          break;
-        }
-        case `!count`:
-        case `!stats`: {
-          if ((await playerCount()) < 1) {
-            msg.channel.send(`No players in the game`);
-            return;
-          }
-          msg.reply(await stats(id));
-          break;
-        }
-        case `!restore`:
-        case `!restoreplayer`: {
-          msg.reply(await restore(id));
-          break;
-        }
-        case `!resetall`: {
-          msg.channel.send(await resetAll(id));
-          break;
-        }
-        case `!attack`:
-        case `!doot`: {
-          msg.reply(await doot(id, rest));
-          break;
-        }
-        case `!items`: {
-          msg.channel.send(await listItems());
-          break;
-        }
-        case `!finditem`: {
-          msg.reply(await getRandomItem(id));
-          break;
-        }
-        case `!myitems`: {
-          msg.reply(await listMyItems(id));
-          break;
-        }
-      }
-    }
-  }
 
   // Bot echo command
   if (msg.content.startsWith(`!vecho`)) {
@@ -439,23 +349,8 @@ client.on(`messageCreate`, async (msg: Message) => {
 });
 
 client.on(`ready`, async () => {
-  const braincells = await prisma.braincell.count();
-  if (braincells === 0) {
-    console.log(chalk.red(`no braincell has been given`));
-    console.log(chalk.yellow(`Please run yarn seed`));
-  }
-
-  // not using rn come back to this later
-  // console.log(
-  //   `Logged in as ${client?.user?.tag}!\n with ${player} Dootiverse player${
-  //     player === 1 ? `` : `s`
-  //   }`,
-  // );
-  redootJob.start();
-  itemJob.start();
-
   // set bot status
-  client.user?.setActivity(`Victorious 24/7`, { type: 3 });
+  client.user?.setActivity(`DEBUGGING 24/7`, { type: 4 });
 });
 
 // make sure this line is the last line

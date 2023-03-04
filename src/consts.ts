@@ -430,30 +430,7 @@ export const fastNFuriousRegex = /(too)+ [^ ]+ (to?o)+ [^ \r\n]+/i;
 export const fiveMinutes = 300000;
 
 export function help(): string {
-  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic/blob/76117f0353fce9eb3286c34cd5f7d63f6f04fdc5/README.md
-
-  automated list of all doot commands:\n  ${DOOT_COMMANDS.join(`
-  `)}
-
-    !DootVerse Commands:
-    !add,
-    !addPlayer     - add yourself to DootVerse (name in progress)
-    !rename,
-    !renamePlayer  - Change your nickname (up to 32 characters)
-    !remove,
-    !removePlayer  - remove yourself from DootVerse (score can be recovered)
-    !delete,
-    !deletePlayer  - permanently remove yourself from game (lose score)
-    !restore,
-    !restorePlayer - rejoin the game (if you were removed)
-    !score,
-    !players       - list all participating players
-    !count,
-    !stats         - show your stats
-
-    !attack,
-    !doot          - doot someone, for example:
-                   !doot KirbyPaint 5\`\`\``;
+  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic#readme\`\`\``;
 }
 
 export const gameAllowedChannels = [
@@ -493,26 +470,3 @@ export const have = [`i've`, `you've`, `we've`, `they've`];
 export const areWere = [`i'm`, `you're`, `we're`, `they're`];
 // The i'd and you'd need to be separate from the we've and the we're, etc.
 export const pronouns = [`i`, `you`, `he`, `she`, `it`, `we`, `they`];
-
-export const DOOT_COMMANDS = [
-  `!add`,
-  `!addplayer`,
-  `!remove`,
-  `!removeplayer`,
-  `!rename`,
-  `!renameplayer`,
-  `!score`,
-  `!players`,
-  `!delete`,
-  `!deleteplayer`,
-  `!count`,
-  `!stats`,
-  `!restore`,
-  `!restoreplayer`,
-  `!resetall`,
-  `!doot`,
-  `!attack`,
-  `!items`,
-  `!finditem`,
-  `!myitems`,
-];
