@@ -52,12 +52,6 @@ client.on(`messageCreate`, async (msg: Message) => {
   const currentGuildId = msg.guildId;
   const isDev = process.env.BOT_ENV === `dev`;
 
-  // Bot echo command
-  if (msg.content.toLowerCase().startsWith(`!vecho`)) {
-    const [, ...rest] = msg.content.split(` `);
-    msg.channel.send(rest.join(` `));
-  }
-
   // Processes to be used only for our special server
   if (
     (currentGuildId === SERVER_ID.DUMMIES && !msg.author.bot) ||
@@ -172,6 +166,12 @@ client.on(`messageCreate`, async (msg: Message) => {
   // Also a section that limits certain commands to certain servers
 
   if (!msg.author.bot) {
+    // Bot echo command
+    if (msg.content.toLowerCase().startsWith(`!vecho`)) {
+      const [, ...rest] = msg.content.split(` `);
+      msg.channel.send(rest.join(` `));
+    }
+
     // PSYCHOSOMATIC
     if (msg.content.toLowerCase().includes(`psychosomatic`)) {
       msg.reply(`THAT BOY NEEDS THERAPY`);
