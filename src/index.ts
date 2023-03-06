@@ -1,5 +1,10 @@
+import { PrismaClient } from "@prisma/client";
+import chalk from "chalk";
 import { Client, Intents, Message } from "discord.js";
 import dotenv from "dotenv";
+
+import { get8Ball } from "./gets/8ball";
+import { aiPrompt } from "./openai/openai";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
@@ -18,11 +23,7 @@ import {
   weepRegex,
   whichRegex,
 } from "./consts";
-import { get8Ball } from "./gets/8ball";
-import { PrismaClient } from "@prisma/client";
 import { addToPlaylist, media } from "./episode-finder";
-import { aiPrompt } from "./openai/openai";
-import chalk from "chalk";
 
 dotenv.config();
 

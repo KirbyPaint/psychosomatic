@@ -49,5 +49,8 @@
     "weatherboy",
     "Whattayaknow",
     "wildin"
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  }
 }
