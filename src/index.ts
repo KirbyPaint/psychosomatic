@@ -69,6 +69,14 @@ client.on(`messageCreate`, async (msg: Message) => {
       msg.channel.send(`*ouiiip`);
     }
 
+    // Marcel the Shell
+    if (msg.content.toLowerCase().includes(`too big`)) {
+      msg.channel.send(`Compared to what?`);
+    }
+    if (msg.content.toLowerCase().includes(`marcel`)) {
+      msg.channel.send(`Let the battle begin.`);
+    }
+
     // One brain cell
     // command to check the brain cell
     if (msg.content.toLowerCase().includes(`who has the brain cell`)) {
