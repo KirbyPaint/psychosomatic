@@ -1,11 +1,11 @@
 import {
-  victoriaReactions,
-  toriQuotes,
   areWere,
-  have,
-  wouldCouldShouldHad,
-  pronouns,
   getRandomInt,
+  have,
+  pronouns,
+  toriQuotes,
+  victoriaReactions,
+  wouldCouldShouldHad,
 } from "../consts";
 
 export function endText(endOfSentence: string[]) {

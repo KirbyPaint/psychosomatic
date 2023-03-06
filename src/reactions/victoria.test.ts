@@ -3,10 +3,10 @@ import {
   fastNFuriousRegex,
   heyVictoriaRegex,
   jpegRegex,
-  naughtyWordReactions,
   tooFastToFurious,
   weepRegex,
 } from "../consts";
+
 import { endText, iThinkWeAll } from "./victoria";
 
 describe(`Victoria tests`, () => {

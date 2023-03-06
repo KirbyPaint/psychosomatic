@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import path from "path";
+
 import { getRandomInt } from "./consts";
 
 const directory = `/home/plex/Documents/text_files`;

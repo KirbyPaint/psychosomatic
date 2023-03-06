@@ -41,7 +41,6 @@ Message contains the following word(s) (case-insensitive):
 | do it            | Sheev Palpatine reaction (DEW IT)                               |
 | burgerboss       | Bob response                                                    |
 | noncanonical     | Tina response                                                   |
-|                  |                                                                 |
 
 ---
 
