@@ -112,6 +112,10 @@ client.on(`messageCreate`, async (msg: Message) => {
     if (msg.content.match(whichRegex)) {
       const [firstWord, secondWord] = msg.content.split(` `);
       if (firstWord.match(whichRegex)) {
+        const result = media(secondWord);
+        if (result.length < 1) {
+          return;
+        }
         msg.channel.send(media(secondWord));
       }
     }

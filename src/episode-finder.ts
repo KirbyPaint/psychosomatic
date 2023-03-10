@@ -25,7 +25,7 @@ export function media(prompt: string): string {
       break;
     }
     default: {
-      return `Invalid/unrecognized prompt`;
+      return ``;
     }
   }
   const filepath = path.join(directory, file);
