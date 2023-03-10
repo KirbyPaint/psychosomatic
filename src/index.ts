@@ -140,7 +140,7 @@ client.on(`messageCreate`, async (msg: Message) => {
               ),
             },
             data: {
-              hasBrainCell: false,
+              hasBrainCell: true,
             },
           }),
         ]);
