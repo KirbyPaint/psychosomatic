@@ -7,6 +7,9 @@ const directory = `/home/plex/Documents/text_files`;
 
 export function media(prompt: string): string {
   let file = ``;
+  if (!prompt) {
+    return ``;
+  }
   switch (prompt.toLowerCase()) {
     case `episode`: {
       file = `episodeList.txt`;
