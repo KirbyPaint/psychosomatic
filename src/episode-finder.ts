@@ -11,16 +11,10 @@ export function media(prompt: string): string {
     return ``;
   }
   switch (prompt.toLowerCase()) {
-    case `episode`: {
-      file = `episodeList.txt`;
-      break;
-    }
-    case `show`: {
-      file = `showList.txt`;
-      break;
-    }
+    case `episode`:
+    case `show`:
     case `movie`: {
-      file = `movieList.txt`;
+      file = `${prompt}List.txt`;
       break;
     }
     case `playlist`: {
@@ -38,9 +32,8 @@ export function media(prompt: string): string {
     .split(`\n`)
     .filter((n) => n);
   if (list.length < 1) {
-    return `No items in ${
-      prompt === `playlist` ? `playlist` : `${prompt} list`
-    }`;
+    return `No items in ${prompt === `playlist` ? `playlist` : `${prompt} list`
+      }`;
   }
   const media = list[getRandomInt(list.length)];
   return media;
