@@ -12,8 +12,7 @@
     "seed": "prisma db seed",
     "push": "prisma db push",
     "format": "prisma format",
-    "lint": "eslint . --ext .ts --fix",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    "lint": "eslint . --ext .ts --fix"
   },
   "repository": {
     "type": "git",
@@ -54,10 +53,7 @@
     "@typescript-eslint/parser": "^5.23.0",
     "babel-jest": "^28.0.3",
     "eslint": "^8.15.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.0.3",
-    "prettier": "^2.6.2",
     "prisma": "latest",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",

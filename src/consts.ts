@@ -462,7 +462,10 @@ export function tooFastToFurious(message: string) {
   wordsArray2[1] = wordsArray[1];
   wordsArray2[2] = `2`;
   wordsArray2[3] = wordsArray[3];
-  const newString = wordsArray2.join(` `).replace(/[^\w\s\']|_/g, "").replace(/\s+/g, " ");
+  const newString = wordsArray2
+    .join(` `)
+    .replace(/[^\w\s]|_/g, ``)
+    .replace(/\s+/g, ` `);
   return newString;
 }
 

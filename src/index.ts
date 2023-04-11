@@ -149,14 +149,13 @@ client.on(`messageCreate`, async (msg: Message) => {
           }),
         ]);
         msg.channel.send(
-          `<@${
-            result.filter((owner) => owner.hasBrainCell)[0].discordId
+          `<@${result.filter((owner) => owner.hasBrainCell)[0].discordId
           }> now has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
         );
         return;
       } else {
         msg.channel.send(
-          `You cannot steal the brain cell, it must be given willingly.`,
+          `You cannot steal the brain cell, it must be given willingly.`
         );
       }
     }
@@ -187,8 +186,8 @@ client.on(`messageCreate`, async (msg: Message) => {
     // Victoria Justice
     if (
       msg.content.toLowerCase().startsWith(`i think`) &&
-      msg.content.length >= 8 &&
-      msg.content.length <= 50
+      msg.content.length >= 15 &&
+      msg.content.length <= 30
     ) {
       if (msg.content.toLowerCase().includes(`i think we all sing`)) {
         msg.channel.send(
@@ -304,7 +303,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 client.on(`ready`, async () => {
   // set bot status
-  client.user?.setActivity(`DEBUGGING 24/7`, { type: 4 });
+  client.user?.setActivity(`DEBUGGING 24/7`, { type: 3 });
 });
 
 // make sure this line is the last line
