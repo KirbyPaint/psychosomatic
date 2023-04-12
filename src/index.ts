@@ -303,7 +303,8 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 client.on(`ready`, async () => {
   // set bot status
-  client.user?.setActivity(`DEBUGGING 24/7`, { type: 3 });
+  const activity = process.env.BOT_ENV === `dev` ? `DEBUGGING` : `Victorious 24/7`;
+  client.user?.setActivity(activity, { type: 3 });
 });
 
 // make sure this line is the last line
