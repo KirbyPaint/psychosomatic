@@ -298,6 +298,13 @@ client.on(`messageCreate`, async (msg: Message) => {
       const prompt = rest.join(` `);
       msg.channel.send(await aiPrompt(prompt));
     }
+
+    // OWO
+    if (msg.content.toLowerCase().includes(`owo`) || msg.content.toLowerCase().includes(`uwu`)) {
+      const [, ...rest] = msg.content.split(` `);
+      const prompt = rest.join(` `);
+      msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`));
+    }
   }
 });
 
