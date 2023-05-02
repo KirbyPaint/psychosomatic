@@ -20,6 +20,7 @@ import {
   naughtyWordReactions,
   SERVER_ID,
   tooFastToFurious,
+  uwuRegex,
   weepRegex,
   whichRegex,
 } from "./consts";
@@ -300,7 +301,7 @@ client.on(`messageCreate`, async (msg: Message) => {
     }
 
     // OWO
-    if (msg.content.toLowerCase().includes(`owo`) || msg.content.toLowerCase().includes(`uwu`)) {
+    if (msg.content.toLowerCase().match(uwuRegex)) {
       const prompt = msg.content;
       msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`));
     }
