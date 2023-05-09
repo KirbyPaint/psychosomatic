@@ -50,16 +50,17 @@ const client = new Client({
 client.on(`messageCreate`, async (msg: Message) => {
   const currentGuildId = msg.guildId;
   const isDev = process.env.BOT_ENV === `dev`;
+  const isBot = msg.author.bot;
   // log all messages to trace errors
-  if (isDev || !msg.author.bot) {
+  if (isDev || !isBot) {
     console.log(chalk.cyan(`\n\n\nMessage received:`));
     console.log(msg);
   }
 
   // Processes to be used only for our special server
   if (
-    (currentGuildId === SERVER_ID.DUMMIES && !msg.author.bot) ||
-    (isDev && !msg.author.bot)
+    (currentGuildId === SERVER_ID.DUMMIES && !isBot) ||
+    (isDev && !isBot)
   ) {
     if (msg.content.toLowerCase().match(cursedRegex)) {
       msg.channel.send(
@@ -162,7 +163,7 @@ client.on(`messageCreate`, async (msg: Message) => {
     }
   }
 
-  if (!msg.author.bot) {
+  if (!isBot) {
     // Bot echo command
     if (msg.content.toLowerCase().startsWith(`!vecho`)) {
       const [, ...rest] = msg.content.split(` `);
@@ -303,7 +304,7 @@ client.on(`messageCreate`, async (msg: Message) => {
     // OWO
     if (msg.content.toLowerCase().match(uwuRegex)) {
       const prompt = msg.content;
-      msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`));
+      msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `w`));
     }
   }
 });
