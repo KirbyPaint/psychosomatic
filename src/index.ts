@@ -52,117 +52,10 @@ client.on(`messageCreate`, async (msg: Message) => {
   const isDev = process.env.BOT_ENV === `dev`;
   const isBot = msg.author.bot;
   // log all messages to trace errors
-  if (isDev || !isBot) {
-    console.log(chalk.cyan(`\n\n\nMessage received:`));
-    console.log(msg);
-  }
+  console.log(chalk.cyan(`\n\n\nMessage received:`));
+  console.log(msg);
 
-  // Processes to be used only for our special server
-  if (
-    (currentGuildId === SERVER_ID.DUMMIES && !isBot) ||
-    (isDev && !isBot)
-  ) {
-    if (msg.content.toLowerCase().match(cursedRegex)) {
-      msg.channel.send(
-        `${naughtyWordReactions[getRandomInt(naughtyWordReactions.length)]}`,
-      );
-    }
-
-    if (msg.content.toLowerCase().match(weepRegex)) {
-      msg.channel.send(`*ouiiip`);
-    }
-
-    // Marcel the Shell
-    if (msg.content.toLowerCase().includes(`too big`)) {
-      msg.channel.send(`Compared to what?`);
-    }
-    if (msg.content.toLowerCase().includes(`marcel`)) {
-      msg.channel.send(`Let the battle begin.`);
-    }
-
-    // One brain cell
-    // command to check the brain cell
-    if (msg.content.toLowerCase().includes(`who has the brain cell`)) {
-      // this should only have to happen once
-      const allBrainCells = await prisma.braincell.findMany({
-        where: { hasBrainCell: true },
-      });
-      if (allBrainCells.length === 0) {
-        await prisma.braincell.update({
-          where: { discordId: msg.author.id },
-          data: {
-            hasBrainCell: true,
-          },
-        });
-      }
-      const brainCell = await prisma.braincell.findFirst({
-        where: { hasBrainCell: true },
-      });
-      if (brainCell) {
-        msg.channel.send(
-          `<@${brainCell.discordId}> has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
-        );
-      } else {
-        // and ideally this NEVER happens
-        msg.channel.send(
-          `No one has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
-        );
-      }
-    }
-
-    // TV finder
-    if (msg.content.match(whichRegex)) {
-      const [firstWord, secondWord] = msg.content.split(` `);
-      if (firstWord.match(whichRegex)) {
-        const result = media(secondWord);
-        if (result.length < 1) {
-          return;
-        }
-        msg.channel.send(media(secondWord));
-      }
-    }
-    if (msg.content.toLowerCase().startsWith(`!addplaylist`)) {
-      const [, ...rest] = msg.content.split(` `);
-      msg.channel.send(addToPlaylist(rest.join(` `)));
-    }
-
-    if (msg.content.toLowerCase().includes(`!give`)) {
-      const discordId = msg.author.id;
-      const brainCellOwner = await prisma.braincell.findFirst({
-        where: { discordId },
-      });
-      if (brainCellOwner?.hasBrainCell) {
-        const result = await prisma.$transaction([
-          prisma.braincell.update({
-            where: { discordId },
-            data: {
-              hasBrainCell: false,
-            },
-          }),
-          prisma.braincell.update({
-            where: {
-              discordId: Object.values(BRAINCELL_USER_ID).find(
-                (id) => id !== discordId,
-              ),
-            },
-            data: {
-              hasBrainCell: true,
-            },
-          }),
-        ]);
-        msg.channel.send(
-          `<@${result.filter((owner) => owner.hasBrainCell)[0].discordId
-          }> now has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
-        );
-        return;
-      } else {
-        msg.channel.send(
-          `You cannot steal the brain cell, it must be given willingly.`
-        );
-      }
-    }
-  }
-
+  // everything in a !isBot block first of all
   if (!isBot) {
     // Bot echo command
     if (msg.content.toLowerCase().startsWith(`!vecho`)) {
@@ -306,7 +199,113 @@ client.on(`messageCreate`, async (msg: Message) => {
       const prompt = msg.content;
       msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `w`));
     }
+    // Processes to be used only for our special server
+    if (
+      (currentGuildId === SERVER_ID.DUMMIES) ||
+      (isDev)
+    ) {
+      if (msg.content.toLowerCase().match(cursedRegex)) {
+        msg.channel.send(
+          `${naughtyWordReactions[getRandomInt(naughtyWordReactions.length)]}`,
+        );
+      }
+
+      if (msg.content.toLowerCase().match(weepRegex)) {
+        msg.channel.send(`*ouiiip`);
+      }
+
+      // Marcel the Shell
+      if (msg.content.toLowerCase().includes(`too big`)) {
+        msg.channel.send(`Compared to what?`);
+      }
+      if (msg.content.toLowerCase().includes(`marcel`)) {
+        msg.channel.send(`Let the battle begin.`);
+      }
+
+      // One brain cell
+      // command to check the brain cell
+      if (msg.content.toLowerCase().includes(`who has the brain cell`)) {
+        // this should only have to happen once
+        const allBrainCells = await prisma.braincell.findMany({
+          where: { hasBrainCell: true },
+        });
+        if (allBrainCells.length === 0) {
+          await prisma.braincell.update({
+            where: { discordId: msg.author.id },
+            data: {
+              hasBrainCell: true,
+            },
+          });
+        }
+        const brainCell = await prisma.braincell.findFirst({
+          where: { hasBrainCell: true },
+        });
+        if (brainCell) {
+          msg.channel.send(
+            `<@${brainCell.discordId}> has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
+          );
+        } else {
+          // and ideally this NEVER happens
+          msg.channel.send(
+            `No one has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
+          );
+        }
+      }
+
+      // TV finder
+      if (msg.content.match(whichRegex)) {
+        const [firstWord, secondWord] = msg.content.split(` `);
+        if (firstWord.match(whichRegex)) {
+          const result = media(secondWord);
+          if (result.length < 1) {
+            return;
+          }
+          msg.channel.send(media(secondWord));
+        }
+      }
+      if (msg.content.toLowerCase().startsWith(`!addplaylist`)) {
+        const [, ...rest] = msg.content.split(` `);
+        msg.channel.send(addToPlaylist(rest.join(` `)));
+      }
+
+      if (msg.content.toLowerCase().includes(`!give`)) {
+        const discordId = msg.author.id;
+        const brainCellOwner = await prisma.braincell.findFirst({
+          where: { discordId },
+        });
+        if (brainCellOwner?.hasBrainCell) {
+          const result = await prisma.$transaction([
+            prisma.braincell.update({
+              where: { discordId },
+              data: {
+                hasBrainCell: false,
+              },
+            }),
+            prisma.braincell.update({
+              where: {
+                discordId: Object.values(BRAINCELL_USER_ID).find(
+                  (id) => id !== discordId,
+                ),
+              },
+              data: {
+                hasBrainCell: true,
+              },
+            }),
+          ]);
+          msg.channel.send(
+            `<@${result.filter((owner) => owner.hasBrainCell)[0].discordId
+            }> now has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
+          );
+          return;
+        } else {
+          msg.channel.send(
+            `You cannot steal the brain cell, it must be given willingly.`
+          );
+        }
+      }
+    }
   }
+
 });
 
 client.on(`ready`, async () => {
