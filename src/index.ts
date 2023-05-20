@@ -3,6 +3,8 @@ import chalk from "chalk";
 import { Client, Intents, Message } from "discord.js";
 import dotenv from "dotenv";
 
+import { ls } from "./bash/list_directory";
+import { shutdown } from "./bash/shutdown";
 import { get8Ball } from "./gets/8ball";
 import { aiPrompt } from "./openai/openai";
 import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
@@ -212,6 +214,16 @@ client.on(`messageCreate`, async (msg: Message) => {
 
       if (msg.content.toLowerCase().match(weepRegex)) {
         msg.channel.send(`*ouiiip`);
+      }
+
+      if (msg.content.toLowerCase() === `ls`) {
+        const result = await ls();
+        msg.channel.send(result);
+      }
+
+      if (msg.content.toLowerCase() === `server shutdown` || msg.content.toLowerCase() === `server reboot`) {
+        const result = await shutdown();
+        msg.channel.send(result);
       }
 
       // Marcel the Shell
