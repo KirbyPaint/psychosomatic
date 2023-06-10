@@ -1,13 +1,16 @@
+import { describe, expect, it } from 'vitest';
+
 import {
   cursedRegex,
   fastNFuriousRegex,
   heyVictoriaRegex,
   jpegRegex,
   tooFastToFurious,
+  toriQuotes,
+  victoriaReactions,
   weepRegex,
 } from "../consts";
-
-import { endText, iThinkWeAll } from "./victoria";
+import { endText, iThinkWeAll, vicPic, vicQuote } from "../reactions/victoria";
 
 describe(`Victoria tests`, () => {
   describe(`I Think We All (tests)`, () => {
@@ -32,6 +35,11 @@ describe(`Victoria tests`, () => {
       expect(iThinkWeAll(message)).toBe(`I THINK WE'D ALL GO DANCE`);
     });
 
+    it(`I Think I've [VERB]`, () => {
+      message = `i think i've fallen`;
+      expect(iThinkWeAll(message)).toBe(`I THINK WE'VE ALL FALLEN`);
+    });
+
     it(`I Think We're [WHATEVER]`, () => {
       message = `i think we're going out dancing`;
       expect(iThinkWeAll(message)).toBe(`I THINK WE'RE ALL GOING OUT DANCING`);
@@ -48,6 +56,20 @@ describe(`Victoria tests`, () => {
       expect(iThinkWeAll(message)).toBe(`I THINK WE ALL THINK MAGUMBO MAGUMBO`);
       message = `I think it's Sonic`;
       expect(iThinkWeAll(message)).toBe(`I THINK WE ALL THINK IT'S SONIC`);
+    });
+  });
+  describe(`VicPic`, () => {
+    it(`should return a string from the array of photos`, () => {
+      const result = vicPic();
+      expect(typeof result).toBe(`string`);
+      expect(victoriaReactions.includes(result)).toBe(true);
+    });
+  });
+  describe(`VicQuote`, () => {
+    it(`should return a quote from the array of quotes`, () => {
+      const result = vicQuote();
+      expect(typeof result).toBe(`string`);
+      expect(toriQuotes.includes(result)).toBe(true);
     });
   });
 });
@@ -114,7 +136,8 @@ describe(`regex`, () => {
       const result3 = tooFastToFurious(`too hot(dog) to handle(dog)`);
       const result4 = tooFastToFurious(`too hot too handle`);
       expect(result1).toMatch(`2 hot 2 handle`);
-      expect(result3).toMatch(`2 hot(dog) 2 handle(dog)`);
+      // punctuation filtered out
+      expect(result3).toMatch(`2 hotdog 2 handledog`);
       expect(result4).toMatch(`2 hot 2 handle`);
     });
 

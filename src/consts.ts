@@ -447,15 +447,6 @@ export function help(): string {
   return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic#readme\`\`\``;
 }
 
-export const gameAllowedChannels = [
-  `955950801157779477`, // chillbros bot spam
-  `1060094887397163048`, // private server for testing
-];
-
-export function isGameAllowedChannel(channelId: string) {
-  return gameAllowedChannels.includes(channelId);
-}
-
 export function tooFastToFurious(message: string) {
   const wordsArray = message.split(` `);
   const wordsArray2 = wordsArray[0].split(` `);
