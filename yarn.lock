@@ -3525,7 +3525,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.41, discord-api-types@npm:^0.37.43":
+"discord-api-types@npm:^0.37.41":
   version: 0.37.43
   resolution: "discord-api-types@npm:0.37.43"
   checksum: 716bafb6b2881fd0bb36edae67ec04d08e393ff80b762c74376a40d99cf6dace71d9b13242cea95df1fb9db3aa64fd3e94719dc983420e3b3e139f0e77258489
@@ -3570,7 +3570,6 @@ __metadata:
     axios: ^1.4.0
     babel-jest: ^29.5.0
     chalk: 4.1.2
-    discord-api-types: ^0.37.43
     discord.js: ^14.11.0
     dotenv: ^16.1.4
     eslint: ^8.42.0
