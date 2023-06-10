@@ -3142,6 +3142,7 @@ __metadata:
     ts-node: ^10.7.0
     ts-node-dev: ^2.0.0
     typescript: ^5.1.3
+    vite: ^4.3.9
     vitest: ^0.32.0
   languageName: unknown
   linkType: soft
@@ -5873,7 +5874,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^3.0.0 || ^4.0.0":
+"vite@npm:^3.0.0 || ^4.0.0, vite@npm:^4.3.9":
   version: 4.3.9
   resolution: "vite@npm:4.3.9"
   dependencies:

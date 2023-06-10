@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import {
   cursedRegex,
   fastNFuriousRegex,
@@ -114,7 +116,8 @@ describe(`regex`, () => {
       const result3 = tooFastToFurious(`too hot(dog) to handle(dog)`);
       const result4 = tooFastToFurious(`too hot too handle`);
       expect(result1).toMatch(`2 hot 2 handle`);
-      expect(result3).toMatch(`2 hot(dog) 2 handle(dog)`);
+      // punctuation filtered out
+      expect(result3).toMatch(`2 hotdog 2 handledog`);
       expect(result4).toMatch(`2 hot 2 handle`);
     });
 
