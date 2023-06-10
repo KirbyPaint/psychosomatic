@@ -9,3 +9,4 @@ showList.txt
 prisma/db.db
 /src/example/*
 .yarn/*
+up*.sh
