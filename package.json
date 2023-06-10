@@ -2,7 +2,7 @@
   "name": "discordbot",
   "version": "1.0.0",
   "description": "discord bot",
-  "main": "index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "start": "nodemon ./dist/index.js",
     "build-dist": "./node_modules/typescript/bin/tsc",
