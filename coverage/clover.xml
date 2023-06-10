@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1686426871452" clover="3.2.0">
-  <project timestamp="1686426871452" name="All files">
-    <metrics statements="535" coveredstatements="521" conditionals="13" coveredconditionals="12" methods="8" coveredmethods="3" elements="556" coveredelements="536" complexity="0" loc="535" ncloc="535" packages="2" files="2" classes="2"/>
+<coverage generated="1686428272618" clover="3.2.0">
+  <project timestamp="1686428272618" name="All files">
+    <metrics statements="526" coveredstatements="526" conditionals="17" coveredconditionals="17" methods="7" coveredmethods="7" elements="550" coveredelements="550" complexity="0" loc="526" ncloc="526" packages="2" files="2" classes="2"/>
     <package name="src">
-      <metrics statements="485" coveredstatements="479" conditionals="1" coveredconditionals="1" methods="4" coveredmethods="1"/>
+      <metrics statements="476" coveredstatements="476" conditionals="3" coveredconditionals="3" methods="3" coveredmethods="3"/>
       <file name="consts.ts" path="/home/plex/Documents/vicbot_dev/src/consts.ts">
-        <metrics statements="485" coveredstatements="479" conditionals="1" coveredconditionals="1" methods="4" coveredmethods="1"/>
+        <metrics statements="476" coveredstatements="476" conditionals="3" coveredconditionals="3" methods="3" coveredmethods="3"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -437,9 +437,9 @@
         <line num="429" count="1" type="stmt"/>
         <line num="430" count="1" type="stmt"/>
         <line num="431" count="1" type="stmt"/>
-        <line num="432" count="1" type="stmt"/>
-        <line num="433" count="0" type="stmt"/>
-        <line num="434" count="0" type="stmt"/>
+        <line num="432" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="433" count="3" type="stmt"/>
+        <line num="434" count="3" type="stmt"/>
         <line num="435" count="1" type="stmt"/>
         <line num="436" count="1" type="stmt"/>
         <line num="437" count="1" type="stmt"/>
@@ -451,52 +451,43 @@
         <line num="443" count="1" type="stmt"/>
         <line num="444" count="1" type="stmt"/>
         <line num="445" count="1" type="stmt"/>
-        <line num="446" count="1" type="stmt"/>
-        <line num="447" count="0" type="stmt"/>
-        <line num="448" count="0" type="stmt"/>
+        <line num="446" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="447" count="1" type="stmt"/>
+        <line num="448" count="1" type="stmt"/>
         <line num="449" count="1" type="stmt"/>
-        <line num="450" count="1" type="stmt"/>
-        <line num="451" count="1" type="stmt"/>
-        <line num="452" count="1" type="stmt"/>
-        <line num="453" count="1" type="stmt"/>
-        <line num="454" count="1" type="stmt"/>
-        <line num="455" count="1" type="stmt"/>
-        <line num="456" count="0" type="stmt"/>
-        <line num="457" count="0" type="stmt"/>
-        <line num="458" count="1" type="stmt"/>
-        <line num="459" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="450" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="451" count="4" type="stmt"/>
+        <line num="452" count="4" type="stmt"/>
+        <line num="453" count="4" type="stmt"/>
+        <line num="454" count="4" type="stmt"/>
+        <line num="455" count="4" type="stmt"/>
+        <line num="456" count="4" type="stmt"/>
+        <line num="457" count="4" type="stmt"/>
+        <line num="458" count="4" type="stmt"/>
+        <line num="459" count="4" type="stmt"/>
         <line num="460" count="4" type="stmt"/>
         <line num="461" count="4" type="stmt"/>
         <line num="462" count="4" type="stmt"/>
-        <line num="463" count="4" type="stmt"/>
-        <line num="464" count="4" type="stmt"/>
-        <line num="465" count="4" type="stmt"/>
-        <line num="466" count="4" type="stmt"/>
-        <line num="467" count="4" type="stmt"/>
-        <line num="468" count="4" type="stmt"/>
-        <line num="469" count="4" type="stmt"/>
-        <line num="470" count="4" type="stmt"/>
-        <line num="471" count="4" type="stmt"/>
+        <line num="463" count="1" type="stmt"/>
+        <line num="464" count="1" type="stmt"/>
+        <line num="465" count="1" type="stmt"/>
+        <line num="466" count="1" type="stmt"/>
+        <line num="467" count="1" type="stmt"/>
+        <line num="468" count="1" type="stmt"/>
+        <line num="469" count="1" type="stmt"/>
+        <line num="470" count="1" type="stmt"/>
+        <line num="471" count="1" type="stmt"/>
         <line num="472" count="1" type="stmt"/>
         <line num="473" count="1" type="stmt"/>
         <line num="474" count="1" type="stmt"/>
         <line num="475" count="1" type="stmt"/>
         <line num="476" count="1" type="stmt"/>
-        <line num="477" count="1" type="stmt"/>
-        <line num="478" count="1" type="stmt"/>
-        <line num="479" count="1" type="stmt"/>
-        <line num="480" count="1" type="stmt"/>
-        <line num="481" count="1" type="stmt"/>
-        <line num="482" count="1" type="stmt"/>
-        <line num="483" count="1" type="stmt"/>
-        <line num="484" count="1" type="stmt"/>
-        <line num="485" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.reactions">
-      <metrics statements="50" coveredstatements="42" conditionals="12" coveredconditionals="11" methods="4" coveredmethods="2"/>
+      <metrics statements="50" coveredstatements="50" conditionals="14" coveredconditionals="14" methods="4" coveredmethods="4"/>
       <file name="victoria.ts" path="/home/plex/Documents/vicbot_dev/src/reactions/victoria.ts">
-        <metrics statements="50" coveredstatements="42" conditionals="12" coveredconditionals="11" methods="4" coveredmethods="2"/>
+        <metrics statements="50" coveredstatements="50" conditionals="14" coveredconditionals="14" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -508,45 +499,45 @@
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
         <line num="11" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="12" count="11" type="cond" truecount="1" falsecount="0"/>
+        <line num="12" count="12" type="cond" truecount="1" falsecount="0"/>
         <line num="13" count="5" type="stmt"/>
         <line num="14" count="5" type="stmt"/>
-        <line num="15" count="11" type="stmt"/>
-        <line num="16" count="11" type="stmt"/>
+        <line num="15" count="12" type="stmt"/>
+        <line num="16" count="12" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
         <line num="18" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="19" count="9" type="stmt"/>
-        <line num="20" count="9" type="stmt"/>
-        <line num="21" count="9" type="stmt"/>
-        <line num="22" count="9" type="stmt"/>
-        <line num="23" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="10" type="stmt"/>
+        <line num="20" count="10" type="stmt"/>
+        <line num="21" count="10" type="stmt"/>
+        <line num="22" count="10" type="stmt"/>
+        <line num="23" count="10" type="cond" truecount="2" falsecount="0"/>
         <line num="24" count="3" type="stmt"/>
         <line num="25" count="3" type="stmt"/>
-        <line num="26" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="10" type="cond" truecount="2" falsecount="0"/>
         <line num="27" count="2" type="stmt"/>
         <line num="28" count="2" type="stmt"/>
-        <line num="29" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="10" type="cond" truecount="2" falsecount="0"/>
         <line num="30" count="1" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
-        <line num="32" count="9" type="cond" truecount="1" falsecount="1"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="9" type="cond" truecount="1" falsecount="0"/>
+        <line num="32" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="10" type="cond" truecount="1" falsecount="0"/>
         <line num="36" count="3" type="stmt"/>
-        <line num="37" count="9" type="stmt"/>
-        <line num="38" count="9" type="stmt"/>
-        <line num="39" count="9" type="stmt"/>
-        <line num="40" count="9" type="stmt"/>
+        <line num="37" count="10" type="stmt"/>
+        <line num="38" count="10" type="stmt"/>
+        <line num="39" count="10" type="stmt"/>
+        <line num="40" count="10" type="stmt"/>
         <line num="41" count="1" type="stmt"/>
-        <line num="42" count="1" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="42" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
         <line num="47" count="1" type="stmt"/>
-        <line num="48" count="1" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
+        <line num="48" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
       </file>
     </package>
   </project>

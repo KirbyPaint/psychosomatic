@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.76% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>479/485</span>
+                <span class='fraction'>476/476</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.76% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>479/485</span>
+                <span class='fraction'>476/476</span>
             </div>
         
             
@@ -539,16 +539,7 @@
 <a name='L474'></a><a href='#L474'>474</a>
 <a name='L475'></a><a href='#L475'>475</a>
 <a name='L476'></a><a href='#L476'>476</a>
-<a name='L477'></a><a href='#L477'>477</a>
-<a name='L478'></a><a href='#L478'>478</a>
-<a name='L479'></a><a href='#L479'>479</a>
-<a name='L480'></a><a href='#L480'>480</a>
-<a name='L481'></a><a href='#L481'>481</a>
-<a name='L482'></a><a href='#L482'>482</a>
-<a name='L483'></a><a href='#L483'>483</a>
-<a name='L484'></a><a href='#L484'>484</a>
-<a name='L485'></a><a href='#L485'>485</a>
-<a name='L486'></a><a href='#L486'>486</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L477'></a><a href='#L477'>477</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -980,8 +971,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -994,17 +985,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -1464,9 +1446,9 @@ export const CHANNEL_ID = {
   BAJALANIS: `715766875971256322`,
 };
 &nbsp;
-export <span class="fstat-no" title="function not covered" >function getRandomInt(max: number) {</span>
-<span class="cstat-no" title="statement not covered" >  return Math.floor(Math.random() * max);</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+export function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
 &nbsp;
 export const jpegRegex = /^[^.]*(jpe?g)/;
 export const weepRegex = /\b(weep)\b/;
@@ -1478,18 +1460,9 @@ export const whichRegex = /(which|what)/i;
 export const fastNFuriousRegex = /(too)+ [^ ]+ (to?o)+ [^ \r\n]+/i;
 export const fiveMinutes = 300000;
 &nbsp;
-export <span class="fstat-no" title="function not covered" >function help(): string {</span>
-<span class="cstat-no" title="statement not covered" >  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic#readme\`\`\``;</span>
-<span class="cstat-no" title="statement not covered" >}</span>
-&nbsp;
-export const gameAllowedChannels = [
-  `955950801157779477`, // chillbros bot spam
-  `1060094887397163048`, // private server for testing
-];
-&nbsp;
-export <span class="fstat-no" title="function not covered" >function isGameAllowedChannel(channelId: string) {</span>
-<span class="cstat-no" title="statement not covered" >  return gameAllowedChannels.includes(channelId);</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+export function help(): string {
+  return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic#readme\`\`\``;
+}
 &nbsp;
 export function tooFastToFurious(message: string) {
   const wordsArray = message.split(` `);
@@ -1525,7 +1498,7 @@ export const pronouns = [`i`, `you`, `he`, `she`, `it`, `we`, `they`];
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-06-10T19:54:31.445Z
+                at 2023-06-10T20:17:52.611Z
             </div>
         <script src="../prettify.js"></script>
         <script>
