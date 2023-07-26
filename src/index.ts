@@ -238,6 +238,11 @@ const client: Client = new Client({
         if (msg.content.toLowerCase().includes(`marcel`)) {
           msg.channel.send(`Let the battle begin.`);
         }
+
+	// DO IT
+      	if (msg.content.toLowerCase().includes(`:(`)) {
+        	msg.react(EMOJI_ID.SAD);
+      	}
   
         // One brain cell
         // command to check the brain cell
