@@ -438,6 +438,7 @@ export const jpegRegex = /^[^.]*(jpe?g)/;
 export const weepRegex = /\b(weep)\b/;
 export const cursedRegex = /\bfoot\b|\bfeet\b/;
 export const uwuRegex = /\bowo\b|\buwu\b/;
+export const sadRegex = /\s:\(/;
 export const heyVictoriaRegex = /(hey )?\bvictoria\b/i;
 export const whichRegex = /(which|what)/i;
 // this might be shit but it'll do the job

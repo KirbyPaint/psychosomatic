@@ -20,6 +20,7 @@ import {
   jpegReactions,
   jpegRegex,
   naughtyWordReactions,
+  sadRegex,
   SERVER_ID,
   tooFastToFurious,
   uwuRegex,
@@ -239,9 +240,9 @@ const client: Client = new Client({
           msg.channel.send(`Let the battle begin.`);
         }
 
-	// DO IT
-      	if (msg.content.toLowerCase().includes(`:(`)) {
-        	msg.react(EMOJI_ID.SAD);
+	// sad
+      	if (msg.content.toLowerCase().match(sadRegex) || msg.content.toLowerCase().startsWith(`:(`)) {
+		msg.react(EMOJI_ID.SAD);
       	}
   
         // One brain cell
