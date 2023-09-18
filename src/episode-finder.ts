@@ -14,7 +14,7 @@ export function media(prompt: string): string {
     case `episode`:
     case `show`:
     case `movie`: {
-      file = `${prompt}List.txt`;
+      file = `${prompt.toLowerCase()}List.txt`;
       break;
     }
     case `playlist`: {
