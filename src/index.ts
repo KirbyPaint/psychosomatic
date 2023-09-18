@@ -221,7 +221,12 @@ const client: Client = new Client({
         if (msg.content.toLowerCase().match(weepRegex)) {
           msg.channel.send(`*ouiiip`);
         }
-  
+
+	// fuck audrey
+	if (msg.content.toLowerCase().includes("audrey")) {
+	  msg.channel.send(`fuck Audrey`);
+	}
+
         if (msg.content.toLowerCase() === `ls`) {
           const result = await ls();
           msg.channel.send(result);
