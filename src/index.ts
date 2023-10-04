@@ -85,6 +85,11 @@ const client: Client = new Client({
       if (msg.content.toLowerCase().includes(`maybe someday`)) {
         msg.react(EMOJI_ID.CONCH);
       }
+ 
+      // WEBP
+      if (msg.content.toLowerCase().includes(`webp`)) {
+        msg.channel.send(`webp detected`);
+      }
   
       // Victoria Justice
       if (
