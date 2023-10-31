@@ -28,6 +28,7 @@ import {
   whichRegex,
 } from "./consts";
 import { addToPlaylist, media } from "./episode-finder";
+import { add_vicpic, read_vicpic_list } from "./vicpic-finder";
 
 dotenv.config();
 
@@ -54,14 +55,18 @@ const client: Client = new Client({
   intents,
 });
 
+const logger = false;
 // actions to take when the bot receives a message
   client.on(`messageCreate`, async (msg: Message) => {
     const currentGuildId = msg.guildId;
     const isDev = process.env.BOT_ENV === `dev`;
     const isBot = msg.author.bot;
+		// console log variable
     // log all messages to trace errors
-    console.log(chalk.cyan(`\n\n\nMessage received:`));
-    console.log(msg);
+		// if (logger) {
+		// 	console.log(chalk.cyan(`\n\n\nMessage received:`));
+		// 	console.log(msg);
+		// }
   
     // everything in a !isBot block first of all
     if (!isBot) {
@@ -104,7 +109,7 @@ const client: Client = new Client({
           return;
         }
         msg.channel.send(iThinkWeAll(msg.content));
-        msg.channel.send(vicPic());
+        msg.channel.send(read_vicpic_list());
         return;
       }
   
@@ -126,8 +131,17 @@ const client: Client = new Client({
             msg.channel.send(vicQuote());
           }
         }
-        msg.channel.send(vicPic());
+        msg.channel.send(read_vicpic_list());
       }
+
+			if (msg.content.toLowerCase().includes(`secret`)) {
+				msg.channel.send(read_vicpic_list());
+			}
+
+			if (msg.content.toLowerCase().startsWith(`!vicpic`)) {
+				const [, ...rest] = msg.content.split(` `);
+				msg.channel.send(add_vicpic(rest[0]));
+			}
   
       if (msg.content.includes(`Toro`)) {
         msg.channel.send(`Did you just call me Toro?`);
@@ -146,8 +160,7 @@ const client: Client = new Client({
       // Alanis
       if (
         msg.content.toLowerCase().includes(`ironic`) ||
-        msg.content.toLowerCase().includes(`alanis`) ||
-        msg.channel.id === CHANNEL_ID.BAJALANIS
+        msg.content.toLowerCase().includes(`alanis`)
       ) {
         // 1/20 chance of Alanisposting
         if (getRandomInt(100) >= 95) {
@@ -223,20 +236,23 @@ const client: Client = new Client({
           );
         }
   
-        if (msg.content.toLowerCase().match(weepRegex)) {
-          msg.channel.send(`*ouiiip`);
-        }
+				// Delphine
+				if (msg.content.toLowerCase().match(weepRegex)) {
+					msg.channel.send(`*ouiiip`);
+				}
 
-	// fuck audrey
-	if (msg.content.toLowerCase().includes("audrey")) {
-	  msg.channel.send(`fuck Audrey`);
-	}
+				// fuck audrey
+				if (msg.content.toLowerCase().includes(`audrey`)) {
+					msg.channel.send(`fuck Audrey`);
+				}
 
-        if (msg.content.toLowerCase() === `ls`) {
-          const result = await ls();
-          msg.channel.send(result);
-        }
+				// bash ls command (example, not used for anything currently)
+				if (msg.content.toLowerCase() === `ls`) {
+					const result = await ls();
+					msg.channel.send(result);
+				}
   
+				// Does what it says, very scary
         if (msg.content.toLowerCase() === `server shutdown` || msg.content.toLowerCase() === `server reboot`) {
           const result = await shutdown();
           msg.channel.send(result);
@@ -250,10 +266,10 @@ const client: Client = new Client({
           msg.channel.send(`Let the battle begin.`);
         }
 
-	// sad
-      	if (msg.content.toLowerCase().match(sadRegex) || msg.content.toLowerCase().startsWith(`:(`)) {
-		msg.react(EMOJI_ID.SAD);
-      	}
+				// sad
+				if (msg.content.toLowerCase().match(sadRegex) || msg.content.toLowerCase().startsWith(`:(`)) {
+				msg.react(EMOJI_ID.SAD);	
+				}
   
         // One brain cell
         // command to check the brain cell
