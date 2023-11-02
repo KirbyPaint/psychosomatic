@@ -134,7 +134,7 @@ const logger = false;
         msg.channel.send(read_vicpic_list());
       }
 
-			if (msg.content.toLowerCase().includes(`secret`)) {
+			if (isDev && msg.content.toLowerCase().includes(`secret`)) {
 				msg.channel.send(read_vicpic_list());
 			}
 
