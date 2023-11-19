@@ -222,9 +222,18 @@ const logger = false;
   
       // OWO
       if (msg.content.toLowerCase().match(uwuRegex)) {
-        const prompt = msg.content;
+				const promptArray = msg.content.split(` `);
+				if (promptArray[0].toLowerCase() === `uwu` || promptArray[0].toLowerCase() === `owo`) {
+					promptArray.shift();
+				}
+				if (promptArray[promptArray.length - 1].toLowerCase() === `uwu` || promptArray[promptArray.length - 1].toLowerCase() === `owo`) {
+					promptArray.pop();
+				}
+				console.log({promptArray});
+        const prompt = promptArray.join(` `);
         msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `W`));
       }
+
       // Processes to be used only for our special server
       if (
         (currentGuildId === SERVER_ID.DUMMIES) ||
