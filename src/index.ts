@@ -7,11 +7,10 @@ import { ls } from "./bash/list_directory";
 import { shutdown } from "./bash/shutdown";
 import { get8Ball } from "./gets/8ball";
 import { aiPrompt } from "./openai/openai";
-import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
+import { iThinkWeAll, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
   BRAINCELL_USER_ID,
-  CHANNEL_ID,
   cursedRegex,
   EMOJI_ID,
   fastNFuriousRegex,
@@ -91,7 +90,7 @@ client.on(`messageCreate`, async (msg: Message) => {
  
       // WEBP
 			if (attachments) {
-				const attachmentArray = Array.from(attachments.values());
+				const attachmentArray: Attachment[] = Array.from(attachments.values());
 				let webp = false;
 				attachmentArray.forEach(attachment => {
 					const {name, url, proxyURL, contentType} = attachment;
