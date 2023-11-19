@@ -223,7 +223,7 @@ const logger = false;
       // OWO
       if (msg.content.toLowerCase().match(uwuRegex)) {
         const prompt = msg.content;
-        msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `w`));
+        msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `W`));
       }
       // Processes to be used only for our special server
       if (
