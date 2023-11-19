@@ -1,17 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
-import { Client, GatewayIntentBits, Message } from "discord.js";
+import { Attachment, Client, GatewayIntentBits, Message } from "discord.js";
 import dotenv from "dotenv";
 
 import { ls } from "./bash/list_directory";
 import { shutdown } from "./bash/shutdown";
 import { get8Ball } from "./gets/8ball";
 import { aiPrompt } from "./openai/openai";
-import { iThinkWeAll, vicPic, vicQuote } from "./reactions/victoria";
+import { iThinkWeAll, vicQuote } from "./reactions/victoria";
 import {
   alanisReactions,
   BRAINCELL_USER_ID,
-  CHANNEL_ID,
   cursedRegex,
   EMOJI_ID,
   fastNFuriousRegex,
@@ -55,18 +54,16 @@ const client: Client = new Client({
   intents,
 });
 
-const logger = false;
+const isDev = process.env.BOT_ENV === `dev`;
 // actions to take when the bot receives a message
-  client.on(`messageCreate`, async (msg: Message) => {
+client.on(`messageCreate`, async (msg: Message) => {
     const currentGuildId = msg.guildId;
-    const isDev = process.env.BOT_ENV === `dev`;
     const isBot = msg.author.bot;
-		// console log variable
-    // log all messages to trace errors
-		// if (logger) {
-		// 	console.log(chalk.cyan(`\n\n\nMessage received:`));
-		// 	console.log(msg);
-		// }
+		const {attachments} = msg;
+		if (isDev) {
+			console.log(chalk.cyan(`\n\n\nMessage received:`));
+			console.log(msg);
+		}
   
     // everything in a !isBot block first of all
     if (!isBot) {
@@ -92,9 +89,20 @@ const logger = false;
       }
  
       // WEBP
-      if (msg.content.toLowerCase().includes(`webp`)) {
-        msg.channel.send(`webp detected`);
-      }
+			if (attachments) {
+				const attachmentArray: Attachment[] = Array.from(attachments.values());
+				let webp = false;
+				attachmentArray.forEach(attachment => {
+					const {name, url, proxyURL, contentType} = attachment;
+					if (name.toLowerCase().includes(`webp`) || url.toLowerCase().includes(`webp`) || proxyURL.toLowerCase().includes(`webp`) || contentType?.toLowerCase().includes(`webp`)) {
+						webp = true;
+					}
+				});
+
+				if (webp) {
+					msg.channel.send(`webp image detected`);
+				}
+			}
   
       // Victoria Justice
       if (
@@ -222,9 +230,17 @@ const logger = false;
   
       // OWO
       if (msg.content.toLowerCase().match(uwuRegex)) {
-        const prompt = msg.content;
-        msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `w`));
+				const promptArray = msg.content.split(` `);
+				if (promptArray[0].toLowerCase() === `uwu` || promptArray[0].toLowerCase() === `owo`) {
+					promptArray.shift();
+				}
+				if (promptArray[promptArray.length - 1].toLowerCase() === `uwu` || promptArray[promptArray.length - 1].toLowerCase() === `owo`) {
+					promptArray.pop();
+				}
+        const prompt = promptArray.join(` `);
+        msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `W`));
       }
+
       // Processes to be used only for our special server
       if (
         (currentGuildId === SERVER_ID.DUMMIES) ||
