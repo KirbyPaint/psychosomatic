@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
-import { Client, GatewayIntentBits, Message } from "discord.js";
+import { Attachment, Client, GatewayIntentBits, Message } from "discord.js";
 import dotenv from "dotenv";
 
 import { ls } from "./bash/list_directory";
@@ -55,18 +55,16 @@ const client: Client = new Client({
   intents,
 });
 
-const logger = false;
+const isDev = process.env.BOT_ENV === `dev`;
 // actions to take when the bot receives a message
-  client.on(`messageCreate`, async (msg: Message) => {
+client.on(`messageCreate`, async (msg: Message) => {
     const currentGuildId = msg.guildId;
-    const isDev = process.env.BOT_ENV === `dev`;
     const isBot = msg.author.bot;
-		// console log variable
-    // log all messages to trace errors
-		// if (logger) {
-		// 	console.log(chalk.cyan(`\n\n\nMessage received:`));
-		// 	console.log(msg);
-		// }
+		const {attachments} = msg;
+		if (isDev) {
+			console.log(chalk.cyan(`\n\n\nMessage received:`));
+			console.log(msg);
+		}
   
     // everything in a !isBot block first of all
     if (!isBot) {
@@ -92,9 +90,20 @@ const logger = false;
       }
  
       // WEBP
-      if (msg.content.toLowerCase().includes(`webp`)) {
-        msg.channel.send(`webp detected`);
-      }
+			if (attachments) {
+				const attachmentArray = Array.from(attachments.values());
+				let webp = false;
+				attachmentArray.forEach(attachment => {
+					const {name, url, proxyURL, contentType} = attachment;
+					if (name.toLowerCase().includes(`webp`) || url.toLowerCase().includes(`webp`) || proxyURL.toLowerCase().includes(`webp`) || contentType?.toLowerCase().includes(`webp`)) {
+						webp = true;
+					}
+				});
+
+				if (webp) {
+					msg.channel.send(`webp image detected`);
+				}
+			}
   
       // Victoria Justice
       if (
