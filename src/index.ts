@@ -77,7 +77,14 @@ client.on(`messageCreate`, async (msg: Message) => {
       if (msg.content.toLowerCase().includes(`psychosomatic`)) {
         msg.reply(`THAT BOY NEEDS THERAPY`);
       }
-  
+      
+      // APPLE BUTTER CRISP
+      if (msg.content.toLowerCase().includes(`coffee`)) {
+        if (getRandomInt(100) >= 95) {
+            msg.reply(`APPLE BUTTER CRISP`);
+          }
+      }
+      
       // Manifest
       if (msg.content.toLowerCase().includes(`manifest`)) {
         msg.react(EMOJI_ID.MANIFEST);
