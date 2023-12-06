@@ -96,6 +96,9 @@ client.on(`messageCreate`, async (msg: Message) => {
       }
  
       // WEBP
+      // NOTE TO FUTURE ASH: fix tabs vs spaces difference in code
+      // Shows in nvim, not VSCode
+      // nvim treating a tab as 8 spaces fyi
 			if (attachments) {
 				const attachmentArray: Attachment[] = Array.from(attachments.values());
 				let webp = false;
@@ -106,7 +109,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 					}
 				});
 
-				if (webp) {
+				if (webp && getRandomInt(100) >= 95) {
 					msg.channel.send(`webp image detected`);
 				}
 			}
