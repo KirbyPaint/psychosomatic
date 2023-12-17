@@ -23,6 +23,7 @@ const ball = [
   `Very doubtful.`,
   `I don't fucking know.`,
   `It's none of my business.`,
+  `No, I don’t think I will`,
 ];
 
 export function get8Ball() {
