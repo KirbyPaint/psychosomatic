@@ -272,6 +272,11 @@ client.on(`messageCreate`, async (msg: Message) => {
 					msg.channel.send(`fuck Audrey`);
 				}
 
+				// fuck josh
+				if (msg.content.toLowerCase().includes(`josh`)) {
+					msg.channel.send(`fuck Josh`);
+				}
+
 				// bash ls command (example, not used for anything currently)
 				if (msg.content.toLowerCase() === `ls`) {
 					const result = await ls();
