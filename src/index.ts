@@ -77,6 +77,12 @@ client.on(`messageCreate`, async (msg: Message) => {
       if (msg.content.toLowerCase().includes(`psychosomatic`)) {
         msg.reply(`THAT BOY NEEDS THERAPY`);
       }
+
+      if (msg) {
+	if (getRandomInt(1000) >= 998) {
+		msg.reply(`Christ, what an asshole`)
+	}
+      }
       
       // APPLE BUTTER CRISP
       if (msg.content.toLowerCase().includes(`coffee`)) {
