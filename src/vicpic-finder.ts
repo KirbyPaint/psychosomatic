@@ -10,13 +10,10 @@ export function read_vicpic_list(): string {
 		.toString()
 		.split(`\n`)
 		.filter((n) => n);
-		console.log({list});
-		console.log({length: list.length});
 	if (list.length < 1) {
 		return `No images found in VicPic list?`;
 	}
 	const image = list[getRandomInt(list.length)];
-	console.log({image});
 	return image;
 }
 
