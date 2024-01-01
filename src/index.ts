@@ -78,12 +78,6 @@ client.on(`messageCreate`, async (msg: Message) => {
         msg.reply(`THAT BOY NEEDS THERAPY`);
       }
 
-      if (msg) {
-	if (getRandomInt(1000) >= 998) {
-		msg.reply(`Christ, what an asshole`)
-	}
-      }
-      
       // APPLE BUTTER CRISP
       if (msg.content.toLowerCase().includes(`coffee`)) {
         if (getRandomInt(100) >= 95) {
@@ -262,7 +256,13 @@ client.on(`messageCreate`, async (msg: Message) => {
         (currentGuildId === SERVER_ID.DUMMIES) ||
         (isDev)
       ) {
-        if (msg.content.toLowerCase().match(cursedRegex)) {
+        if (msg) {
+	if (getRandomInt(1000) >= 998) {
+		msg.reply(`Christ, what an asshole`)
+	}
+      }
+
+	      if (msg.content.toLowerCase().match(cursedRegex)) {
           msg.channel.send(
             `${naughtyWordReactions[getRandomInt(naughtyWordReactions.length)]}`,
           );
