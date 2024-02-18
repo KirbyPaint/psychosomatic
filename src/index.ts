@@ -95,6 +95,11 @@ client.on(`messageCreate`, async (msg: Message) => {
 			msg.react(EMOJI_ID.CONCH);
 		}
 
+		// forgor
+		if (msg.content.toLowerCase().includes(`forgor`)) {
+			msg.react(`💀`);
+		}
+
 		// WEBP
 		if (attachments) {
 			const attachmentArray: Attachment[] = Array.from(attachments.values());
