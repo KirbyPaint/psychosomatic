@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import { ls } from "./bash/list_directory";
 import { shutdown } from "./bash/shutdown";
 import { get8Ball } from "./gets/8ball";
-import { aiPrompt } from "./openai/openai";
 import { iThinkWeAll, vicQuote } from "./reactions/victoria";
 import {
 	alanisReactions,
@@ -224,13 +223,6 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 		if (msg.content.toLowerCase().includes(`noncanonical`)) {
 			msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
-		}
-
-		// AI
-		if (msg.content.toLowerCase().startsWith(`@tori`)) {
-			const [, ...rest] = msg.content.split(` `);
-			const prompt = rest.join(` `);
-			msg.channel.send(await aiPrompt(prompt));
 		}
 
 		// OWO

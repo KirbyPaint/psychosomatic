@@ -4,7 +4,6 @@ import {
 	have,
 	pronouns,
 	toriQuotes,
-	victoriaReactions,
 	wouldCouldShouldHad,
 } from "../consts";
 
@@ -37,12 +36,6 @@ export function iThinkWeAll(msg: string) {
 	}
 	phrase += `${endText(rest)}`;
 	return phrase.toLocaleUpperCase();
-}
-
-export function vicPic() {
-	return victoriaReactions[
-		Math.floor(getRandomInt(victoriaReactions.length))
-	].toString();
 }
 
 export function vicQuote() {
