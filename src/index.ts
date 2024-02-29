@@ -236,6 +236,9 @@ client.on(`messageCreate`, async (msg: Message) => {
 		// OWO
 		if (msg.content.toLowerCase().match(uwuRegex)) {
 			const promptArray = msg.content.split(` `);
+			if (promptArray.length < 2) {
+				return;
+			}
 			if (promptArray[0].toLowerCase() === `uwu` || promptArray[0].toLowerCase() === `owo`) {
 				promptArray.shift();
 			}
