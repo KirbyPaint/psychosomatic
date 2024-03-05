@@ -56,9 +56,8 @@ const client: Client = new Client({
 const isDev = process.env.BOT_ENV === `dev`;
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg: Message) => {
-	const currentGuildId = msg.guildId;
 	const isBot = msg.author.bot;
-	const { attachments, content } = msg;
+	const { attachments, content, guildId: currentGuildId } = msg;
 	const message = content.toLowerCase();
 	if (isDev) {
 		console.log(chalk.cyan(`\n\n\nMessage received:`));
