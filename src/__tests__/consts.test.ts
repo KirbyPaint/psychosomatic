@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getRandomInt, help } from '../consts';
+import { getRandomInt, help } from '../consts/consts';
 
 describe(`Consts`, () => {
 	it(`tests random number function`, () => {

@@ -6,9 +6,11 @@
 		"Alanisposting",
 		"APOD",
 		"BAJALANIS",
+		"bowo",
 		"braincell",
 		"braincells",
 		"burgerboss",
+		"CHABI",
 		"chillbros",
 		"codepaths",
 		"consts",
@@ -52,7 +54,8 @@
 		"wazz",
 		"weatherboy",
 		"Whattayaknow",
-		"wildin"
+		"wildin",
+		"Wonderwall"
 	],
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true

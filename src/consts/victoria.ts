@@ -5,7 +5,7 @@ import {
 	pronouns,
 	toriQuotes,
 	wouldCouldShouldHad,
-} from "../consts";
+} from "./consts";
 
 export function endText(endOfSentence: string[]) {
 	if (endOfSentence[0]?.toLowerCase() === `all`) {

@@ -5,8 +5,6 @@ import dotenv from "dotenv";
 
 import { ls } from "./bash/list_directory";
 import { shutdown } from "./bash/shutdown";
-import { get8Ball } from "./gets/8ball";
-import { iThinkWeAll, vicQuote } from "./reactions/victoria";
 import {
 	alanisReactions,
 	BRAINCELL_USER_ID,
@@ -24,9 +22,11 @@ import {
 	uwuRegex,
 	weepRegex,
 	whichRegex,
-} from "./consts";
-import { addToPlaylist, media } from "./episode-finder";
-import { add_vicpic, read_vicpic_list } from "./vicpic-finder";
+} from "./consts/consts";
+import { iThinkWeAll, vicQuote } from "./consts/victoria";
+import { get8Ball } from "./functions/8ball";
+import { addToPlaylist, media } from "./functions/episode-finder";
+import { addVicPic, vicPic } from "./functions/vicpic-finder";
 
 dotenv.config();
 
@@ -56,9 +56,9 @@ const client: Client = new Client({
 const isDev = process.env.BOT_ENV === `dev`;
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg: Message) => {
-	const currentGuildId = msg.guildId;
 	const isBot = msg.author.bot;
-	const {attachments} = msg;
+	const { attachments, channel, content, guildId: currentGuildId } = msg;
+	const message = content.toLowerCase();
 	if (isDev) {
 		console.log(chalk.cyan(`\n\n\nMessage received:`));
 		console.log(msg);
@@ -67,35 +67,35 @@ client.on(`messageCreate`, async (msg: Message) => {
 	// everything in a !isBot block first of all
 	if (!isBot) {
 		// Bot echo command
-		if (msg.content.toLowerCase().startsWith(`!vecho`)) {
-			const [, ...rest] = msg.content.split(` `);
-			msg.channel.send(rest.join(` `));
+		if (message.startsWith(`!vecho`)) {
+			const [, ...rest] = content.split(` `);
+			channel.send(rest.join(` `));
 		}
   
 		// PSYCHOSOMATIC
-		if (msg.content.toLowerCase().includes(`psychosomatic`)) {
+		if (message.includes(`psychosomatic`) && !message.includes(`github`)) {
 			msg.reply(`THAT BOY NEEDS THERAPY`);
 		}
 
 		// APPLE BUTTER CRISP
-		if (msg.content.toLowerCase().includes(`coffee`)) {
+		if (message.includes(`coffee`)) {
 			if (getRandomInt(100) >= 95) {
 				msg.reply(`APPLE BUTTER CRISP`);
 			}
 		}
 
 		// Manifest
-		if (msg.content.toLowerCase().includes(`manifest`)) {
+		if (message.includes(`manifest`)) {
 			msg.react(EMOJI_ID.MANIFEST);
 		}
 
 		// Conch
-		if (msg.content.toLowerCase().includes(`maybe someday`)) {
+		if (message.includes(`maybe someday`)) {
 			msg.react(EMOJI_ID.CONCH);
 		}
 
 		// forgor
-		if (msg.content.toLowerCase().includes(`forgor`)) {
+		if (message.includes(`forgor`)) {
 			msg.react(`💀`);
 		}
 
@@ -104,66 +104,69 @@ client.on(`messageCreate`, async (msg: Message) => {
 			const attachmentArray: Attachment[] = Array.from(attachments.values());
 			let webp = false;
 			attachmentArray.forEach(attachment => {
-				const {name, url, proxyURL, contentType} = attachment;
-				if (name.toLowerCase().includes(`webp`) || url.toLowerCase().includes(`webp`) || proxyURL.toLowerCase().includes(`webp`) || contentType?.toLowerCase().includes(`webp`)) {
+				const { name, url, proxyURL, contentType } = attachment;
+				if (name.toLowerCase().includes(`webp`) ||
+						url.toLowerCase().includes(`webp`) ||
+						proxyURL.toLowerCase().includes(`webp`) ||
+						contentType?.toLowerCase().includes(`webp`)) {
 					webp = true;
 				}
 			});
 			if (webp && getRandomInt(100) >= 95) {
-				msg.channel.send(`webp image detected`);
+				channel.send(`webp image detected`);
 			}
 		}
 
 		// Victoria Justice
 		if (
-			msg.content.toLowerCase().startsWith(`i think`) &&
-			msg.content.length >= 15 &&
-			msg.content.length <= 30
+			message.startsWith(`i think`) &&
+			content.length >= 15 &&
+			content.length <= 30
 		) {
-			if (msg.content.toLowerCase().includes(`i think we all sing`)) {
-				msg.channel.send(
+			if (message.includes(`i think we all sing`)) {
+				channel.send(
 					`https://pbs.twimg.com/media/C-iOjtzUwAAHz9L?format=jpg&name=900x900`,
 				);
 				return;
 			}
-			msg.channel.send(iThinkWeAll(msg.content));
-			msg.channel.send(read_vicpic_list());
+			channel.send(iThinkWeAll(content));
+			channel.send(vicPic());
 			return;
 		}
 
 		// any command having to do with addressing the bot by name
-		if (msg.content.toLowerCase().includes(`victoria`)) {
+		if (message.includes(`victoria`)) {
 			if (
-				(msg.content.toLowerCase().startsWith(`victoria`) &&
-					msg.content.includes(`?`)) ||
-				(msg.content.toLowerCase().startsWith(`hey victoria`) &&
-					msg.content.includes(`?`))
+				(message.startsWith(`victoria`) &&
+					content.includes(`?`)) ||
+				(message.startsWith(`hey victoria`) &&
+					content.includes(`?`))
 			) {
 				// ask her a question
 				msg.reply(JSON.stringify(get8Ball()));
-			} else if (msg.content.toLowerCase().includes(`i love you`)) {
+			} else if (message.includes(`i love you`)) {
 				msg.reply(`I love you too`);
 			} else {
 				// low chance of a random Victorious quote
 				if (getRandomInt(100) >= 95) {
-					msg.channel.send(vicQuote());
+					channel.send(vicQuote());
 				}
 			}
-			msg.channel.send(read_vicpic_list());
+			channel.send(vicPic());
 		}
-		if (isDev && msg.content.toLowerCase().includes(`secret`)) {
-			msg.channel.send(read_vicpic_list());
+		if (isDev && message.includes(`secret`)) {
+			channel.send(vicPic());
 		}
-		if (msg.content.toLowerCase().startsWith(`!vicpic`)) {
-			const [, ...rest] = msg.content.split(` `);
-			msg.channel.send(add_vicpic(rest[0]));
-		}
-
-		if (msg.content.includes(`Toro`)) {
-			msg.channel.send(`Did you just call me Toro?`);
+		if (message.startsWith(`!vicpic`)) {
+			const [, ...rest] = content.split(` `);
+			channel.send(addVicPic(rest[0]));
 		}
 
-		if (msg.content.toLowerCase().includes(`jenny`)) {
+		if (content.includes(`Toro`)) {
+			channel.send(`Did you just call me Toro?`);
+		}
+
+		if (message.includes(`jenny`)) {
 			msg.react(`8️⃣`); // it's seriously just the unicode emoji
 			msg.react(`6️⃣`);
 			msg.react(`7️⃣`);
@@ -175,59 +178,59 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 		// Alanis
 		if (
-			msg.content.toLowerCase().includes(`ironic`) ||
-			msg.content.toLowerCase().includes(`alanis`)
+			message.includes(`ironic`) ||
+			message.includes(`alanis`)
 		) {
 			// 1/20 chance of Alanisposting
 			if (getRandomInt(100) >= 95) {
-				msg.channel.send(alanisReactions[getRandomInt(alanisReactions.length)]);
+				channel.send(alanisReactions[getRandomInt(alanisReactions.length)]);
 			}
 		}
 
 		// do I look like I know what a jpeg is?
-		if (msg.content.toLowerCase().match(jpegRegex)) {
+		if (message.match(jpegRegex)) {
 			if (getRandomInt(100) >= 85) {
-				msg.channel.send(jpegReactions[getRandomInt(jpegReactions.length)]);
+				channel.send(jpegReactions[getRandomInt(jpegReactions.length)]);
 			}
 		}
 
 		// 2 Fast 2 Furious converter
-		if (msg.content.toLowerCase().match(fastNFuriousRegex)) {
-			const wordsArray = msg.content.match(fastNFuriousRegex);
+		if (message.match(fastNFuriousRegex)) {
+			const wordsArray = content.match(fastNFuriousRegex);
 			if (wordsArray) {
-				msg.channel.send(tooFastToFurious(wordsArray[0]));
+				channel.send(tooFastToFurious(wordsArray[0]));
 			}
 		}
 
 		// Shia Surprise
-		if (msg.content.toLowerCase().includes(`shia labeouf`)) {
-			msg.channel.send(`https://youtu.be/o0u4M6vppCI`);
+		if (message.includes(`shia labeouf`)) {
+			channel.send(`https://youtu.be/o0u4M6vppCI`);
 		}
 
 		// DO IT
-		if (msg.content.toLowerCase().includes(`do it`)) {
+		if (message.includes(`do it`)) {
 			msg.react(EMOJI_ID.SHEEV);
 		}
 
 		// Help
-		if (msg.content.toLowerCase() === `!vhelp`) {
-			msg.channel.send(help());
+		if (message === `!vhelp`) {
+			channel.send(help());
 		}
 
 		// Bob's Burgers
-		if (msg.content.toLowerCase().includes(`burgerboss`)) {
-			msg.channel.send(
+		if (message.includes(`burgerboss`)) {
+			channel.send(
 				`https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRShYgX1IfRVVqMr55MsAVZ3mdeD8LHYS9eAUUyZ4ygpQONDlPR`,
 			);
 		}
 
-		if (msg.content.toLowerCase().includes(`noncanonical`)) {
-			msg.channel.send(`https://youtu.be/GoAPSBMQEKU`);
+		if (message.includes(`noncanonical`)) {
+			channel.send(`https://youtu.be/GoAPSBMQEKU`);
 		}
 
 		// OWO
-		if (msg.content.toLowerCase().match(uwuRegex)) {
-			const promptArray = msg.content.split(` `);
+		if (message.match(uwuRegex)) {
+			const promptArray = content.split(` `);
 			if (promptArray.length < 2) {
 				return;
 			}
@@ -238,7 +241,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 				promptArray.pop();
 			}
 			const prompt = promptArray.join(` `);
-			msg.channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `W`));
+			channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `W`));
 		}
 
 		// Processes to be used only for our special server
@@ -252,53 +255,53 @@ client.on(`messageCreate`, async (msg: Message) => {
 				}
 			}
 
-			if (msg.content.toLowerCase().match(cursedRegex)) {
-				msg.channel.send(naughtyWordReactions[getRandomInt(naughtyWordReactions.length)]);
+			if (message.match(cursedRegex)) {
+				channel.send(naughtyWordReactions[getRandomInt(naughtyWordReactions.length)]);
 			}
   
 			// Delphine
-			if (msg.content.toLowerCase().match(weepRegex)) {
-				msg.channel.send(`*ouiiip`);
+			if (message.match(weepRegex)) {
+				channel.send(`*ouiiip`);
 			}
 
 			// fuck audrey
-			if (msg.content.toLowerCase().includes(`audrey`)) {
-				msg.channel.send(`fuck Audrey`);
+			if (message.includes(`audrey`)) {
+				channel.send(`fuck Audrey`);
 			}
 
 			// fuck josh
-			if (msg.content.toLowerCase().includes(`josh`)) {
-				msg.channel.send(`fuck Josh`);
+			if (message.includes(`josh`)) {
+				channel.send(`fuck Josh`);
 			}
 
 			// bash ls command (example, not used for anything currently)
-			if (msg.content.toLowerCase() === `ls`) {
+			if (message === `ls`) {
 				const result = await ls();
-				msg.channel.send(result);
+				channel.send(result);
 			}
   
 			// Does what it says, very scary
-			if (msg.content.toLowerCase() === `server shutdown` || msg.content.toLowerCase() === `server reboot`) {
+			if (message === `server shutdown` || message === `server reboot`) {
 				const result = await shutdown();
-				msg.channel.send(result);
+				channel.send(result);
 			}
   
 			// Marcel the Shell
-			if (msg.content.toLowerCase().includes(`too big`)) {
-				msg.channel.send(`Compared to what?`);
+			if (message.includes(`too big`)) {
+				channel.send(`Compared to what?`);
 			}
-			if (msg.content.toLowerCase().includes(`marcel`)) {
-				msg.channel.send(`Let the battle begin.`);
+			if (message.includes(`marcel`)) {
+				channel.send(`Let the battle begin.`);
 			}
 
 			// sad
-			if (msg.content.toLowerCase().match(sadRegex) || msg.content.toLowerCase().startsWith(`:(`)) {
+			if (message.match(sadRegex) || message.startsWith(`:(`)) {
 				msg.react(EMOJI_ID.SAD);	
 			}
   
 			// One brain cell
 			// command to check the brain cell
-			if (msg.content.toLowerCase().includes(`who has the brain cell`)) {
+			if (message.includes(`who has the brain cell`)) {
 				// this should only have to happen once
 				const allBrainCells = await prisma.braincell.findMany({
 					where: { hasBrainCell: true },
@@ -315,34 +318,34 @@ client.on(`messageCreate`, async (msg: Message) => {
 					where: { hasBrainCell: true },
 				});
 				if (brainCell) {
-					msg.channel.send(
+					channel.send(
 						`<@${brainCell.discordId}> has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
 					);
 				} else {
 					// and ideally this NEVER happens
-					msg.channel.send(
+					channel.send(
 						`No one has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
 					);
 				}
 			}
   
 			// TV finder
-			if (msg.content.match(whichRegex)) {
-				const [firstWord, secondWord] = msg.content.split(` `);
+			if (content.match(whichRegex)) {
+				const [firstWord, secondWord] = content.split(` `);
 				if (firstWord.match(whichRegex)) {
 					const result = media(secondWord);
 					if (result.length < 1) {
 						return;
 					}
-					msg.channel.send(media(secondWord));
+					channel.send(media(secondWord));
 				}
 			}
-			if (msg.content.toLowerCase().startsWith(`!addplaylist`)) {
-				const [, ...rest] = msg.content.split(` `);
-				msg.channel.send(addToPlaylist(rest.join(` `)));
+			if (message.startsWith(`!addplaylist`)) {
+				const [, ...rest] = content.split(` `);
+				channel.send(addToPlaylist(rest.join(` `)));
 			}
 
-			if (msg.content.toLowerCase().includes(`!give`)) {
+			if (message.includes(`!give`)) {
 				const discordId = msg.author.id;
 				const brainCellOwner = await prisma.braincell.findFirst({
 					where: { discordId },
@@ -366,12 +369,12 @@ client.on(`messageCreate`, async (msg: Message) => {
 							},
 						}),
 					]);
-					msg.channel.send(
+					channel.send(
 						`<@${result.filter((owner) => owner.hasBrainCell)[0].discordId}> now has the brain cell <:onebraincell:${EMOJI_ID.BRAIN_CELL}>`,
 					);
 					return;
 				} else {
-					msg.channel.send(
+					channel.send(
 						`You cannot steal the brain cell, it must be given willingly.`
 					);
 				}
