@@ -1,8 +1,11 @@
+import dotenv from "dotenv";
 import * as fs from "fs";
 
 import { getRandomInt } from "./consts";
 
-const filepath = `/home/plex/Documents/vicbot_dev/src/images.txt`;
+dotenv.config();
+
+const filepath = process.env.VICPICS_PATH || `/tmp/vicpics.txt`;
 
 export function vicPic(): string {
 	const list = fs

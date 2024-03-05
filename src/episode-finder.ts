@@ -1,9 +1,12 @@
+import dotenv from "dotenv";
 import * as fs from "fs";
 import path from "path";
 
 import { getRandomInt } from "./consts";
 
-const directory = `/home/plex/Documents/text_files`;
+dotenv.config();
+
+const directory = process.env.LISTS_PATH || `/tmp`;
 
 export function media(prompt: string): string {
 	let file = ``;
