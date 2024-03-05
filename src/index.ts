@@ -104,8 +104,11 @@ client.on(`messageCreate`, async (msg: Message) => {
 			const attachmentArray: Attachment[] = Array.from(attachments.values());
 			let webp = false;
 			attachmentArray.forEach(attachment => {
-				const {name, url, proxyURL, contentType} = attachment;
-				if (name.toLowerCase().includes(`webp`) || url.toLowerCase().includes(`webp`) || proxyURL.toLowerCase().includes(`webp`) || contentType?.toLowerCase().includes(`webp`)) {
+				const { name, url, proxyURL, contentType } = attachment;
+				if (name.toLowerCase().includes(`webp`) ||
+						url.toLowerCase().includes(`webp`) ||
+						proxyURL.toLowerCase().includes(`webp`) ||
+						contentType?.toLowerCase().includes(`webp`)) {
 					webp = true;
 				}
 			});
