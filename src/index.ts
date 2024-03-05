@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import { ls } from "./bash/list_directory";
 import { shutdown } from "./bash/shutdown";
 import { get8Ball } from "./consts/8ball";
-import { iThinkWeAll, vicQuote } from "./reactions/victoria";
 import {
 	alanisReactions,
 	BRAINCELL_USER_ID,
@@ -24,7 +23,8 @@ import {
 	uwuRegex,
 	weepRegex,
 	whichRegex,
-} from "./consts";
+} from "./consts/consts";
+import { iThinkWeAll, vicQuote } from "./reactions/victoria";
 import { addToPlaylist, media } from "./episode-finder";
 import { addVicPic, vicPic } from "./vicpic-finder";
 

@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import * as fs from "fs";
 import path from "path";
 
-import { getRandomInt } from "./consts";
+import { getRandomInt } from "./consts/consts";
 
 dotenv.config();
 

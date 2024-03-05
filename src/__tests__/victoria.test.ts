@@ -8,7 +8,7 @@ import {
 	tooFastToFurious,
 	toriQuotes,
 	weepRegex,
-} from "../consts";
+} from "../consts/consts";
 import { endText, iThinkWeAll, vicQuote } from "../reactions/victoria";
 
 describe(`Victoria tests`, () => {
