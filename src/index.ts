@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 import { ls } from "./bash/list_directory";
 import { shutdown } from "./bash/shutdown";
-import { get8Ball } from "./gets/8ball";
+import { get8Ball } from "./consts/8ball";
 import { iThinkWeAll, vicQuote } from "./reactions/victoria";
 import {
 	alanisReactions,

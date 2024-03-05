@@ -26,7 +26,7 @@ const common = [
 const uncommon = [
 	`It's none of my business.`,
 	`It's none of your business.`,
-	`No, I don’t think I will.`,
+	`No, I don't think I will.`,
 	`Yes, dear.`,
 	`Yes, now leave me alone.`,
 	`Sure, I mean, it's your funeral.`,
@@ -46,12 +46,12 @@ const rare = [
 export function get8Ball() {
 	const table = getRandomInt(100);
 	if (table >= 97) {
-		return rare[getRandomInt(rare.length)]
+		return rare[getRandomInt(rare.length)];
 	}
 	else if (table >= 90) {
-		return uncommon[getRandomInt(uncommon.length)]
+		return uncommon[getRandomInt(uncommon.length)];
 	}
 	else {
-		return common[getRandomInt(common.length)]
+		return common[getRandomInt(common.length)];
 	}
 }
