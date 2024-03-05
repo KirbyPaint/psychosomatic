@@ -135,9 +135,9 @@ client.on(`messageCreate`, async (msg: Message) => {
 		if (msg.content.toLowerCase().includes(`victoria`)) {
 			if (
 				(msg.content.toLowerCase().startsWith(`victoria`) &&
-				 msg.content.includes(`?`)) ||
-			 	(msg.content.toLowerCase().startsWith(`hey victoria`) &&
-			  	msg.content.includes(`?`))
+					msg.content.includes(`?`)) ||
+				(msg.content.toLowerCase().startsWith(`hey victoria`) &&
+					msg.content.includes(`?`))
 			) {
 				// ask her a question
 				msg.reply(JSON.stringify(get8Ball()));
@@ -248,7 +248,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 		) {
 			if (msg) {
 				if (getRandomInt(10000) >= 9995) {
-					msg.reply(`Christ, what an asshole`)
+					msg.reply(`Christ, what an asshole`);
 				}
 			}
 
