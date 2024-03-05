@@ -26,7 +26,7 @@ import {
 	whichRegex,
 } from "./consts";
 import { addToPlaylist, media } from "./episode-finder";
-import { add_vicpic, read_vicpic_list } from "./vicpic-finder";
+import { addVicPic, vicPic } from "./vicpic-finder";
 
 dotenv.config();
 
@@ -130,7 +130,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 				return;
 			}
 			channel.send(iThinkWeAll(content));
-			channel.send(read_vicpic_list());
+			channel.send(vicPic());
 			return;
 		}
 
@@ -152,14 +152,14 @@ client.on(`messageCreate`, async (msg: Message) => {
 					channel.send(vicQuote());
 				}
 			}
-			channel.send(read_vicpic_list());
+			channel.send(vicPic());
 		}
 		if (isDev && message.includes(`secret`)) {
-			channel.send(read_vicpic_list());
+			channel.send(vicPic());
 		}
 		if (message.startsWith(`!vicpic`)) {
 			const [, ...rest] = content.split(` `);
-			channel.send(add_vicpic(rest[0]));
+			channel.send(addVicPic(rest[0]));
 		}
 
 		if (content.includes(`Toro`)) {

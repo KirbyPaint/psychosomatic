@@ -4,7 +4,7 @@ import { getRandomInt } from "./consts";
 
 const filepath = `/home/plex/Documents/vicbot_dev/src/images.txt`;
 
-export function read_vicpic_list(): string {
+export function vicPic(): string {
 	const list = fs
 		.readFileSync(filepath)
 		.toString()
@@ -17,7 +17,7 @@ export function read_vicpic_list(): string {
 	return image;
 }
 
-export function add_vicpic(input: string): string {
+export function addVicPic(input: string): string {
 	fs.appendFileSync(filepath, `${input}\n`);
 	return `Appended ${input} to VicPic list`;
 }
