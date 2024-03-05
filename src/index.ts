@@ -73,7 +73,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 		}
   
 		// PSYCHOSOMATIC
-		if (message.includes(`psychosomatic`)) {
+		if (message.includes(`psychosomatic`) && !message.includes(`github`)) {
 			msg.reply(`THAT BOY NEEDS THERAPY`);
 		}
 
