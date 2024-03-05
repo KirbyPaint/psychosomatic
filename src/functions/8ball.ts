@@ -1,4 +1,4 @@
-import { getRandomInt } from "./consts";
+import { getRandomInt } from "../consts/consts";
 
 const common = [
 	`It is certain.`,

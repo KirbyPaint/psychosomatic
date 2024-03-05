@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 
 import { ls } from "./bash/list_directory";
 import { shutdown } from "./bash/shutdown";
-import { get8Ball } from "./consts/8ball";
 import {
 	alanisReactions,
 	BRAINCELL_USER_ID,
@@ -24,9 +23,10 @@ import {
 	weepRegex,
 	whichRegex,
 } from "./consts/consts";
-import { iThinkWeAll, vicQuote } from "./reactions/victoria";
-import { addToPlaylist, media } from "./episode-finder";
-import { addVicPic, vicPic } from "./vicpic-finder";
+import { iThinkWeAll, vicQuote } from "./consts/victoria";
+import { get8Ball } from "./functions/8ball";
+import { addToPlaylist, media } from "./functions/episode-finder";
+import { addVicPic, vicPic } from "./functions/vicpic-finder";
 
 dotenv.config();
 

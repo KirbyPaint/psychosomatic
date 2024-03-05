@@ -9,7 +9,7 @@ import {
 	toriQuotes,
 	weepRegex,
 } from "../consts/consts";
-import { endText, iThinkWeAll, vicQuote } from "../reactions/victoria";
+import { endText, iThinkWeAll, vicQuote } from "../consts/victoria";
 
 describe(`Victoria tests`, () => {
 	describe(`I Think We All (tests)`, () => {

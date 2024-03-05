@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import * as fs from "fs";
 
-import { getRandomInt } from "./consts/consts";
+import { getRandomInt } from "../consts/consts";
 
 dotenv.config();
 
