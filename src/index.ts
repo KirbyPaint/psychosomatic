@@ -66,10 +66,20 @@ client.on(`messageCreate`, async (msg: Message) => {
   
 	// everything in a !isBot block first of all
 	if (!isBot) {
+		// Help
+		if (message === `!vhelp`) {
+			channel.send(help());
+		}
+
 		// Bot echo command
 		if (message.startsWith(`!vecho`)) {
 			const [, ...rest] = content.split(` `);
 			channel.send(rest.join(` `));
+		}
+
+		// fuck anyone
+		if (message.startsWith(`fuck`)) {
+			channel.send(`yeah, ${message}`);
 		}
   
 		// PSYCHOSOMATIC
@@ -84,9 +94,41 @@ client.on(`messageCreate`, async (msg: Message) => {
 			}
 		}
 
-		// fuck anyone
-		if (message.startsWith(`fuck`)) {
-			channel.send(`yeah, ${message}`);
+		if (message.includes(`jenny`)) {
+			msg.react(`8️⃣`); // it's seriously just the unicode emoji
+			msg.react(`6️⃣`);
+			msg.react(`7️⃣`);
+			msg.react(`5️⃣`);
+			msg.react(`3️⃣`);
+			msg.react(`0️⃣`);
+			msg.react(`9️⃣`);
+		}
+
+		// Alanis
+		if (
+			message.includes(`ironic`) ||
+			message.includes(`alanis`)
+		) {
+			// 1/20 chance of Alanisposting
+			if (getRandomInt(100) >= 95) {
+				channel.send(alanisReactions[getRandomInt(alanisReactions.length)]);
+			}
+		}
+
+		// Shia Surprise
+		if (message.includes(`shia labeouf`)) {
+			channel.send(`https://youtu.be/o0u4M6vppCI`);
+		}
+
+		// Bob's Burgers
+		if (message.includes(`burgerboss`)) {
+			channel.send(
+				`https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRShYgX1IfRVVqMr55MsAVZ3mdeD8LHYS9eAUUyZ4ygpQONDlPR`,
+			);
+		}
+
+		if (message.includes(`noncanonical`)) {
+			channel.send(`https://youtu.be/GoAPSBMQEKU`);
 		}
 
 		// Manifest
@@ -169,9 +211,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 			}
 			channel.send(vicPic());
 		}
-		if (isDev && message.includes(`secret`)) {
-			channel.send(vicPic());
-		}
+
 		if (message.startsWith(`!vicpic`)) {
 			const [, ...rest] = content.split(` `);
 			channel.send(addVicPic(rest[0]));
@@ -179,27 +219,6 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 		if (content.includes(`Toro`)) {
 			channel.send(`Did you just call me Toro?`);
-		}
-
-		if (message.includes(`jenny`)) {
-			msg.react(`8️⃣`); // it's seriously just the unicode emoji
-			msg.react(`6️⃣`);
-			msg.react(`7️⃣`);
-			msg.react(`5️⃣`);
-			msg.react(`3️⃣`);
-			msg.react(`0️⃣`);
-			msg.react(`9️⃣`);
-		}
-
-		// Alanis
-		if (
-			message.includes(`ironic`) ||
-			message.includes(`alanis`)
-		) {
-			// 1/20 chance of Alanisposting
-			if (getRandomInt(100) >= 95) {
-				channel.send(alanisReactions[getRandomInt(alanisReactions.length)]);
-			}
 		}
 
 		// do I look like I know what a jpeg is?
@@ -215,27 +234,6 @@ client.on(`messageCreate`, async (msg: Message) => {
 			if (wordsArray) {
 				channel.send(tooFastToFurious(wordsArray[0]));
 			}
-		}
-
-		// Shia Surprise
-		if (message.includes(`shia labeouf`)) {
-			channel.send(`https://youtu.be/o0u4M6vppCI`);
-		}
-
-		// Help
-		if (message === `!vhelp`) {
-			channel.send(help());
-		}
-
-		// Bob's Burgers
-		if (message.includes(`burgerboss`)) {
-			channel.send(
-				`https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRShYgX1IfRVVqMr55MsAVZ3mdeD8LHYS9eAUUyZ4ygpQONDlPR`,
-			);
-		}
-
-		if (message.includes(`noncanonical`)) {
-			channel.send(`https://youtu.be/GoAPSBMQEKU`);
 		}
 
 		// OWO
