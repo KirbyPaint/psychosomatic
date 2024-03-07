@@ -104,6 +104,11 @@ client.on(`messageCreate`, async (msg: Message) => {
 			msg.react(EMOJI_ID.CONCH);
 		}
 
+		// DO IT
+		if (message.includes(`do it`)) {
+			msg.react(EMOJI_ID.SHEEV);
+		}
+
 		// forgor
 		if (message.includes(`forgor`)) {
 			msg.react(`💀`);
@@ -215,11 +220,6 @@ client.on(`messageCreate`, async (msg: Message) => {
 		// Shia Surprise
 		if (message.includes(`shia labeouf`)) {
 			channel.send(`https://youtu.be/o0u4M6vppCI`);
-		}
-
-		// DO IT
-		if (message.includes(`do it`)) {
-			msg.react(EMOJI_ID.SHEEV);
 		}
 
 		// Help
