@@ -89,6 +89,11 @@ client.on(`messageCreate`, async (msg: Message) => {
 			msg.react(EMOJI_ID.MANIFEST);
 		}
 
+		// Garnet
+		if (message.includes(`garnet`)) {
+			msg.react(EMOJI_ID.GARNET);
+		}
+
 		// Conch
 		if (message.includes(`maybe someday`)) {
 			msg.react(EMOJI_ID.CONCH);
