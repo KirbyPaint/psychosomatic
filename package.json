@@ -4,16 +4,16 @@
 	"description": "discord bot",
 	"main": "dist/src/index.js",
 	"scripts": {
-		"start": "nodemon ./dist/index.js",
 		"build-dist": "./node_modules/typescript/bin/tsc",
-		"superbuild": "rm -rf dist/ && yarn build-dist && yarn push && yarn seed && yarn start",
-		"watch": "nodemon -e ts --watch src --exec 'yarn build-dist && yarn start'",
-		"test": "vitest",
 		"coverage": "vitest run --coverage",
-		"seed": "prisma db seed",
-		"push": "prisma db push",
 		"format": "prisma format",
-		"lint": "eslint . --ext .ts --fix"
+		"lint": "eslint . --ext .ts --fix",
+		"push": "prisma db push",
+		"seed": "prisma db seed",
+		"start": "nodemon ./dist/index.js",
+		"superbuild": "rm -rf dist/ && yarn build-dist && yarn push && yarn seed && yarn start",
+		"test": "vitest",
+		"watch": "nodemon -e ts --watch src --exec 'yarn build-dist && yarn start'"
 	},
 	"repository": {
 		"type": "git",
