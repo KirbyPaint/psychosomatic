@@ -84,6 +84,11 @@ client.on(`messageCreate`, async (msg: Message) => {
 			}
 		}
 
+		// fuck anyone
+		if (message.startsWith(`fuck`)) {
+			channel.send(`yeah, ${message}`);
+		}
+
 		// Manifest
 		if (message.includes(`manifest`)) {
 			msg.react(EMOJI_ID.MANIFEST);
