@@ -12,8 +12,10 @@
 		"seed": "prisma db seed",
 		"start": "nodemon ./dist/index.js",
 		"superbuild": "rm -rf dist/ && yarn build-dist && yarn push && yarn seed && yarn start",
+		"sb": "yarn superbuild",
 		"test": "vitest",
-		"watch": "nodemon -e ts --watch src --exec 'yarn build-dist && yarn start'"
+		"watch": "nodemon -e ts --watch src --exec 'yarn build-dist && yarn start'",
+		"w": "yarn watch"
 	},
 	"repository": {
 		"type": "git",
