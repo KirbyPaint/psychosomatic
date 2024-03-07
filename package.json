@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "nodemon ./dist/index.js",
 		"build-dist": "./node_modules/typescript/bin/tsc",
-		"superbuild": "yarn build-dist && yarn push && yarn seed && yarn start",
+		"superbuild": "rm -rf dist/ && yarn build-dist && yarn push && yarn seed && yarn start",
 		"watch": "nodemon -e ts --watch src --exec 'yarn build-dist && yarn start'",
 		"test": "vitest",
 		"coverage": "vitest run --coverage",
