@@ -18,6 +18,7 @@ import {
 	naughtyWordReactions,
 	sadRegex,
 	SERVER_ID,
+	shhhRegex,
 	tooFastToFurious,
 	uwuRegex,
 	weepRegex,
@@ -59,13 +60,17 @@ client.on(`messageCreate`, async (msg: Message) => {
 	const isBot = msg.author.bot;
 	const { attachments, channel, content, guildId: currentGuildId } = msg;
 	const message = content.toLowerCase();
+	let shushed = 0;
+	const now = Date.now();
+	const isMuted = now - shushed > 900 ? true : false;
 	if (isDev) {
 		console.log(chalk.cyan(`\n\n\nMessage received:`));
 		console.log(msg);
 	}
   
 	// everything in a !isBot block first of all
-	if (!isBot) {
+	if (!isBot && !isMuted) {
+		console.log({ isMuted })
 		// Help
 		if (message === `!vhelp`) {
 			channel.send(help());
@@ -193,6 +198,11 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 		// any command having to do with addressing the bot by name
 		if (message.includes(`victoria`)) {
+			if (message.includes(`victoria`) && message.match(shhhRegex)) {
+				shushed = Date.now();
+				console.log({ shushed });
+				return;
+			}
 			if (
 				(message.startsWith(`victoria`) &&
 					content.includes(`?`)) ||

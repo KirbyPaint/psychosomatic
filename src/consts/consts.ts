@@ -101,6 +101,7 @@ export const whichRegex = /(which|what)/i;
 // this might be shit but it'll do the job
 export const fastNFuriousRegex = /(too)+ [^ ]+ (to?o)+ [^ \r\n]+/i;
 export const fiveMinutes = 300000;
+export const shhhRegex = /([s+][h+]+)/;
 
 export function help(): string {
 	return `\`\`\`you should just @KirbyPaint\nhttps://github.com/KirbyPaint/psychosomatic/blob/main/src/index.ts\nhttps://github.com/KirbyPaint/psychosomatic#readme\`\`\``;
