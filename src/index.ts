@@ -94,6 +94,11 @@ client.on(`messageCreate`, async (msg: Message) => {
 			}
 		}
 
+		// Richard you good boy
+		if (message.includes(`good noodle`)) {
+			channel.send(`Richard, you good boy`);
+		}
+
 		if (message.includes(`jenny`)) {
 			msg.react(`8️⃣`); // it's seriously just the unicode emoji
 			msg.react(`6️⃣`);
