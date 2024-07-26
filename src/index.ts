@@ -85,7 +85,6 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 		// fmk
 		if (message.startsWith(`fmk`)) {
-			console.log({ message });
 			const [, f, m, k] = message.split(`\n`);
 			if (!f || !m || !k) {
 				return;
