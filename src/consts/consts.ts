@@ -133,3 +133,13 @@ export const have = [`i've`, `you've`, `we've`, `they've`];
 export const areWere = [`i'm`, `you're`, `we're`, `they're`];
 // The i'd and you'd need to be separate from the we've and the we're, etc.
 export const pronouns = [`i`, `you`, `he`, `she`, `it`, `we`, `they`];
+
+// Fisher-Yates shuffle algorithm
+export function shuffleArray(array: string[]): string[] {
+	const newArray = array.slice(); // Make a copy of the array
+	for (let i = newArray.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // Swap elements
+	}
+	return newArray;
+}

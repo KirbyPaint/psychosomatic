@@ -18,6 +18,7 @@ import {
 	naughtyWordReactions,
 	sadRegex,
 	SERVER_ID,
+	shuffleArray,
 	tooFastToFurious,
 	uwuRegex,
 	weepRegex,
@@ -63,7 +64,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 		console.log(chalk.cyan(`\n\n\nMessage received:`));
 		console.log(msg);
 	}
-  
+
 	// everything in a !isBot block first of all
 	if (!isBot) {
 		// Help
@@ -81,7 +82,19 @@ client.on(`messageCreate`, async (msg: Message) => {
 		if (message.startsWith(`fuck`)) {
 			channel.send(`yeah, ${message}`);
 		}
-  
+
+		// fmk
+		if (message.startsWith(`fmk`)) {
+			console.log({ message });
+			const [, f, m, k] = message.split(`\n`);
+			if (!f || !m || !k) {
+				return;
+			} else {
+				const [nf, nm, nk] = shuffleArray([f, m, k]);
+				channel.send(`fuck ${nf}, marry ${nm}, kill ${nk}`);
+			}
+		}
+
 		// PSYCHOSOMATIC
 		if (message.includes(`psychosomatic`) && !message.includes(`github`)) {
 			msg.reply(`THAT BOY NEEDS THERAPY`);
@@ -168,9 +181,9 @@ client.on(`messageCreate`, async (msg: Message) => {
 			attachmentArray.forEach(attachment => {
 				const { name, url, proxyURL, contentType } = attachment;
 				if (name.toLowerCase().includes(`webp`) ||
-						url.toLowerCase().includes(`webp`) ||
-						proxyURL.toLowerCase().includes(`webp`) ||
-						contentType?.toLowerCase().includes(`webp`)) {
+					url.toLowerCase().includes(`webp`) ||
+					proxyURL.toLowerCase().includes(`webp`) ||
+					contentType?.toLowerCase().includes(`webp`)) {
 					webp = true;
 				}
 			});
@@ -271,7 +284,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 			if (message.match(cursedRegex)) {
 				channel.send(naughtyWordReactions[getRandomInt(naughtyWordReactions.length)]);
 			}
-  
+
 			// Delphine
 			if (message.match(weepRegex)) {
 				channel.send(`*ouiiip`);
@@ -292,13 +305,13 @@ client.on(`messageCreate`, async (msg: Message) => {
 				const result = await ls();
 				channel.send(result);
 			}
-  
+
 			// Does what it says, very scary
 			if (message === `server shutdown` || message === `server reboot`) {
 				const result = await shutdown();
 				channel.send(result);
 			}
-  
+
 			// Marcel the Shell
 			if (message.includes(`too big`)) {
 				channel.send(`Compared to what?`);
@@ -309,9 +322,9 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 			// sad
 			if (message.match(sadRegex) || message.startsWith(`:(`)) {
-				msg.react(EMOJI_ID.SAD);	
+				msg.react(EMOJI_ID.SAD);
 			}
-  
+
 			// One brain cell
 			// command to check the brain cell
 			if (message.includes(`who has the brain cell`)) {
@@ -341,7 +354,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 					);
 				}
 			}
-  
+
 			// TV finder
 			if (content.match(whichRegex)) {
 				const [firstWord, secondWord] = content.split(` `);
