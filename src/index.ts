@@ -172,6 +172,12 @@ client.on(`messageCreate`, async (msg: Message) => {
 		if (message.includes(`forgor`)) {
 			msg.react(`💀`);
 		}
+		
+		// vsc*de
+		if (message.includes(`vscode`) || message.includes(`vs code`)) {
+			msg.react(`🤮`);
+			msg.reply(`eww vsc*de`);
+		}
 
 		// WEBP
 		if (attachments) {
