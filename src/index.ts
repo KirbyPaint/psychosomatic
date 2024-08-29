@@ -175,8 +175,10 @@ client.on(`messageCreate`, async (msg: Message) => {
 		
 		// vsc*de
 		if (message.includes(`vscode`) || message.includes(`vs code`)) {
-			msg.react(`🤮`);
-			msg.reply(`eww vsc*de`);
+			if (getRandomInt(10) == 10) {
+				msg.react(`🤮`);
+				msg.reply(`eww vsc*de`);
+			}
 		}
 
 		// WEBP
