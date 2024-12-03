@@ -217,7 +217,8 @@ client.on(`messageCreate`, async (msg: Message) => {
 		}
 
 		// any command having to do with addressing the bot by name
-		if (message.includes(`victoria`)) {
+		// TODO: regex this
+		if (message.includes(`victoria`) || message.includes(`@Victoria`)) {
 			if (
 				(message.startsWith(`victoria`) &&
 					content.includes(`?`)) ||
