@@ -8,6 +8,7 @@ import { shutdown } from "./bash/shutdown";
 import {
 	alanisReactions,
 	BRAINCELL_USER_ID,
+	breadRegex,
 	cursedRegex,
 	EMOJI_ID,
 	fastNFuriousRegex,
@@ -109,6 +110,11 @@ client.on(`messageCreate`, async (msg: Message) => {
 		// Richard you good boy
 		if (message.includes(`good noodle`)) {
 			channel.send(`Richard, you good boy`);
+		}
+
+		// presentation
+		if (message.match(breadRegex)) {
+			channel.send(`bready or not here I come`);
 		}
 
 		if (message.includes(`jenny`)) {
