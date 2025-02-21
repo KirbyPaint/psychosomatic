@@ -303,6 +303,17 @@ client.on(`messageCreate`, async (msg: Message) => {
 				channel.send(`*ouiiip`);
 			}
 
+			// Millennial Message Detection
+			if (message.includes(`lol`) || message.includes(`haha`)) {
+				if (getRandomInt(30) >= 29) {
+					const wordArray = message.split(` `);
+					const lastWord = wordArray[wordArray.length - 1];
+					if (lastWord === `lol` || lastWord === `haha`) {
+						msg.reply(`# ${lastWord}`)
+					}
+				}
+			}
+
 			// fuck audrey
 			if (message.includes(`audrey`)) {
 				channel.send(`fuck Audrey`);
