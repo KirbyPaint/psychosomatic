@@ -326,10 +326,10 @@ client.on(`messageCreate`, async (msg: Message) => {
 			}
 
 			// Does what it says, very scary
-			if (message === `server shutdown` || message === `server reboot`) {
-				const result = await shutdown();
-				channel.send(result);
-			}
+			// if (message === `server shutdown` || message === `server reboot`) {
+			// 	const result = await shutdown();
+			// 	channel.send(result);
+			// }
 
 			// Marcel the Shell
 			if (message.includes(`too big`)) {
