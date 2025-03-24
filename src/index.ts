@@ -283,6 +283,13 @@ client.on(`messageCreate`, async (msg: Message) => {
 			channel.send(prompt.replace(/r/g, `w`).replace(/l/g, `w`).replace(/R/g, `W`).replace(/L/g, `W`));
 		}
 
+		// Chabi sad face
+		if (currentGuildId !== SERVER_ID.CHILLBROS) {
+			if (message.match(sadRegex) || message.startsWith(`:(`)) {
+				msg.react(EMOJI_ID.SAD);
+			}
+		}
+
 		// Processes to be used only for our special server
 		if (
 			(currentGuildId === SERVER_ID.DUMMIES) ||
@@ -340,9 +347,9 @@ client.on(`messageCreate`, async (msg: Message) => {
 			}
 
 			// sad
-			if (message.match(sadRegex) || message.startsWith(`:(`)) {
-				msg.react(EMOJI_ID.SAD);
-			}
+			// if (message.match(sadRegex) || message.startsWith(`:(`)) {
+			// 	msg.react(EMOJI_ID.SAD);
+			// }
 
 			// One brain cell
 			// command to check the brain cell

@@ -81,6 +81,7 @@ export const BRAINCELL_USER_ID = {
 
 export const SERVER_ID = {
 	DUMMIES: `625931911029850118`,
+	CHILLBROS: `186014599798063104`,
 };
 
 export const CHANNEL_ID = {
