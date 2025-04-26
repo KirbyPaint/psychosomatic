@@ -31,6 +31,7 @@ const uncommon = [
 	`Yes, now leave me alone.`,
 	`Sure, I mean, it's your funeral.`,
 	`Technically yes, but you'll hate it.`,
+	`The auguries say no.`,
 ];
 
 const rare = [
