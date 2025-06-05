@@ -312,7 +312,7 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 			// Millennial Message Detection
 			if (message.includes(`lol`) || message.includes(`haha`) || message.includes(`yeah`)) {
-				if (getRandomInt(30) >= 29) {
+				if (getRandomInt(30) > 29) {
 					const wordArray = message.split(` `);
 					const lastWord = wordArray[wordArray.length - 1];
 					if (lastWord === `lol` || lastWord.includes(`haha`) || lastWord === `yeah`) {
