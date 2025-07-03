@@ -310,6 +310,13 @@ client.on(`messageCreate`, async (msg: Message) => {
 				channel.send(`*ouiiip`);
 			}
 
+			// shit sucks
+			if (message.includes(`shit sucks`)) {
+				if (getRandomInt(100) >= 98) {
+					msg.reply(`One must imagine Sisyphus happy`);
+				}
+			}
+
 			// Millennial Message Detection
 			if (message.includes(`lol`) || message.includes(`haha`) || message.includes(`yeah`)) {
 				if (getRandomInt(30) > 29) {
