@@ -114,7 +114,9 @@ client.on(`messageCreate`, async (msg: Message) => {
 
 		// presentation
 		if (message.match(breadRegex)) {
-			channel.send(`bready or not here I come`);
+			if (getRandomInt(100) >= 99) {
+				channel.send(`bready or not here I come`);
+			}
 		}
 
 		if (message.includes(`jenny`)) {
