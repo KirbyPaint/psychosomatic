@@ -189,24 +189,6 @@ client.on(`messageCreate`, async (msg: Message) => {
 			}
 		}
 
-		// WEBP
-		if (attachments) {
-			const attachmentArray: Attachment[] = Array.from(attachments.values());
-			let webp = false;
-			attachmentArray.forEach(attachment => {
-				const { name, url, proxyURL, contentType } = attachment;
-				if (name.toLowerCase().includes(`webp`) ||
-					url.toLowerCase().includes(`webp`) ||
-					proxyURL.toLowerCase().includes(`webp`) ||
-					contentType?.toLowerCase().includes(`webp`)) {
-					webp = true;
-				}
-			});
-			if (webp && getRandomInt(100) >= 95) {
-				channel.send(`webp image detected`);
-			}
-		}
-
 		// Victoria Justice
 		if (
 			message.startsWith(`i think`) &&
