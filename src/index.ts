@@ -55,6 +55,8 @@ const client: Client = new Client({
 	intents,
 });
 
+# bs commit comment
+
 const isDev = process.env.BOT_ENV === `dev`;
 // actions to take when the bot receives a message
 client.on(`messageCreate`, async (msg: Message) => {
